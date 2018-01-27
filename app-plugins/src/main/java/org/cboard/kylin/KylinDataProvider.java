@@ -3,6 +3,7 @@ package org.cboard.kylin;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
+import org.apache.commons.lang.StringUtils;
 import org.cboard.cache.CacheManager;
 import org.cboard.cache.HeapCacheManager;
 import org.cboard.dataprovider.DataProvider;
@@ -148,7 +149,16 @@ public class KylinDataProvider extends DataProvider implements Aggregatable, Ini
             whereStr =  sqlHelper.assembleFilterSql(filterHelpers);
         }
         fsql = "SELECT %s FROM %s %s %s GROUP BY %s ORDER BY %s";
-        exec = String.format(fsql, columnAliasName, tableName, kylinModel.getTableAlias(tableName), whereStr, columnAliasName, columnAliasName);
+        //exec = String.format(fsql, columnAliasName, tableName, kylinModel.getTableAlias(tableName), whereStr, columnAliasName, columnAliasName);
+        //20171226update
+        String tmp =StringUtils.substringAfter(tableName, ".");
+        String aliasTables ="";
+        if (tmp!="")
+            aliasTables =tmp;
+        else
+            aliasTables =kylinModel.getTableAlias(tableName);
+        exec = String.format(fsql, columnAliasName, tableName,aliasTables, whereStr, columnAliasName, columnAliasName);
+        //update end
         LOG.info(exec);
         try (Connection connection = getConnection();
              Statement stat = connection.createStatement();

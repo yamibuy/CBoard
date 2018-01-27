@@ -2,14 +2,14 @@ package org.cboard.kylin.model;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.math3.analysis.function.Log;
 import org.cboard.kylin.KylinDataProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
  *     columnType: Map<alias.column, dataType>
  */
 public class KylinModel2x extends KylinBaseModel {
+    private static final Logger LOG = LoggerFactory.getLogger(KylinDataProvider.class);
 
     public KylinModel2x(JSONObject model, Map<String, String> dataSource, Map<String, String> query, String[] version) throws Exception {
         super(model, dataSource, query, version);
@@ -46,7 +47,13 @@ public class KylinModel2x extends KylinBaseModel {
             Map<String, Object> urlParams = new HashMap<>();
             urlParams.put("project", project);
             urlParams.put("tableName", table);
-            return restTemplate.getForEntity("http://" + serverIp + "/kylin/api/tables/{project}/{tableName}", String.class, urlParams);
+            //ResponseEntity e = restTemplate.getForEntity("http://" + serverIp + "/kylin/api/tables/{project}/{tableName}", String.class, urlParams);
+            //20171224update
+            ResponseEntity e = restTemplate.getForEntity("http://" + serverIp + "/kylin/api/tables/{tableName}", String.class, urlParams);
+            LOG.info(">>>"+e.toString());
+            //20171224update end
+            return e;
+
         }
     }
 
@@ -71,9 +78,8 @@ public class KylinModel2x extends KylinBaseModel {
     @Override
     void initMetaData() throws Exception {
         String factTable = model.getString("fact_table");
-        
         tableAlias.put(StringUtils.substringAfter(factTable, "."),factTable);
-        
+
         model.getJSONArray("lookups").stream().map(e -> (JSONObject) e)
                 .forEach(s -> tableAlias.put(s.getString("alias"),s.getString("table")));
 

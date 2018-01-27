@@ -38,6 +38,7 @@ public class KylinSyntaxHelper extends SqlSyntaxHelper {
         if (columnStr.indexOf(".") != -1) {
             columnStr = StringUtils.substringAfter(vConfig.getColumn(), ".");
         }
+        System.out.println(vConfig.getColumn()+"-----"+vConfig.getAggType());
         switch (vConfig.getAggType()) {
             case "sum":
                 return "SUM(" + kylinModel.getColumnWithAliasPrefix(vConfig.getColumn()) + ") AS sum_" + columnStr;

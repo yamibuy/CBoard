@@ -58,7 +58,6 @@ public abstract class KylinBaseModel implements Serializable {
     }
 
     /**
-     *
      * @param table
      */
     public String getTableWithAliasSuffix(String table) {
@@ -114,6 +113,7 @@ public abstract class KylinBaseModel implements Serializable {
 
     /**
      * Return Array[alias.column]
+     *
      * @return
      */
     public abstract String[] getColumns();
