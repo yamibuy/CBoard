@@ -131,7 +131,9 @@ cBoard.controller('paramCtrl', function ($scope, $uibModal, $http) {
 
     $scope.editParam = function () {
         $uibModal.open({
-            templateUrl: 'org/cboard/view/dashboard/modal/param.html',
+            // templateUrl: 'org/cboard/view/dashboard/modal/param.html',
+            // 修改过滤条件modal(旧的保留)
+            templateUrl: 'org/cboard/view/dashboard/modal/param-new.html',
             windowTemplateUrl: 'org/cboard/view/util/modal/window.html',
             backdrop: false,
             size: 'lg',

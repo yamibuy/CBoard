@@ -1280,6 +1280,7 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
 
         $scope.getChartView = function () {
             if ($scope.curWidget.config && $scope.curWidget.config.chart_type) {
+                console.log('org/cboard/view/config/chart/' + $scope.curWidget.config.chart_type + '.html');
                 return 'org/cboard/view/config/chart/' + $scope.curWidget.config.chart_type + '.html';
             }
         };
@@ -1287,6 +1288,7 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
         $scope.getOptionsView = function () {
             var basePath = 'org/cboard/view/config/chart/options/';
             if ($scope.curWidget.config && $scope.curWidget.config.chart_type) {
+                console.log($scope.curWidget.config.chart_type);
                 return basePath + $scope.curWidget.config.chart_type + '.html';
             }
         }
@@ -1342,7 +1344,9 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
         $scope.selects = [];
         $scope.editFilter = function (setbackArr, setbackIdx) {
             $uibModal.open({
-                templateUrl: 'org/cboard/view/dashboard/modal/param.html',
+                // templateUrl: 'org/cboard/view/dashboard/modal/param.html',
+                // 修改过滤条件modal(旧的保留)
+                templateUrl: 'org/cboard/view/dashboard/modal/param-new.html',
                 windowTemplateUrl: 'org/cboard/view/util/modal/window.html',
                 backdrop: false,
                 size: 'lg',
@@ -1462,7 +1466,9 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
                     };
                     $scope.editFilter = function (filter) {
                         $uibModal.open({
-                            templateUrl: 'org/cboard/view/dashboard/modal/param.html',
+                            // templateUrl: 'org/cboard/view/dashboard/modal/param.html',
+                            // 修改过滤条件modal(旧的保留)
+                            templateUrl: 'org/cboard/view/dashboard/modal/param-new.html',
                             windowTemplateUrl: 'org/cboard/view/util/modal/window.html',
                             backdrop: false,
                             size: 'lg',
@@ -1647,26 +1653,14 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
         }();
 
         $scope.doConfigParams = function () {
-            $http.get('dashboard/getConfigParams.do', {
-                params: {
-                    type: $scope.datasource.type,
-                    datasourceId: $scope.datasource.id,
-                    page: 'widget.html'
-                }
-            }).then(function (response) {
+            $http.get('dashboard/getConfigParams.do?type=' + $scope.datasource.type + '&page=widget.html').then(function (response) {
                 $scope.params = response.data;
             });
         };
 
         $scope.changeDs = function () {
             $scope.curWidget.query = {};
-            $http.get('dashboard/getConfigParams.do', {
-                params: {
-                    type: $scope.datasource.type,
-                    datasourceId: $scope.datasource.id,
-                    page: 'widget.html'
-                }
-            }).then(function (response) {
+            $http.get('dashboard/getConfigParams.do?type=' + $scope.datasource.type + '&page=widget.html').then(function (response) {
                 $scope.params = response.data;
                 for (var i in $scope.params) {
                     var name = $scope.params[i].name;
