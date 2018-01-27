@@ -574,3 +574,52 @@ treecontrol.tree-dark {
     border-color: rgba(47, 165, 255, 0.75);
     -webkit-box-shadow: 0 0 4px rgba(54, 131, 255, 0.86);
 }
+.hr-line-dashed {
+    border-top: 1px dashed #e7eaec;
+    color: #fff;
+    background-color: #fff;
+    height: 1px;
+    margin: 10px 0;
+}
+.modal-header-background {
+    background-color: #3c8dbc;
+}
+.modal-header-background > h4,
+.modal-header-background > span {
+    color: #fff;
+}
+.modal-property__wrapper {
+    background-color: #eee;
+}
+.modal-list__wrapper {
+    list-style: none;
+    padding-left: 0;
+    background-color: #EEE;
+    height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 5px;
+    outline: none;
+}
+.modal-list__wrapper > li {
+    height: 30px;
+    line-height: 30px;
+    padding-left: 15px;
+    margin: 5px 0;
+    border-bottom: 1px dashed #DDD;
+}
+.modal-list__wrapper > li:last-child {
+    border: 0 none;
+}
+.pull-left-imp {
+    text-align: left!important;
+}
+.pleft-0 {
+    padding-left: 0px!important;
+}
+.pright-0 {
+    padding-right: 0!important;
+}
+.pall-0 {
+    padding: 0;
+}
