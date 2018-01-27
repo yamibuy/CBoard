@@ -37,16 +37,34 @@ CBoardKpiRender.prototype.do = function () {
 };
 
 CBoardKpiRender.prototype.template =
-    "<div class='small-box {style}'> \
-               <div class='inner'> \
-                   <h3>{kpiValue}</h3> \
-                   <p>{kpiName}</p> \
-               </div> \
-               <div class='icon'> \
-                   <i class='ion ion-stats-bars'></i> \
-               </div> \
-               <a class='small-box-footer'>\
-                   <span ng-click='reload(widget)' style='cursor: pointer'>{refresh} <i class='fa fa-refresh'></i></span>\
-                   <span ng-click='config(widget)' ng-if='widgetCfg' style='cursor: pointer'>{edit} <i class='fa fa-wrench'></i></span>\
-               </a>\
-            </div>";
+    "<div class='small-box {style}'>\
+        <div class='small-box__left'>\
+            <div class='small-box__left-top'>\
+                <h3>{kpiValue}</h3>\
+                <p>{kpiName}</p>\
+            </div>\
+            <div class='small-box__left-bottom'>\
+                <span ng-click='reload(widget)' style='cursor: pointer'>{refresh} <i class='fa fa-refresh'></i></span>\
+                <span ng-click='config(widget)' ng-if='widgetCfg' style='cursor: pointer'>{edit} <i class='fa fa-wrench'></i></span>\
+            </div>\
+        </div>\
+        <div class='small-box__right'>\
+          <span>\
+            <i class='ion ion-stats-bars'></i>\
+          </span>\
+        </div>\
+    </div>"
+
+// "<div class='small-box {style}'> \
+//            <div class='inner'> \
+//                <h3>{kpiValue}</h3> \
+//                <p>{kpiName}</p> \
+//            </div> \
+//            <div class='icon'> \
+//                <i class='ion ion-stats-bars'></i> \
+//            </div> \
+//            <a class='small-box-footer'>\
+//                <span ng-click='reload(widget)' style='cursor: pointer'>{refresh} <i class='fa fa-refresh'></i></span>\
+//                <span ng-click='config(widget)' ng-if='widgetCfg' style='cursor: pointer'>{edit} <i class='fa fa-wrench'></i></span>\
+//            </a>\
+//         </div>";

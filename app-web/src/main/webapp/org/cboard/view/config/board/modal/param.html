@@ -42,7 +42,7 @@
             <div class="cubeSelected">
                 <div class="title"><span>{{'CONFIG.DASHBOARD.LINKED_COLUMN'|translate}}</span></div>
                 <div class="cubes">
-                    <span ng-repeat="v in param.col" ng-click="deleteSelected($index)">{{'[' + v.name + '].[' + v.column + ']';}}</span>
+                    <p ng-repeat="v in param.col" ng-click="deleteSelected($index)">{{'[' + v.name + '].[' + v.column + ']';}}</p>
                 </div>
             </div>
         </div>

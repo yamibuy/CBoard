@@ -6,7 +6,7 @@ cBoard.directive('dashboardWidget', function ($compile, $templateCache, dataServ
 
     var renderEchart = function (scope, element, attrs) {
         var template = $templateCache.get("echartContent");
-        scope.myheight = scope.row.height ? (scope.row.height - 44) : 350;
+        scope.myheight = scope.row.height ? (scope.row.height) : 300;
         var link = $compile(template);
         element.append(link(scope));
         var ndWrapper = $(element).find('.box-body');
@@ -15,7 +15,7 @@ cBoard.directive('dashboardWidget', function ($compile, $templateCache, dataServ
 
     var renderMap = function (scope, element, attrs) {
         var template = $templateCache.get("chartContent");
-        scope.myheight = scope.row.height ? (scope.row.height - 44) : 350;
+        scope.myheight = scope.row.height ? (scope.row.height) : 300;
         var link = $compile(template);
         element.append(link(scope));
         var ndWrapper = $(element).find('.box-body');
@@ -32,7 +32,7 @@ cBoard.directive('dashboardWidget', function ($compile, $templateCache, dataServ
 
     var renderTable = function (scope, element, attrs) {
         var template = $templateCache.get("chartContent");
-        scope.myheight = scope.row.height ? (scope.row.height - 44) : 500;
+        scope.myheight = scope.row.height ? (scope.row.height) : 500;
         var aa = $compile(template)(scope);
         element.append(aa);
         var ndWrapper = $(element).find('.box-body');

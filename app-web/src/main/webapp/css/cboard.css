@@ -20,6 +20,7 @@
 
 .box-header {
     padding: 11px 10px;
+    border-bottom: 1px solid #ddd;
 }
 
 .panel-body {
@@ -622,4 +623,30 @@ treecontrol.tree-dark {
 }
 .pall-0 {
     padding: 0;
+}
+.border-non {
+    border: 0 none!important;
+}
+.box-header {
+    background-color: #ffffff;
+    border-color: #e7eaec;
+    border-image: none;
+    border-width: 3px 0 0;
+    color: inherit;
+    margin-bottom: 0;
+    padding: 14px 15px 7px;
+    min-height: 48px;
+}
+.box-body {
+    background-color: #ffffff;
+    color: inherit;
+    padding: 15px 20px 20px 20px;
+    padding: 5px 5px 5px 5px;
+    border-color: #e7eaec;
+    border-image: none;
+    border-style: solid solid none;
+    border-width: 1px 0;
+}
+.bk-white {
+    background-color: #fff!important;
 }
