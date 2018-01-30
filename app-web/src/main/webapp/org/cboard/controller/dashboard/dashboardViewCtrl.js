@@ -3,8 +3,8 @@
  */
 
 cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $state, $stateParams, $http, ModalUtils, chartService, $interval, $uibModal, dataService) {
-
     $scope.loading = true;
+    $scope.loadingData = true;
     $scope.paramInit = 0;
     $scope.relations = JSON.stringify([]);
     $http.get("dashboard/getDatasetList.do").success(function (response) {
@@ -19,6 +19,8 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
     });
 
     $scope.timelineColor = ['bg-light-blue', 'bg-red', 'bg-aqua', 'bg-green', 'bg-yellow', 'bg-gray', 'bg-navy', 'bg-teal', 'bg-purple', 'bg-orange', 'bg-maroon', 'bg-black'];
+
+    var wLength = 0;
 
     var groupTimeline = function () {
         $scope.timeline = [];
@@ -95,7 +97,9 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                     scope: scope,
                     reload: reload
                 }).then(
-                    function() {widget.loading = false;}
+                    function() {
+                        widget.loading = false;
+                    }
                 );
             } else {
                 chartService.renderChart(container, widgetConfig, {
@@ -106,6 +110,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                 }).then(function (d) {
                     widget.realTimeTicket = d;
                     widget.loading = false;
+                    $scope.loadingData = false;
                 });
             }
             widget.realTimeOption = {optionFilter: optionFilter, scope: scope};
@@ -181,12 +186,12 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
         });
         return dsReloadStatus;
     };
-
     var loadWidget = function (reload) {
         paramToFilter();
         var dsReloadStatus = initDsReloadStatus(reload);
         _.each($scope.board.layout.rows, function (row) {
             _.each(row.widgets, function (widget) {
+                wLength++;
                 if (!_.isUndefined(widget.hasRole) && !widget.hasRole) {
                     return;
                 }
@@ -206,6 +211,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                 } else {
                     widget.show = true;
                 }
+
                 //real time load task
                 var w = widget.widget.data;
                 var ds = _.find($scope.datasetList, function (e) {
@@ -234,14 +240,17 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                         }
                     });
                 }
+
             });
         });
     };
 
     var paramInitListener;
+
     $scope.load = function (reload) {
         $scope.paramInit = 0;
         $scope.loading = true;
+        $scope.loadingData = true;
         $("#relations").val(JSON.stringify([]));
         _.each($scope.intervals, function (e) {
             $interval.cancel(e);
@@ -381,12 +390,14 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
     };
 
     $scope.applyParamFilter = function () {
+        $scope.loadingData = true;
         paramToFilter();
         _.each($scope.board.layout.rows, function (row) {
             _.each(row.widgets, function (w) {
                 try {
-                    chartService.realTimeRender(w.realTimeTicket, injectFilter(w.widget).data, null, null, w, true);
+                    chartService.realTimeRender(w.realTimeTicket, injectFilter(w.widget).data, null, $scope, w, true);
                 } catch (e) {
+                    $scope.loadingData = false;
                     console.error(e);
                 }
             });
@@ -463,6 +474,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
     };
 
     $scope.reload = function (widget) {
+        $scope.loadingData = true;
         paramToFilter();
         widget.widget.data = injectFilter(widget.widget).data;
         widget.show = false;
@@ -582,6 +594,6 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                 param.title = param.values.length > 0 ? paramObj : undefined;
             });
         });
-    }
+    };
 
 });

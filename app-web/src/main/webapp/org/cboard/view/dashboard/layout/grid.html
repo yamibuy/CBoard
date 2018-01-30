@@ -4,7 +4,6 @@
 <div id="inner-container" class="content">
 
     <input ng-model="relations" ng-hide="true" id="relations"/> <!--json [{},{}]-->
-
     <div ng-repeat="row in board.layout.rows track by $index">
         <ng-switch on="row.type">
             <div ng-switch-when="param" class="row">
@@ -20,18 +19,12 @@
                         </div>
                         <div class="box-body">
                             <div class="col-sm-12">
-                                <!-- <div style="min-height: 35px;height: auto;padding: 0px"> -->
-                                <!-- <div class="row"> -->
                                 <div ng-repeat="param in row.params | filter:{paramType:'selector'}:true" ng-controller="paramCtrl" ng-init="init()">
                                     <ng-include src="'org/cboard/view/dashboard/param/selector.html'"/>
                                 </div>
-                                <!-- </div> -->
-                                <!-- <div class="row"> -->
                                 <div ng-repeat="param in row.params | filter:{paramType:'slider'}:true" ng-controller="paramCtrl" ng-init="init()">
                                     <ng-include src="'org/cboard/view/dashboard/param/slider.html'" class="col-md-{{param.cfg.width}}"/>
                                 </div>
-                                <!-- </div> -->
-                                <!-- </div> -->
                             </div>
                         </div>
                     </div>
@@ -58,12 +51,11 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="box-body">
-                                    <!-- <div class="box-body"> -->
+                                <!-- <div class="box-body">
                                     <div class="overlay">
                                         <i class="fa fa-refresh fa-spin"></i>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div ng-if="widget.hasRole == false" class="col-md-{{widget.width}}">
@@ -77,7 +69,6 @@
                                     </div>
                                 </div>
                                 <div class="box-body">
-                                    <!-- <div class="box-body"> -->
                                     {{'ADMIN.CONTACT_ADMIN' | translate}}：<br>
                                     <ul>
                                         <li ng-repeat="ri in widget.roleInfo"> {{ri.type | translate}}：{{ri.name}}</li>

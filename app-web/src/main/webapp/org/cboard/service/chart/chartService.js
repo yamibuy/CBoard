@@ -141,6 +141,7 @@ cBoard.service('chartService', function ($q, dataService, chartPieService, chart
                 if (widgetWraper) {
                     widgetWraper.loading = false;
                 }
+                scope.loadingData = false;
             });
         };
 
