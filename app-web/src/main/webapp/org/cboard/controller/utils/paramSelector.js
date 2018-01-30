@@ -2,6 +2,7 @@
  * Created by yfyuan on 2017/5/2.
  */
 cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance, dataService, param, filter, getSelects, ok) {
+    // 初始化部分数据
     $scope.type = [
         {
             title: '等于',
@@ -127,6 +128,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             $scope.showRange = false;
         }
 
+        $scope.rangeItem.selected = '';
         $scope.rangeItem.capped = '';
         $scope.rangeItem.lowerLimit = '';
 
@@ -157,6 +159,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
     }
     // 选定时间范围
     $scope.selectRange = function (type) {
+        // = ≠
         if(type =='equal'){
             if($.inArray($scope.rangeItem.selected,param.values) > -1){
                 $scope.exist_o = true;
@@ -166,8 +169,10 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
                 return;
             }
             param.values.push($scope.rangeItem.selected);
+            // < > ≤ ≥
         }else if(type == 'openInterval'){
             param.values[0] = $scope.rangeItem.selected;
+            // 范围
         }else if(type == 'closeInterval'){
             if(param.values[0] && (param.values[0] == $scope.rangeItem.capped)){
                 $scope.exist_t = true;
@@ -185,6 +190,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             param.values = [];
             param.values.push($scope.rangeItem.capped);
             param.values.push($scope.rangeItem.lowerLimit);
+            // 周/季度
         }else if(type == 'qorw'){
             if(param.type == '=' || param.type == '≠'){
                 param.values.push($scope.rangeItem.selected);
@@ -199,6 +205,16 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
     }
     //
     $scope.clearValue = function (flag) {
+        $scope.rangeItem = {
+            selected: '',
+            capped: '',
+            lowerLimit: ''
+        };
+        param.type = '=';
+        $scope.operate.equal = true;
+        $scope.operate.openInterval = false;
+        $scope.operate.closeInterval = false;
+        $scope.param.values = [];
         if(flag == 1){
             $scope.type = [
                 {
@@ -258,7 +274,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             param.values = [];
         }
         filterFlag = flag;
-    }
+    };
     // 删除当前选定值
     $scope.clearSelected = function (index) {
         if($scope.showRange){
@@ -266,5 +282,5 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
         }else {
             param.values.splice(index, 1);
         }
-    }
+    };
 });

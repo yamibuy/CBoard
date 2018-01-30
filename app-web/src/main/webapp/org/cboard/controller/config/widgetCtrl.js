@@ -1280,7 +1280,6 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
 
         $scope.getChartView = function () {
             if ($scope.curWidget.config && $scope.curWidget.config.chart_type) {
-                console.log('org/cboard/view/config/chart/' + $scope.curWidget.config.chart_type + '.html');
                 return 'org/cboard/view/config/chart/' + $scope.curWidget.config.chart_type + '.html';
             }
         };
@@ -1288,7 +1287,6 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
         $scope.getOptionsView = function () {
             var basePath = 'org/cboard/view/config/chart/options/';
             if ($scope.curWidget.config && $scope.curWidget.config.chart_type) {
-                console.log($scope.curWidget.config.chart_type);
                 return basePath + $scope.curWidget.config.chart_type + '.html';
             }
         }

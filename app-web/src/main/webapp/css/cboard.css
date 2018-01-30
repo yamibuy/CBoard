@@ -650,3 +650,6 @@ treecontrol.tree-dark {
 .bk-white {
     background-color: #fff!important;
 }
+.toolbar > .info {
+    display: none!important;
+}
