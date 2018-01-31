@@ -1636,8 +1636,9 @@ a:focus {
   margin-bottom: 20px;
   border-color: #e7eaec;
   border-image: none;
-  border-style: solid solid none;
+  /*border-style: solid solid none;*/
   border-width: 3px 0 0;
+  box-shadow: 0px 5px 5px 0px #ddd;
 }
 .small-box > .small-box__left {
   display: flex;
@@ -1673,15 +1674,24 @@ a:focus {
 
 .small-box__right {
   width: 20%;
-  /*background-color: #fff;*/
-  opacity: .4;
+  position: relative;
+}
+.small-box__right > .icons {
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.small-box__right span {
-  color: #fff;
   font-size: 44px;
+}
+.small-box__right > .small-box__mask {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  opacity: .4;
 }
 
 
@@ -4544,6 +4554,9 @@ table.text-center th {
 .bg-purple,
 .bg-maroon,
 .bg-black,
+.bg-diy-blue,
+.bg-diy-green,
+.bg-diy-yellow,
 .bg-red-active,
 .bg-yellow-active,
 .bg-aqua-active,
@@ -4609,6 +4622,17 @@ table.text-center th {
 .bg-yellow{
   background-color: #f39c12 !important;
 }
+.bg-diy-yellow {
+  background-color: #9DD504!important;
+}
+.bg-diy-green {
+  background-color: #1AB394!important;
+}
+.bg-diy-blue {
+  background-color: #3DBEDB!important;
+}
+
+
 .bg-aqua{
   background-color: #00c0ef !important;
 }

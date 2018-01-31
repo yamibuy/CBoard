@@ -191,36 +191,40 @@
                                                     <i class="fa fa-spinner fa-spin"></i>
                                                 </div>
                                             </div>
-                                            <div class="tab-pane" id="viewQuery_widget" ng-class="{'viewQuery_widget': 'active'}[tab]"
-                                                 style="min-height: 300px;height: 100%;overflow: hidden; user-select: text;"/>
-                                            <!-- /.tab-pane -->
-                                            <div class="tab-pane" id="options" ng-class="{'options': 'active'}[tab]"
-                                                 style="min-height: 300px;height: 100%;overflow: hidden;" ng-include="getOptionsView()"/>
-                                            <!-- /.tab-pane -->
                                         </div>
-                                        <!-- /.tab-content -->
+                                        <div class="tab-pane" id="viewQuery_widget" ng-class="{'viewQuery_widget': 'active'}[tab]"
+                                             style="min-height: 300px;height: 100%;overflow: hidden; user-select: text;"/>
+                                        <!-- /.tab-pane -->
+                                        <div class="tab-pane" id="options" ng-class="{'options': 'active'}[tab]"
+                                             style="min-height: 300px;height: 100%;overflow: hidden;" ng-include="getOptionsView()"/>
+                                        <!-- /.tab-pane -->
                                     </div>
-                                    <!-- nav-tabs-custom -->
+                                    <!-- /.tab-content -->
                                 </div>
+                                <!-- nav-tabs-custom -->
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="box-footer">
-                </div>
-                <div class="overlay fa box box-solid" ng-show="loading">
-                    <div class="box-header with-border">
-                        <!--<h3 class="box-title"></h3>-->
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="remove">
-                                <i class="fa fa-times" style="font-size: large"></i></button>
-                        </div>
-                    </div>
-                    <i class="fa fa-spinner fa-spin"></i>
-                </div>
             </div>
         </div>
     </div>
+
+    <div class="box-footer">
+    </div>
+
+    <div class="overlay fa box box-solid" ng-show="loading">
+        <div class="box-header with-border">
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                    <i class="fa fa-times" style="font-size: large"></i></button>
+            </div>
+        </div>
+        <i class="fa fa-spinner fa-spin"></i>
+    </div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <script type="text/ng-template" id="widgetTipTemplate">

@@ -49,9 +49,10 @@ CBoardKpiRender.prototype.template =
             </div>\
         </div>\
         <div class='small-box__right'>\
-          <span>\
+          <div class='icons'>\
             <i class='ion ion-stats-bars'></i>\
-          </span>\
+          </div>\
+          <div class='small-box__mask'></div>\
         </div>\
     </div>"
 

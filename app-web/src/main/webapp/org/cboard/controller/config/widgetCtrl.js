@@ -167,7 +167,12 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
             {name: translate('CONFIG.WIDGET.AQUA'), value: 'bg-aqua'},
             {name: translate('CONFIG.WIDGET.RED'), value: 'bg-red'},
             {name: translate('CONFIG.WIDGET.GREEN'), value: 'bg-green'},
-            {name: translate('CONFIG.WIDGET.YELLOW'), value: 'bg-yellow'}
+            {name: translate('CONFIG.WIDGET.YELLOW'), value: 'bg-yellow'},
+
+            {name: translate('CONFIG.WIDGET.DIY_BLUE'), value: 'bg-diy-blue'},
+            {name: translate('CONFIG.WIDGET.DIY_GREEN'), value: 'bg-diy-green'},
+            {name: translate('CONFIG.WIDGET.DIY_YELLOW'), value: 'bg-diy-yellow'}
+
         ];
 
         $.getJSON('plugins/FineMap/mapdata/citycode.json', function (data) {
