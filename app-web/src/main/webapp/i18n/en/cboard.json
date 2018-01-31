@@ -105,7 +105,13 @@
   "CONFIG": {
     "COMMON": {
       "CUSTOM_EXPRESSION": "Calculated Measures",
-      "PLEASE_SELECT_FOLDER": "Please select a folder"
+      "PLEASE_SELECT_FOLDER": "Please select a folder",
+      "NOT_DATE": "Non-date",
+      "YEAR": "Year",
+      "MONTH": "Month",
+      "DATE": "Date",
+      "QUARTERLY": "Quarterly",
+      "WEEK": "Week"
     },
     "DATA_SOURCE": {
       "DATA_SOURCE_HEADER": "Data Source",
@@ -304,7 +310,8 @@
       "TIP_ADD_HIERARCHY": "Add Hierarchy",
       "TIP_SWITCH_TO_MEASURE": "Switch to Measure",
       "TIP_SWITCH_TO_DIMENSION": "Switch to Dimension",
-      "CUSTOM": "Custom"
+      "CUSTOM": "Custom",
+      "TYPE_SELECT": "Choose Type"
     },
     "JOB": {
       "CONFIG": "Config",

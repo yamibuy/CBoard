@@ -19,7 +19,7 @@
             </div>
             <div class="hr-line-dashed"></div>
             <!--属性类型-->
-            <div class="form-group">
+            <div class="form-group" ng-show="false">
                 <label class="col-lg-2 control-label">
                     属性类型：
                 </label>
@@ -126,9 +126,9 @@
                         <div class="col-xs-10 col-md-4 col-lg-5">
                             <div class="input-group">
                                 <!-- datetimepicker -->
-                                <input type="text" ng-if="selectedAttrKey === 'Y'" amazedatepicker class="form-control time-year" ng-model="rangeItem.selected" placeholder="请选择年" format="YYYY">
-                                <input type="text" ng-if="selectedAttrKey === 'M'" amazedatepicker class="form-control time-month" ng-model="rangeItem.selected" placeholder="请选择月" format="YYYY-MM">
-                                <input type="text" ng-if="selectedAttrKey === 'D'" amazedatepicker class="form-control time-day" ng-model="rangeItem.selected" placeholder="请选择日" format="YYYY-MM-DD">
+                                <input type="text" ng-if="selectedAttrKey === 'Y'" ngdatepicker class="form-control time-year" ng-model="rangeItem.selected" placeholder="请选择年" minview="2">
+                                <input type="text" ng-if="selectedAttrKey === 'M'" ngdatepicker class="form-control time-month" ng-model="rangeItem.selected" placeholder="请选择月" minview="1">
+                                <input type="text" ng-if="selectedAttrKey === 'D'" ngdatepicker class="form-control time-day" ng-model="rangeItem.selected" placeholder="请选择日" minview="0">
                                 <div class="input-group-btn">
                                     <div class="input-group-btn" ng-repeat="_i in [3]"
                                          ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
@@ -150,9 +150,9 @@
                         <div class="col-xs-10 col-md-4 col-lg-6">
                             <div class="input-group">
                                 <!-- datetimepicker -->
-                                <input type="text" amazedatepicker ng-if="selectedAttrKey === 'Y'" format="YYYY" class="form-control time-year" ng-model="rangeItem.selected" placeholder="请选择年">
-                                <input type="text" amazedatepicker ng-if="selectedAttrKey === 'M'" format="YYYY-MM" class="form-control time-month" ng-model="rangeItem.selected" placeholder="请选择月">
-                                <input type="text" amazedatepicker ng-if="selectedAttrKey === 'D'" format="YYYY-MM-DD" class="form-control time-day" ng-model="rangeItem.selected" placeholder="请选择日">
+                                <input type="text" ngdatepicker ng-if="selectedAttrKey === 'Y'" minview="2" class="form-control time-year" ng-model="rangeItem.selected" placeholder="请选择年">
+                                <input type="text" ngdatepicker ng-if="selectedAttrKey === 'M'" minview="1" class="form-control time-month" ng-model="rangeItem.selected" placeholder="请选择月">
+                                <input type="text" ngdatepicker ng-if="selectedAttrKey === 'D'" minview="0" class="form-control time-day" ng-model="rangeItem.selected" placeholder="请选择日">
                                 <div class="input-group-btn">
                                     <div class="input-group-btn" ng-repeat="_i in [4]"
                                          ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
@@ -170,18 +170,18 @@
                     <div class="col-xs-12 col-md-12 col-lg-10 pleft-0" ng-if="operate.closeInterval">
                         <div class="col-lg-5">
                             <!-- datetimepicker -->
-                            <input type="text" amazedatepicker ng-if="selectedAttrKey === 'Y'" format="YYYY" class="form-control time-year-1" ng-model="rangeItem.capped" placeholder="请选择年份上限">
-                            <input type="text" amazedatepicker ng-if="selectedAttrKey === 'M'" format="YYYY-MM" class="form-control time-month-1" ng-model="rangeItem.capped" placeholder="请选择月份上限">
-                            <input type="text" amazedatepicker ng-if="selectedAttrKey === 'D'" format="YYYY-MM-DD" class="form-control time-day-1" ng-model="rangeItem.capped" placeholder="请选择日期上限">
+                            <input type="text" ngdatepicker ng-if="selectedAttrKey === 'Y'" minview="2" class="form-control time-year-1" ng-model="rangeItem.capped" placeholder="请选择年份上限">
+                            <input type="text" ngdatepicker ng-if="selectedAttrKey === 'M'" minview="1" class="form-control time-month-1" ng-model="rangeItem.capped" placeholder="请选择月份上限">
+                            <input type="text" ngdatepicker ng-if="selectedAttrKey === 'D'" minview="0" class="form-control time-day-1" ng-model="rangeItem.capped" placeholder="请选择日期上限">
                             <small class="text-danger" ng-if="exist_t">
                                 已存在
                             </small>
                         </div>
                         <div class="col-lg-5">
                             <!-- datetimepicker TODO -->
-                            <input type="text" amazedatepicker ng-if="selectedAttrKey === 'Y'" format="YYYY" class="form-control time-year-2" ng-model="rangeItem.lowerLimit" placeholder="请选择年份下限">
-                            <input type="text" amazedatepicker ng-if="selectedAttrKey === 'M'" format="YYYY-MM" class="form-control time-month-2" ng-model="rangeItem.lowerLimit" placeholder="请选择月份下限">
-                            <input type="text" amazedatepicker ng-if="selectedAttrKey === 'D'" format="YYYY-MM-DD" class="form-control time-day-2" ng-model="rangeItem.lowerLimit" placeholder="请选择日期下限">
+                            <input type="text" ngdatepicker ng-if="selectedAttrKey === 'Y'" minview="2" class="form-control time-year-2" ng-model="rangeItem.lowerLimit" placeholder="请选择年份下限">
+                            <input type="text" ngdatepicker ng-if="selectedAttrKey === 'M'" minview="1" class="form-control time-month-2" ng-model="rangeItem.lowerLimit" placeholder="请选择月份下限">
+                            <input type="text" ngdatepicker ng-if="selectedAttrKey === 'D'" minview="0" class="form-control time-day-2" ng-model="rangeItem.lowerLimit" placeholder="请选择日期下限">
                             <small class="text-danger" ng-if="exist_e">
                                 已存在
                             </small>

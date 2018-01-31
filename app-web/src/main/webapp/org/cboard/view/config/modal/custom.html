@@ -20,16 +20,16 @@
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label class="col-lg-2 control-label">
-                            选择类型
+                            {{'CONFIG.DATASET.TYPE_SELECT' | translate}}
                         </label>
                         <div class="col-lg-10">
                             <select class="form-control" ng-model="c.fileType">
-                                <option value="other">非日期类型</option>
-                                <option value="Y">年份</option>
-                                <option value="M">月份</option>
-                                <option value="D">日期</option>
-                                <option value="Q">季度</option>
-                                <option value="W">周</option>
+                                <option value="other">{{'CONFIG.COMMON.NOT_DATE' | translate}}</option>
+                                <option value="Y">{{'CONFIG.COMMON.YEAR' | translate}}</option>
+                                <option value="M">{{'CONFIG.COMMON.MONTH' | translate}}</option>
+                                <option value="D">{{'CONFIG.COMMON.DATE' | translate}}</option>
+                                <option value="Q">{{'CONFIG.COMMON.QUARTERLY' | translate}}</option>
+                                <option value="W">{{'CONFIG.COMMON.WEEK' | translate}}</option>
                             </select>
                         </div>
                     </div>

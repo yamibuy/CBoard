@@ -105,7 +105,13 @@
   "CONFIG": {
     "COMMON": {
       "CUSTOM_EXPRESSION": "可选表达式",
-      "PLEASE_SELECT_FOLDER": "请选择文件夹"
+      "PLEASE_SELECT_FOLDER": "请选择文件夹",
+      "NOT_DATE": "非日期类型",
+      "YEAR": "年份",
+      "MONTH": "月份",
+      "DATE": "日期",
+      "QUARTERLY": "季度",
+      "WEEK": "周"
     },
     "DATA_SOURCE": {
       "DATA_SOURCE_HEADER": "数据源",
@@ -304,7 +310,8 @@
       "TIP_ADD_HIERARCHY": "添加层级",
       "TIP_SWITCH_TO_MEASURE": "转换为指标",
       "TIP_SWITCH_TO_DIMENSION": "转换为维度",
-      "CUSTOM": "定制语句"
+      "CUSTOM": "定制语句",
+      "TYPE_SELECT": "选择类型"
     },
     "JOB": {
       "CONFIG": "配置",

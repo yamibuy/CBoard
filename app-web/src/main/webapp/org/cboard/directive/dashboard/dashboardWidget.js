@@ -128,3 +128,61 @@ cBoard.directive('amazedatepicker', function ($timeout,$filter,$rootScope){
         }
     }
 });
+
+cBoard.directive('ngdatepicker', function ($timeout,$filter,$rootScope){
+    return {
+        require: '?ngModel',
+        restrict: 'A',
+        scope: {
+            ngModel: '=',
+            minDate: '='
+        },
+        link: function(scope, element, attr, ngModel) {
+            // 当数据在AngularJS内部改变, 把model的值更新到view上
+            ngModel.$render = function() {
+                $timeout(function(){
+                    element.val(ngModel.$viewValue ? ngModel.$viewValue : '');
+                });
+            };
+            // 当数据在AngularJS外部改变
+            element.on('blur', function() {
+                // 通知AngularJS更新UI, 并把值转成时间戳
+                $timeout(function(){
+                    var pickedTime = element.val();
+                    ngModel.$setViewValue(pickedTime ? pickedTime : '');
+                });
+            });
+
+            var vm = {
+                events: {
+                    init: function(){
+                        vm.events.dateTimePickerInit('zh-cn');
+                    },
+                    dateTimePickerInit: function(language){
+                        $timeout(function () {
+                            var headerFormat = 'yyyy-mm-dd'
+                            switch (attr.minview) {
+                                case '2':
+                                    headerFormat = 'yyyy';
+                                    break;
+                                case '1':
+                                    headerFormat = 'yyyy-mm';
+                                    break;
+                                case '0':
+                                    headerFormat = 'yyyy-mm-dd';
+                                    break;
+                            }
+                            element.datepicker({
+                                format: headerFormat,
+                                language: 'zh-CN',
+                                minViewMode: attr.minview-0
+                            });
+                        })
+                    }
+                }
+            };
+
+            vm.events.init();
+        }
+    }
+});
