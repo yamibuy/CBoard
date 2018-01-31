@@ -566,7 +566,9 @@ cBoard.controller('datasetCtrl', function ($scope, $http, $state, $stateParams, 
             size: 'lg',
             controller: function ($scope, $uibModalInstance) {
                 $scope.c = o;
-                $scope.c.fileType = 'other';
+                if(o.type == 'column'){
+                    $scope.c.fileType = o.fileType ? o.fileType : 'other';
+                }
                 $scope.ok = function () {
                     $uibModalInstance.close();
                 };
