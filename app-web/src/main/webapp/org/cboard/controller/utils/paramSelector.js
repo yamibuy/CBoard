@@ -57,8 +57,8 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
         capped: '',
         lowerLimit: ''
     };
-    // 初始进来需要设置默认值 TODO （PS：属性类型一行需要隐藏）
-    $scope.selectedAttrKey = null;
+    // 初始进来需要设置默认值
+    $scope.selectedAttrKey = param.fileType;
 
     $scope.getSelects = function () {
         $scope.loading = true;

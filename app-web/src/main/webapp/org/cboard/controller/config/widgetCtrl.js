@@ -271,7 +271,7 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
         $scope.verify = {widgetName: true};
         $scope.params = [];
         $scope.curDataset;
-    
+
         $scope.folderData = [];
         $scope.openFolder = false;
         $scope.selectedFold = {};
@@ -346,8 +346,8 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
                 jstree_ReloadTree(treeID, originalData);
             });
         };
-        
-    
+
+
         $http.get("dashboard/getDatasourceList.do").success(function (response) {
             $scope.datasourceList = response;
             getCategoryList();
@@ -968,62 +968,62 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
             }, 100,true);
         };
 
-    $scope.saveWin = function (type) {
-        var o = {"name": $scope.widgetName};
-        $uibModal.open({
-            templateUrl: 'org/cboard/view/config/modal/saveWin.html',
-            windowTemplateUrl: 'org/cboard/view/util/modal/window.html',
-            backdrop: false,
-            size: '40%',
-            scope: $scope,
-            controller: function ($scope, $uibModalInstance) {
+        $scope.saveWin = function (type) {
+            var o = {"name": $scope.widgetName};
+            $uibModal.open({
+                templateUrl: 'org/cboard/view/config/modal/saveWin.html',
+                windowTemplateUrl: 'org/cboard/view/util/modal/window.html',
+                backdrop: false,
+                size: '40%',
+                scope: $scope,
+                controller: function ($scope, $uibModalInstance) {
 
-                $scope.folderConfig = angular.copy(jsTreeConfig1);
-                $scope.folderConfig.plugins = ['types', 'unique', 'sort'];
+                    $scope.folderConfig = angular.copy(jsTreeConfig1);
+                    $scope.folderConfig.plugins = ['types', 'unique', 'sort'];
 
-                $scope.folderConfig.core.data = $scope.folderData;
+                    $scope.folderConfig.core.data = $scope.folderData;
 
-                $scope.o = o;
-                $scope.type = type;
-                $scope.ok = function () {
-                    if (!o.name) {
-                        $scope.alerts = [{msg: translate('CONFIG.WIDGET.WIDGET_NAME') + translate('COMMON.NOT_EMPTY'), type: 'danger'}];
-                        $("#Name").focus();
-                        return false;
-                    }
-                    if(!$scope.$parent.selectedFold.id){
-                        $scope.alerts = [{msg: translate('CONFIG.COMMON.PLEASE_SELECT_FOLDER'), type: 'danger'}];
-                        return false;
-                    }
+                    $scope.o = o;
+                    $scope.type = type;
+                    $scope.ok = function () {
+                        if (!o.name) {
+                            $scope.alerts = [{msg: translate('CONFIG.WIDGET.WIDGET_NAME') + translate('COMMON.NOT_EMPTY'), type: 'danger'}];
+                            $("#Name").focus();
+                            return false;
+                        }
+                        if(!$scope.$parent.selectedFold.id){
+                            $scope.alerts = [{msg: translate('CONFIG.COMMON.PLEASE_SELECT_FOLDER'), type: 'danger'}];
+                            return false;
+                        }
 
-                    $scope.$parent.widgetName = o.name;
-                    $scope.saveWgt($scope.type);
-                    $uibModalInstance.close();
-                };
+                        $scope.$parent.widgetName = o.name;
+                        $scope.saveWgt($scope.type);
+                        $uibModalInstance.close();
+                    };
 
-                $scope.cancel = function () {
-                    $uibModalInstance.close();
-                };
-                $scope.selectedFolder = function () {
-                    var selectedNodes = jstree_GetWholeTree("selectFolderID").get_selected(true);
+                    $scope.cancel = function () {
+                        $uibModalInstance.close();
+                    };
+                    $scope.selectedFolder = function () {
+                        var selectedNodes = jstree_GetWholeTree("selectFolderID").get_selected(true);
 
-                    if(selectedNodes.length > 0){
-                        $scope.$parent.selectedFold = _.find($scope.folderList, function (f) {
-                            return f.id == selectedNodes[0].id;
-                        });
-                    }
-                };
-            }
-        }).rendered.then(function () {
-            $timeout(function () {
-                var instance = jstree_GetWholeTree("selectFolderID");
-                instance.deselect_all();
-                instance.open_all();
-                instance.select_node($scope.selectedFold.id);
-            }, 100);
-        });
-    };
-    
+                        if(selectedNodes.length > 0){
+                            $scope.$parent.selectedFold = _.find($scope.folderList, function (f) {
+                                return f.id == selectedNodes[0].id;
+                            });
+                        }
+                    };
+                }
+            }).rendered.then(function () {
+                $timeout(function () {
+                    var instance = jstree_GetWholeTree("selectFolderID");
+                    instance.deselect_all();
+                    instance.open_all();
+                    instance.select_node($scope.selectedFold.id);
+                }, 100);
+            });
+        };
+
         var saveWgtCallBack = function (serviceStatus) {
             if (serviceStatus.status == '1') {
                 getWidgetList();
@@ -1044,7 +1044,7 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
             var o = {};
             o.name = $scope.widgetName;
             o.folderId = $scope.selectedFold.id;
-            
+
             o.data = {};
             o.data.config = $scope.curWidget.config;
             if ($scope.customDs) {
@@ -1324,6 +1324,7 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
                         col: item.column,
                         level: item.level,
                         type: 'eq',
+                        fileType: item.fileType,
                         values: [],
                         sort: 'asc'
                     };
@@ -1350,6 +1351,7 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
                 size: 'lg',
                 resolve: {
                     param: function () {
+                        console.log(setbackArr);
                         var item = setbackArr[setbackIdx];
                         if (item.col) {
                             if (item.type == 'eq') {
@@ -1551,13 +1553,13 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
                 $scope.deleteNode();
             }
         });
-    
+
         $scope.loadFolders = function () {
             $scope.openFolder = !$scope.openFolder;
 
             jstree_ReloadTree("selectFolderID", $scope.folderData);
         };
-    
+
         $scope.selectedFolder = function () {
             var selectedNodes = jstree_GetWholeTree("selectFolderID").get_selected(true);
             if(selectedNodes.length > 0){
@@ -1568,14 +1570,14 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
             }
             $scope.openFolder = !$scope.openFolder;
         };
-    
+
         var getSelectedWidget = function () {
             var selectedNode = jstree_GetSelectedNodes(treeID)[0];
 
             $scope.selectedFold = _.find($scope.folderList, function (f) {
                 return f.id == selectedNode.parent;
             });
-            
+
             return _.find($scope.widgetList, function (w) {
                 return w.id == selectedNode.id;
             });
@@ -1641,7 +1643,7 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
             }
             return list;
         };
-    
+
         $scope.treeEventsObj = function () {
             var baseEventObj = jstree_baseTreeEventsObj({
                 ngScope: $scope, ngHttp: $http, ngTimeout: $timeout, ModalUtils: ModalUtils,

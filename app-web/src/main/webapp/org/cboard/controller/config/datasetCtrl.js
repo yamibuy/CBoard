@@ -91,8 +91,8 @@ cBoard.controller('datasetCtrl', function ($scope, $http, $state, $stateParams, 
             jstree_ReloadTree(treeID, originalData);
         });
     };
-    
-    
+
+
     $http.get("dashboard/getDatasourceList.do").success(function (response) {
         $scope.datasourceList = response;
     });
@@ -112,7 +112,7 @@ cBoard.controller('datasetCtrl', function ($scope, $http, $state, $stateParams, 
             }
         });
     };
-    
+
     var getCategoryList = function () {
         $http.get("dashboard/getDatasetCategoryList.do").success(function (response) {
             $scope.categoryList = response;
@@ -264,15 +264,15 @@ cBoard.controller('datasetCtrl', function ($scope, $http, $state, $stateParams, 
 
                 $scope.folderConfig = angular.copy(jsTreeConfig1);
                 $scope.folderConfig.plugins = ['types', 'unique', 'sort'];
-                
+
                 $scope.folderConfig.core.data = $scope.folderData;
-                
+
                 $scope.o = o;
                 $scope.type = type;
                 $scope.ok = function () {
                     if (!o.name) {
                         $scope.alerts = [{msg: translate('CONFIG.DATASET.NAME') + translate('COMMON.NOT_EMPTY'), type: 'danger'}];
-                        
+
                         $("#Name").focus();
                         return false;
                     }
@@ -280,11 +280,11 @@ cBoard.controller('datasetCtrl', function ($scope, $http, $state, $stateParams, 
                         $scope.alerts = [{msg: translate('CONFIG.COMMON.PLEASE_SELECT_FOLDER'), type: 'danger'}];
                         return false;
                     }
-                    
+
                     $scope.curDataset.name = o.name;
 
                     $scope.save($scope.type);
-                    
+
                     $uibModalInstance.close();
                 };
                 $scope.cancel = function () {
@@ -306,10 +306,10 @@ cBoard.controller('datasetCtrl', function ($scope, $http, $state, $stateParams, 
                 instance.deselect_all();
                 instance.open_all();
                 instance.select_node($scope.selectedFold.id);
-            }, 100);            
+            }, 100);
         });
     };
-    
+
     $scope.save = function (type) {
         $scope.datasource ? $scope.curDataset.data.datasource = $scope.datasource.id : null;
         $scope.curDataset.data.query = $scope.curWidget.query;
@@ -318,7 +318,7 @@ cBoard.controller('datasetCtrl', function ($scope, $http, $state, $stateParams, 
             return;
         }
         var ds = angular.copy($scope.curDataset);
-        
+
         ds.name = $scope.curDataset.name;
         ds.folderId = $scope.selectedFold.id;
 
@@ -346,7 +346,7 @@ cBoard.controller('datasetCtrl', function ($scope, $http, $state, $stateParams, 
             });
         }
     };
-    
+
     $scope.editFilterGroup = function (col) {
         var columnObjs = schemaToSelect($scope.curDataset.data.schema);
         $uibModal.open({
@@ -440,11 +440,11 @@ cBoard.controller('datasetCtrl', function ($scope, $http, $state, $stateParams, 
                 }
             });
             _.each(rawSelects, function(col) {
-               if (_.find(selects, function(o) { return col == o.column;}) === undefined) {
+                if (_.find(selects, function(o) { return col == o.column;}) === undefined) {
                     selects.push({
                         column: col
                     });
-               }
+                }
             });
             return angular.copy(selects);
         }
@@ -566,6 +566,7 @@ cBoard.controller('datasetCtrl', function ($scope, $http, $state, $stateParams, 
             size: 'lg',
             controller: function ($scope, $uibModalInstance) {
                 $scope.c = o;
+                $scope.c.fileType = 'other';
                 $scope.ok = function () {
                     $uibModalInstance.close();
                 };

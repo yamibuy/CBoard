@@ -98,7 +98,7 @@ angular.module('cBoard').config(['$stateProvider', function ($stateProvider) {
 angular.module('cBoard').factory('sessionHelper', ["$rootScope","$q", function ($rootScope,$q) {
     var sessionHelper = {
         responseError: function (response) {
-            if (response.data.status && response.data.status == 2) {
+            if (response.data && response.data.status && response.data.status == 2) {
                 if ($rootScope.alert) {
                     $rootScope.alert(response.data.msg);
                 }
