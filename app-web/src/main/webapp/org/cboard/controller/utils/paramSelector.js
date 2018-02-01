@@ -1,7 +1,7 @@
 /**
  * Created by yfyuan on 2017/5/2.
  */
-cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance, dataService, param, filter, getSelects, ok) {
+cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance, dataService, param, filter, getSelects, ok,disabled) {
     // 初始化部分数据
     $scope.type = [
         {
@@ -13,14 +13,6 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             value: '≠'
         },
         {
-            title: '大于',
-            value: '>'
-        },
-        {
-            title: '小于',
-            value: '<'
-        },
-        {
             title: '大于等于',
             value: '≥'
         },
@@ -29,22 +21,11 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             value: '≤'
         },
         {
-            title: '大于下限小于等于上限',
-            value: '(a,b]'
-        },
-        {
-            title: '大于等于下限小于上限',
-            value: '[a,b)'
-        },
-        {
-            title: '大于下限小于上限',
-            value: '(a,b)'
-        },
-        {
-            title: '大于等于下限小于等于上限',
+            title: '范围[上限,下限]',
             value: '[a,b]'
         },
     ];
+    $scope.disabled = disabled;
     $scope.param = param;
     $scope.operate = {};
     $scope.filter = filter;
@@ -69,8 +50,8 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
     };
     var showValues = function () {
         var equal = ['=', '≠'];
-        var openInterval = ['>', '<', '≥', '≤'];
-        var closeInterval = ['(a,b]', '[a,b)', '(a,b)', '[a,b]'];
+        var openInterval = ['≥', '≤'];
+        var closeInterval = ['[a,b]'];
         $scope.operate.equal = $.inArray($scope.param.type, equal) > -1 ? true : false;
         $scope.operate.openInterval = $.inArray($scope.param.type, openInterval) > -1 ? true : false;
         $scope.operate.closeInterval = $.inArray($scope.param.type, closeInterval) > -1 ? true : false;
@@ -120,7 +101,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
         return _.indexOf($scope.param.values, v) == -1;
     };
     $scope.filterType = function () {
-        var rang = ['(a,b]', '[a,b)', '(a,b)', '[a,b]'];
+        var rang = ['[a,b]'];
         if($.inArray(param.type,rang) != -1){
             // 显示上下限选择框
             $scope.showRange = true;
@@ -169,7 +150,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
                 return;
             }
             param.values.push($scope.rangeItem.selected);
-            // < > ≤ ≥
+            // ≤ ≥
         }else if(type == 'openInterval'){
             param.values[0] = $scope.rangeItem.selected;
             // 范围
@@ -194,7 +175,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
         }else if(type == 'qorw'){
             if(param.type == '=' || param.type == '≠'){
                 param.values.push($scope.rangeItem.selected);
-            }else if(param.type == '>' || param.type == '<' || param.type == '≥' || param.type == '≤'){
+            }else if(param.type == '≥' || param.type == '≤'){
                 param.values = [];
                 param.values[0] = $scope.rangeItem.selected;
             }else {
@@ -226,14 +207,6 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
                     value: '≠'
                 },
                 {
-                    title: '大于',
-                    value: '>'
-                },
-                {
-                    title: '小于',
-                    value: '<'
-                },
-                {
                     title: '大于等于',
                     value: '≥'
                 },
@@ -242,19 +215,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
                     value: '≤'
                 },
                 {
-                    title: '大于下限小于等于上限',
-                    value: '(a,b]'
-                },
-                {
-                    title: '大于等于下限小于上限',
-                    value: '[a,b)'
-                },
-                {
-                    title: '大于下限小于上限',
-                    value: '(a,b)'
-                },
-                {
-                    title: '大于等于下限小于等于上限',
+                    title: '范围[上限,下限]',
                     value: '[a,b]'
                 },
             ];
