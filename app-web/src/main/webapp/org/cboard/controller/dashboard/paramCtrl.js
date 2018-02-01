@@ -138,6 +138,9 @@ cBoard.controller('paramCtrl', function ($scope, $uibModal, $http) {
             backdrop: false,
             size: 'lg',
             resolve: {
+                disabled: function(){
+                    return true;
+                },
                 param: function () {
                     if ($scope.param) {
                         return angular.copy($scope.param);

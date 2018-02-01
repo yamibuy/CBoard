@@ -1355,8 +1355,10 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
                 backdrop: false,
                 size: 'lg',
                 resolve: {
+                    disabled: function(){
+                        return false;
+                    },
                     param: function () {
-                        console.log(setbackArr);
                         var item = setbackArr[setbackIdx];
                         if (item.col) {
                             if (item.type == 'eq') {
@@ -1478,6 +1480,9 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
                             backdrop: false,
                             size: 'lg',
                             resolve: {
+                                disabled: function(){
+                                    return false;
+                                },
                                 param: function () {
                                     return angular.copy(filter);
                                 },

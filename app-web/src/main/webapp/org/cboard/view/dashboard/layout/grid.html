@@ -22,7 +22,7 @@
                                 <div class="col-lg-1" ng-repeat="param in row.params | filter:{paramType:'selector'}:true" ng-controller="paramCtrl" ng-init="init()">
                                     <ng-include src="'org/cboard/view/dashboard/param/selector.html'"/>
                                 </div>
-                                <div class="col-lg-1" ng-repeat="param in row.params | filter:{paramType:'slider'}:true" ng-controller="paramCtrl" ng-init="init()">
+                                <div class="col-lg-12" ng-repeat="param in row.params | filter:{paramType:'slider'}:true" ng-controller="paramCtrl" ng-init="init()">
                                     <ng-include src="'org/cboard/view/dashboard/param/slider.html'" class="col-md-{{param.cfg.width}}"/>
                                 </div>
                             </div>

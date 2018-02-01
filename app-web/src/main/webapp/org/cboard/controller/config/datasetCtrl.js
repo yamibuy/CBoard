@@ -100,6 +100,21 @@ cBoard.controller('datasetCtrl', function ($scope, $http, $state, $stateParams, 
     var getDatasetList = function () {
         $http.get("dashboard/getDatasetList.do").success(function (response) {
             $scope.datasetList = response;
+            // 判断数据有无类型，若无，加上other(非日期类型)
+            _.forEach($scope.datasetList,function(v){
+                _.forEach(v.data.schema.dimension,function(val){
+                    if(val.type === 'column' && !(val.hasOwnProperty('fileType'))){
+                        val.fileType = 'other';
+                    }
+                    if(val.type === 'level'){
+                        _.forEach(val.columns,function(value){
+                            if(value.type == 'column' && !(value.hasOwnProperty('fileType'))){
+                                value.fileType = 'other';
+                            }
+                        });
+                    }
+                });
+            });
             $scope.folderIds = angular.toJson(_.uniq($scope.datasetList.map(function (item) {
                 return item.folderId;
             })));
@@ -388,6 +403,9 @@ cBoard.controller('datasetCtrl', function ($scope, $http, $state, $stateParams, 
                         backdrop: false,
                         size: 'lg',
                         resolve: {
+                            disabled: function(){
+                                return false;
+                            },
                             param: function () {
                                 return angular.copy(filter);
                             },

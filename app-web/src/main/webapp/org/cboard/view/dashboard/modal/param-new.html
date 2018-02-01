@@ -78,7 +78,8 @@
                     <div class="col-xs-12 col-md-4 col-lg-4">
                         <select class="form-control"
                                 ng-model="param.type"
-                                ng-change="filterType()">
+                                ng-change="filterType()"
+                                ng-disabled="disabled">
                             <option ng-repeat="t in type" value="{{t.value}}">
                                 {{t.title}}
                             </option>
@@ -197,7 +198,7 @@
                 <div ng-if="selectedAttrKey === 'Q' || selectedAttrKey === 'W'" class="col-xs-12 col-md-12 col-lg-10">
                     <div class="col-lg-4" ng-if="operate.equal">
                         <div class="input-group">
-                            <input type="text" class="form-control" ng-model="rangeItem.selected" placeholder="如：2018-01">
+                            <input type="text" class="form-control" ng-model="rangeItem.selected" placeholder="{{selectedAttrKey == 'W' ? '如：2018-1或2018-52': '如：2018-1或2018-4'}}">
                             <div class="input-group-btn">
                                 <div class="input-group-btn">
                                     <button class="btn btn-primary" ng-click="selectRange('qorw')" ng-disabled="!rangeItem.selected">
@@ -210,7 +211,7 @@
 
                     <div class="col-lg-4" ng-if="operate.openInterval">
                         <div class="input-group">
-                            <input type="text" class="form-control" ng-model="rangeItem.selected" placeholder="如：2018-01">
+                            <input type="text" class="form-control" ng-model="rangeItem.selected" placeholder="{{selectedAttrKey == 'W' ? '如：2018-1或2018-52': '如：2018-1或2018-4'}}">
                             <div class="input-group-btn">
                                 <div class="input-group-btn">
                                     <button class="btn btn-primary" ng-click="selectRange('qorw')" ng-disabled="!rangeItem.selected">
@@ -223,10 +224,10 @@
 
                     <div class="col-lg-10 pall-0" ng-if="operate.closeInterval">
                         <div class="col-lg-5">
-                            <input type="text" class="form-control" ng-model="rangeItem.capped" placeholder="上限，如：2018-01">
+                            <input type="text" class="form-control" ng-model="rangeItem.capped" placeholder="{{selectedAttrKey == 'W' ? '如：2018-1或2018-52': '如：2018-1或2018-4'}}">
                         </div>
                         <div class="col-lg-5">
-                            <input type="text" class="form-control" ng-model="rangeItem.lowerLimit" placeholder="下限，如：2018-01">
+                            <input type="text" class="form-control" ng-model="rangeItem.lowerLimit" placeholder="{{selectedAttrKey == 'W' ? '如：2018-1或2018-52': '如：2018-1或2018-4'}}">
                         </div>
                         <div class="col-lg-2 pull-right">
                             <button class="btn btn-primary" ng-click="selectRange('qorw')" ng-disabled="!rangeItem.capped || !rangeItem.lowerLimit">
