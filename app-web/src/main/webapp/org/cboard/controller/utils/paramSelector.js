@@ -3,6 +3,8 @@
  */
 cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance, dataService, param, filter, getSelects, ok,disabled) {
     // 初始化部分数据
+    //
+    console.log(param);
     $scope.type = [
         {
             title: '等于',
@@ -120,16 +122,23 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
         lowerLimit: ''
     };
     // 初始进来需要设置默认值
-    $scope.selectedAttrKey = param.fileType;
-    console.log(param.fileType);
+    if(param.hasOwnProperty('fileType')){
+        $scope.selectedAttrKey = param.fileType;
+    }else if(param.col && param.col.length == 1){
+        $scope.selectedAttrKey = param.col[0].fileType;
+    }else {
+        $scope.selectedAttrKey = 'other'
+    }
+
+
     if(param.fileType !== 'other'){
         $scope.currentDropList = $scope.dropList[param.fileType];
-        console.log($scope.currentDropList);
     }
 
     $scope.onClickDropList = function(key){
         console.log(key);
         // 判断类型
+
     };
 
     $scope.getSelects = function () {

@@ -116,6 +116,7 @@ cBoard.controller('boardCtrl',
         var loadBoardDataset = function (status) {
             var datasetIdArr = [];
             var widgetArr = [];
+
             _.each($scope.curBoard.layout.rows, function (row) {
                 _.each(row.widgets, function (widget) {
                     var w = _.find($scope.widgetList, function (w) {
@@ -143,7 +144,13 @@ cBoard.controller('boardCtrl',
                                 return ds.id == d;
                             });
                             if (dataset != undefined) {
-                                $scope.boardDataset.push({name: dataset.name, columns: dps.columns, datasetId: dataset.id});
+                                $scope.boardDataset.push(
+                                    {
+                                        name: dataset.name,
+                                        columns: dps.columns,
+                                        datasetId: dataset.id
+                                    }
+                                );
                             }
                             status.i--;
                         } else {
@@ -456,6 +463,22 @@ cBoard.controller('boardCtrl',
                         for (var i = 0; i < paramCol.length; i++) {
                             (paramCol[i].column == v.column && paramCol[i].name == v.name) ? haveCol = true : null;
                         }
+                        // 补充fileType
+                        _.forEach(parent.datasetList,function(value){
+                            if(value.id == v.datasetId){
+                                _.forEach(value.data.schema.dimension,function(vals){
+                                    if(vals.hasOwnProperty('columns')){
+                                        _.forEach(vals.columns,function(values){
+                                            if(values.hasOwnProperty('fileType') && column === values.column){
+                                                v.fileType = values.column
+                                            }
+                                        });
+                                    }else {
+                                        v.fileType = vals.fileType
+                                    }
+                                });
+                            }
+                        });
                         (!haveCol || $scope.param.col == []) ? $scope.param.col.push(v) : null;
                     };
                     $scope.close = function () {
