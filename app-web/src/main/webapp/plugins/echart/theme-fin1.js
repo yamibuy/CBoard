@@ -21,9 +21,11 @@
     }
     echarts.registerTheme('theme-fin1', {
         "color": [
+            "#1AB394",//自定义
+            "#DED828",//自定义
+            "#F86B59",//自定义
             "#3c8dbc",
             "#59c4e6",
-            "#f56954",
             "#00a65a",
             "#a5e7f0",
             "#cbb0e3",
@@ -214,6 +216,9 @@
             "symbol": "emptyCircle",
             "smooth": true,
             "color": [
+                "#1AB394",//自定义
+                "#DED828",//自定义
+                "#F86B59",//自定义
                 "#3c8dbc",
                 "#59c4e6",
                 "#f56954",

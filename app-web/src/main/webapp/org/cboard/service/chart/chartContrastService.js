@@ -101,7 +101,7 @@ cBoard.service('chartContrastService', function () {
                     },
                     itemStyle:{
                         normal: {
-                            color : '#3C8DBC'
+                            color : '#1AB394'
                         }
                     },
                     data:aggregate_data[1]
