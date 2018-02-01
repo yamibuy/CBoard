@@ -244,8 +244,8 @@
                 </label>
                 <div class="col-lg-10">
                     <div class="col-lg-12">
-                        <div class="btn-group" ng-repeat="value in param.values track by $index" style="margin-right: 3px">
-                            <button class="btn btn-default btn-sm">{{param.values[$index]}}</button>
+                        <div class="btn-group" ng-repeat="value in param.cloneValue track by $index" style="margin-right: 3px">
+                            <button class="btn btn-default btn-sm">{{typeOf(value) == 'string' ? value : value.title}}</button>
                             <button class="btn btn-default btn-sm" ng-click="clearSelected($index)">
                                 <i class="fa fa-trash-o text-danger"></i>
                             </button>
