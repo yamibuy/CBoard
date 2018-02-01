@@ -1,7 +1,7 @@
 <div class="modal-header modal-header-background">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="close()">
         <span aria-hidden="true">×</span></button>
-    <h4 class="modal-title font-bold">{{param.alias ? param.alias : param.col}}</h4>
+    <h4 class="modal-title font-bold">{{param.name ? param.name : (param.alias ? param.alias : param.col)}}</h4>
 </div>
 <div class="modal-body">
     <form class="form-horizontal">
@@ -13,7 +13,7 @@
                 </label>
                 <div class="col-lg-10">
                     <p class="form-control-static">
-                        {{param.alias ? param.alias : param.col}}
+                        {{param.name ? param.name : (param.alias ? param.alias : param.col)}}
                     </p>
                 </div>
             </div>
@@ -131,8 +131,8 @@
                                 <input type="text" ng-if="selectedAttrKey === 'M'" ngdatepicker class="form-control time-month" ng-model="rangeItem.selected" placeholder="请选择月" minview="1">
                                 <input type="text" ng-if="selectedAttrKey === 'D'" ngdatepicker class="form-control time-day" ng-model="rangeItem.selected" placeholder="请选择日" minview="0">
                                 <div class="input-group-btn">
-                                    <div class="input-group-btn" ng-repeat="_i in [3]"
-                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
+                                    <div class="input-group-btn"
+                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html?i=111'">
                                     </div>
                                 </div>
                             </div>
@@ -155,8 +155,8 @@
                                 <input type="text" ngdatepicker ng-if="selectedAttrKey === 'M'" minview="1" class="form-control time-month" ng-model="rangeItem.selected" placeholder="请选择月">
                                 <input type="text" ngdatepicker ng-if="selectedAttrKey === 'D'" minview="0" class="form-control time-day" ng-model="rangeItem.selected" placeholder="请选择日">
                                 <div class="input-group-btn">
-                                    <div class="input-group-btn" ng-repeat="_i in [4]"
-                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
+                                    <div class="input-group-btn"
+                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html?i=111'">
                                     </div>
                                 </div>
                             </div>

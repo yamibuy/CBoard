@@ -139,7 +139,7 @@ cBoard.controller('paramCtrl', function ($scope, $uibModal, $http) {
             size: 'lg',
             resolve: {
                 disabled: function(){
-                    return true;
+                    return false;
                 },
                 param: function () {
                     if ($scope.param) {

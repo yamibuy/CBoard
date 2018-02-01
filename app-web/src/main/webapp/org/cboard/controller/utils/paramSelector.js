@@ -25,6 +25,87 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             value: '[a,b]'
         },
     ];
+    $scope.dropList = {
+        Y: [
+            {
+                key: "{now('Y',0,'yyyy')}",
+                title: '本年',
+            },
+            {
+                key: "{now('Y',-1,'yyyy')}",
+                title: '去年',
+            },
+        ],
+        M: [
+            {
+                key: "{now('M',0,'yyyy-MM')}",
+                title: '本月',
+            },
+            {
+                key: "{now('M',-1,'yyyy-MM')}",
+                title: '上月',
+            },
+            {
+                key: "{now('M',-3,'yyyy-MM')}",
+                title: '最近第3月',
+            },
+            {
+                key: "{now('M',-6,'yyyy-MM')}",
+                title: '最近第6月',
+            },
+            {
+                key: "{now('M',-12,'yyyy-MM')}",
+                title: '最近第12月',
+            },
+        ],
+        D: [
+            {
+                key: "{now('D',-7,'yyyy-MM-dd')}",
+                title: '最近第7天',
+            },
+            {
+                key: "{now('D',-15,'yyyy-MM-dd')}",
+                title: '最近第15天',
+            },
+            {
+                key: "{now('D',-30,'yyyy-MM-dd')}",
+                title: '最近第30天',
+            },
+            {
+                key: "{now('D',-60,'yyyy-MM-dd')}",
+                title: '最近第60天',
+            },
+            {
+                key: "{now('D',-90,'yyyy-MM-dd')}",
+                title: '最近第90天',
+            },
+            {
+                key: "{now('D',-180,'yyyy-MM-dd')}",
+                title: '最近半年',
+            },
+        ],
+        Q: [
+            {
+                key: "{now('Q',0,'yyyy-Q')}",
+                title: '本季度',
+            },
+            {
+                key: "{now('Q',-1,'yyyy-Q')}",
+                title: '上季度'
+            }
+        ],
+        W: [
+            {
+                key: "{now('W',0,'yyyy-W')}",
+                title: '本周',
+            },
+            {
+                key: "{now('W',-1,'yyyy-W')}",
+                title: '上周'
+            },
+        ]
+    };
+
     $scope.disabled = disabled;
     $scope.param = param;
     $scope.operate = {};
@@ -40,6 +121,16 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
     };
     // 初始进来需要设置默认值
     $scope.selectedAttrKey = param.fileType;
+    console.log(param.fileType);
+    if(param.fileType !== 'other'){
+        $scope.currentDropList = $scope.dropList[param.fileType];
+        console.log($scope.currentDropList);
+    }
+
+    $scope.onClickDropList = function(key){
+        console.log(key);
+        // 判断类型
+    };
 
     $scope.getSelects = function () {
         $scope.loading = true;
