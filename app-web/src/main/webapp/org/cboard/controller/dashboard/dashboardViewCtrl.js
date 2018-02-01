@@ -490,6 +490,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                     reload: true
                 });
                 widget.loading = false;
+                $scope.loadingData = false;
             } else {
                 chartService.renderChart(content, widgetConfig, {
                     optionFilter: optionFilter,
@@ -499,6 +500,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                 }).then(function (d) {
                     widget.realTimeTicket = d;
                     widget.loading = false;
+                    $scope.loadingData = false;
                 });
             }
             widget.realTimeOption = {optionFilter: optionFilter, scope: scope};

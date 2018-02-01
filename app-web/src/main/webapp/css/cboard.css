@@ -729,3 +729,6 @@ treecontrol.tree-dark {
     -webkit-animation: scale 1.2s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
     animation: scale 1.2s 0.36s infinite cubic-bezier(.2, .68, .18, 1.08);
 }
+.optionNum {
+    display: none!important;
+}
