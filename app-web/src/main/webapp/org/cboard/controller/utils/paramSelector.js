@@ -3,8 +3,6 @@
  */
 cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance, dataService, param, filter, getSelects, ok,disabled) {
     // 初始化部分数据
-    //
-    console.log(param);
     $scope.type = [
         {
             title: '等于',
@@ -109,7 +107,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
     };
 
     $scope.disabled = disabled;
-    $scope.param = param;
+    $scope.param = angular.copy(param);
     $scope.param.cloneValue = angular.copy(param.values);
 
     $scope.operate = {};
@@ -143,7 +141,9 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             });
         })
     }
-
+    $scope.findTypeOf = function(param){
+        return typeof(param)
+    };
     $scope.onClickDropList = function(key){
         // 判断类型
         var obj = $scope.dropList[param.fileType];
@@ -241,7 +241,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             }
         );
         _.forEach($scope.param.values,function(v,i){
-            if(typeof(v) != 'string'){
+            if(typeof v != 'string'){
                 $scope.param.values[i] = $scope.param.values[i].key;
             }
         });
@@ -253,53 +253,49 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             $scope.param.cloneValue.length = 1;
         }
     };
-    // 选定日期类型
-    $scope.addToSelected = function () {
-        console.log(param.cloneValue);
-    }
     // 选定时间范围
     $scope.selectRange = function (type) {
         // = ≠
         if(type =='equal'){
-            if($.inArray($scope.rangeItem.selected,param.cloneValue) > -1){
+            if($.inArray($scope.rangeItem.selected,$scope.param.cloneValue) > -1){
                 $scope.exist_o = true;
                 $timeout(function(){
                     $scope.exist_o = false;
                 },1500);
                 return;
             }
-            param.cloneValue.push($scope.rangeItem.selected);
+            $scope.param.cloneValue.push($scope.rangeItem.selected);
             // ≤ ≥
         }else if(type == 'openInterval'){
-            param.cloneValue[0] = $scope.rangeItem.selected;
+            $scope.param.cloneValue[0] = $scope.rangeItem.selected;
             // 范围
         }else if(type == 'closeInterval'){
-            if(param.cloneValue[0] && (param.cloneValue[0] == $scope.rangeItem.capped)){
+            if($scope.param.cloneValue[0] && ($scope.param.cloneValue[0] == $scope.rangeItem.capped)){
                 $scope.exist_t = true;
                 $timeout(function() {
                     $scope.exist_t = false;
                 }, 1500);
             }
-            if(param.cloneValue[1] && (param.cloneValue[1] == $scope.rangeItem.lowerLimit)){
+            if($scope.param.cloneValue[1] && ($scope.param.cloneValue[1] == $scope.rangeItem.lowerLimit)){
                 $scope.exist_e = true;
                 $timeout(function() {
                     $scope.exist_e = false;
                 }, 1500);
             }
 
-            param.cloneValue = [];
-            param.cloneValue.push($scope.rangeItem.capped);
-            param.cloneValue.push($scope.rangeItem.lowerLimit);
+            $scope.param.cloneValue = [];
+            $scope.param.cloneValue.push($scope.rangeItem.capped);
+            $scope.param.cloneValue.push($scope.rangeItem.lowerLimit);
             // 周/季度
         }else if(type == 'qorw'){
             if(param.type == '=' || param.type == '≠'){
-                param.cloneValue.push($scope.rangeItem.selected);
+                $scope.param.cloneValue.push($scope.rangeItem.selected);
             }else if(param.type == '≥' || param.type == '≤'){
-                param.cloneValue = [];
-                param.cloneValue[0] = $scope.rangeItem.selected;
+                $scope.param.cloneValue = [];
+                $scope.param.cloneValue[0] = $scope.rangeItem.selected;
             }else {
-                param.cloneValue[0] = $scope.rangeItem.capped;
-                param.cloneValue[1] = $scope.rangeItem.lowerLimit;
+                $scope.param.cloneValue[0] = $scope.rangeItem.capped;
+                $scope.param.cloneValue[1] = $scope.rangeItem.lowerLimit;
             }
         }
     }
@@ -351,16 +347,16 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             ];
         }
         if(flag != filterFlag){
-            param.cloneValue = [];
+            $scope.param.cloneValue = [];
         }
         filterFlag = flag;
     };
     // 删除当前选定值
     $scope.clearSelected = function (index) {
         if($scope.showRange){
-            param.cloneValue = [];
+            $scope.param.cloneValue = [];
         }else {
-            param.cloneValue.splice(index, 1);
+            $scope.param.cloneValue.splice(index, 1);
         }
     };
 });
