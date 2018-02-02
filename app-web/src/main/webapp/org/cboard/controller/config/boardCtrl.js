@@ -467,14 +467,16 @@ cBoard.controller('boardCtrl',
                         _.forEach(parent.datasetList,function(value){
                             if(value.id == v.datasetId){
                                 _.forEach(value.data.schema.dimension,function(vals){
-                                    if(vals.hasOwnProperty('columns')){
+                                    if(vals.type == 'level'){
                                         _.forEach(vals.columns,function(values){
-                                            if(values.hasOwnProperty('fileType') && column === values.column){
-                                                v.fileType = values.column
+                                            if(column === values.column){
+                                                v.fileType = values.fileType || 'other'
                                             }
                                         });
-                                    }else {
-                                        v.fileType = vals.fileType
+                                    }else if(vals.type == 'column'){
+                                        if(column == vals.column){
+                                            v.fileType = vals.fileType || 'other'
+                                        }
                                     }
                                 });
                             }

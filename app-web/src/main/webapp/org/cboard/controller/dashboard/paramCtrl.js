@@ -48,6 +48,8 @@ cBoard.controller('paramCtrl', function ($scope, $uibModal, $http) {
     };
 
     $scope.init = function () {
+        console.log($scope.datasetList);
+        console.log($scope.$parent.param);
         $scope.param = $scope.$parent.param;
         $scope.param.selects = [];
         if(!$scope.param.type) $scope.param.type = '=';
@@ -160,7 +162,9 @@ cBoard.controller('paramCtrl', function ($scope, $uibModal, $http) {
                     return function (param) {
                         $scope.param.values = param.values;
                         $scope.param.type = param.type;
-                        $scope.applyParamFilter();
+                        if($scope.applyParamFilter) {
+                            $scope.applyParamFilter();
+                        }
                     }
                 }
             },

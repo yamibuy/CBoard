@@ -131,8 +131,8 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
     }
 
 
-    if(param.fileType !== 'other'){
-        $scope.currentDropList = $scope.dropList[param.fileType];
+    if($scope.selectedAttrKey !== 'other'){
+        $scope.currentDropList = $scope.dropList[$scope.selectedAttrKey];
         _.forEach($scope.param.cloneValue,function(v,i){
             _.forEach($scope.currentDropList,function(val){
                 if(v == val.key){
@@ -146,7 +146,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
     };
     $scope.onClickDropList = function(key){
         // 判断类型
-        var obj = $scope.dropList[param.fileType];
+        var obj = $scope.dropList[$scope.selectedAttrKey];
         for(var i in obj){
             if(obj[i].key == key){
                 $scope.param.cloneValue.push(obj[i]);
