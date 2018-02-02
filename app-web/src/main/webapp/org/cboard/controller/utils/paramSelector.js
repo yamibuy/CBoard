@@ -101,8 +101,8 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
     // 初始进来需要设置默认值
     if(param.hasOwnProperty('fileType')){
         $scope.selectedAttrKey = param.fileType;
-    }else if(param.col && param.col.length == 1){
-        $scope.selectedAttrKey = param.col[0].fileType;
+    }else if(param.col && param.col.length > 0){
+        $scope.selectedAttrKey = param.col[0].fileType || 'other';
     }else {
         $scope.selectedAttrKey = 'other'
     }
@@ -307,6 +307,8 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
                 $scope.param.cloneValue[0] = $scope.rangeItem.capped;
                 $scope.param.cloneValue[1] = $scope.rangeItem.lowerLimit;
             }
+        }else if(!type){
+
         }
     }
     //
@@ -369,4 +371,16 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             $scope.param.cloneValue.splice(index, 1);
         }
     };
+    //
+    $scope.setInputValue = function(){
+        if($.inArray($scope.rangeItem.selected,$scope.param.cloneValue) != -1){
+            $scope.exist_other = true;
+            $timeout(function(){
+                $scope.exist_other = false;
+            },1500)
+            return;
+        }
+        $scope.param.cloneValue.push($scope.rangeItem.selected);
+        $scope.rangeItem.selected = '';
+    }
 });
