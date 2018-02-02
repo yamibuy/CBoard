@@ -3,28 +3,6 @@
  */
 cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance, dataService, param, filter, getSelects, ok,disabled) {
     // 初始化部分数据
-    $scope.type = [
-        {
-            title: '等于',
-            value: '='
-        },
-        {
-            title: '不等于',
-            value: '≠'
-        },
-        {
-            title: '大于等于',
-            value: '≥'
-        },
-        {
-            title: '小于等于',
-            value: '≤'
-        },
-        {
-            title: '范围[上限,下限]',
-            value: '[a,b]'
-        },
-    ];
     $scope.dropList = {
         Y: [
             {
@@ -105,7 +83,6 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             },
         ]
     };
-
     $scope.disabled = disabled;
     $scope.param = angular.copy(param);
     $scope.param.cloneValue = angular.copy(param.values);
@@ -132,6 +109,28 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
 
 
     if($scope.selectedAttrKey !== 'other'){
+        $scope.type = [
+            {
+                title: '等于',
+                value: '='
+            },
+            {
+                title: '不等于',
+                value: '≠'
+            },
+            {
+                title: '大于等于',
+                value: '≥'
+            },
+            {
+                title: '小于等于',
+                value: '≤'
+            },
+            {
+                title: '范围[上限,下限]',
+                value: '[a,b]'
+            },
+        ];
         $scope.currentDropList = $scope.dropList[$scope.selectedAttrKey];
         _.forEach($scope.param.cloneValue,function(v,i){
             _.forEach($scope.currentDropList,function(val){
@@ -140,6 +139,17 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
                 }
             });
         })
+    }else {
+        $scope.type = [
+            {
+                title: '等于',
+                value: '='
+            },
+            {
+                title: '不等于',
+                value: '≠'
+            }
+        ];
     }
     $scope.findTypeOf = function(param){
         return typeof(param)
