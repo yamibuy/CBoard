@@ -1702,7 +1702,7 @@ a:focus {
 .box {
   position: relative;
   background: #fff;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   width: 100%;
   /*
   webkit-animation-duration: 1s;
