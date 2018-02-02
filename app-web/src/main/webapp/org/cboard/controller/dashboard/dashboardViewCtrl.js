@@ -600,6 +600,10 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
         ],
         D: [
             {
+                key: "{now('D',-1,'yyyy-MM-dd')}",
+                title: '最近第1天',
+            },
+            {
                 key: "{now('D',-7,'yyyy-MM-dd')}",
                 title: '最近第7天',
             },
