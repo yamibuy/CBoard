@@ -565,7 +565,86 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
         }
         $scope.applyParamFilter();
     };
-
+    var dropList = {
+        Y: [
+            {
+                key: "{now('Y',0,'yyyy')}",
+                title: '本年',
+            },
+            {
+                key: "{now('Y',-1,'yyyy')}",
+                title: '去年',
+            },
+        ],
+        M: [
+            {
+                key: "{now('M',0,'yyyy-MM')}",
+                title: '本月',
+            },
+            {
+                key: "{now('M',-1,'yyyy-MM')}",
+                title: '上月',
+            },
+            {
+                key: "{now('M',-3,'yyyy-MM')}",
+                title: '最近第3月',
+            },
+            {
+                key: "{now('M',-6,'yyyy-MM')}",
+                title: '最近第6月',
+            },
+            {
+                key: "{now('M',-12,'yyyy-MM')}",
+                title: '最近第12月',
+            },
+        ],
+        D: [
+            {
+                key: "{now('D',-7,'yyyy-MM-dd')}",
+                title: '最近第7天',
+            },
+            {
+                key: "{now('D',-15,'yyyy-MM-dd')}",
+                title: '最近第15天',
+            },
+            {
+                key: "{now('D',-30,'yyyy-MM-dd')}",
+                title: '最近第30天',
+            },
+            {
+                key: "{now('D',-60,'yyyy-MM-dd')}",
+                title: '最近第60天',
+            },
+            {
+                key: "{now('D',-90,'yyyy-MM-dd')}",
+                title: '最近第90天',
+            },
+            {
+                key: "{now('D',-180,'yyyy-MM-dd')}",
+                title: '最近半年',
+            },
+        ],
+        Q: [
+            {
+                key: "{now('Q',0,'yyyy-Q')}",
+                title: '本季度',
+            },
+            {
+                key: "{now('Q',-1,'yyyy-Q')}",
+                title: '上季度'
+            }
+        ],
+        W: [
+            {
+                key: "{now('W',0,'yyyy-W')}",
+                title: '本周',
+            },
+            {
+                key: "{now('W',-1,'yyyy-W')}",
+                title: '上周'
+            },
+        ]
+    };
     var updateParamTitle = function () {
         _.each($scope.board.layout.rows, function (row) {
             _.each(row.params, function (param) {
@@ -576,17 +655,37 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                 switch (param.type) {
                     case '=':
                     case '≠':
-                        paramObj = param.name + ' ' + param.type + ' (' + param.values + ')';
+                        var arr = angular.copy(param.values);
+                        _.forEach(arr,function(v,i){
+                            for(var j in dropList){
+                                for(var k in dropList[j]){
+                                    if(dropList[j][k].key == v){
+                                        arr[i] = dropList[j][k].title
+                                    }
+                                }
+                            };
+                        });
+                        paramObj = param.name + ' ' + param.type + ' (' + arr + ')';
                         break;
-                    case '>':
-                    case '<':
+                    // case '>':
+                    // case '<':
                     case '≥':
                     case '≤':
-                        paramObj = param.name + ' ' + param.type + ' ' + param.values;
+                        var arr = angular.copy(param.values);
+                        _.forEach(arr,function(v,i){
+                            for(var j in dropList){
+                                for(var k in dropList[j]){
+                                    if(dropList[j][k].key == v){
+                                        arr[i] = dropList[j][k].title
+                                    }
+                                }
+                            };
+                        });
+                        paramObj = param.name + ' ' + param.type + ' ' + arr;
                         break;
-                    case '(a,b]':
-                    case '[a,b)':
-                    case '(a,b)':
+                    // case '(a,b]':
+                    // case '[a,b)':
+                    // case '(a,b)':
                     case '[a,b]':
                         var leftBrackets = param.type.split('a')[0];
                         var rightBrackets = param.type.split('b')[1];
