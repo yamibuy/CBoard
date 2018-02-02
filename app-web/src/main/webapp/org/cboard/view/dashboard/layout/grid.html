@@ -4,11 +4,11 @@
 <div id="inner-container" class="content">
 
     <input ng-model="relations" ng-hide="true" id="relations"/> <!--json [{},{}]-->
-    <div ng-repeat="row in board.layout.rows track by $index">
+    <div ng-repeat="row in board.layout.rows track by $index" ng-class="{true: 'box',false: ''}[row.widgets[0].widget.data.config.chart_type != 'kpi']">
         <ng-switch on="row.type">
             <div ng-switch-when="param" class="row">
-                <div class="col-lg-12 box" style="padding: 10px 0">
-                    <div class="box box-solid">
+                <div class="col-lg-12">
+                    <div class="box-solid">
                         <div class="box-header border-non" ng-if="paramToString(row)">
                             <div class="box-tools pull-right" ng-init="paramInfoShow = true">
                                 <div ng-show="paramInfoShow" class="paramTemplate btn btn-box-tool">{{paramToString(row)}}</div>
@@ -18,7 +18,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <div class="col-lg-12 pleft-0">
+                            <div class="col-lg-12">
                                 <div class="col-lg-1 pleft-0" ng-repeat="param in row.params | filter:{paramType:'selector'}:true" ng-controller="paramCtrl" ng-init="init()">
                                     <ng-include src="'org/cboard/view/dashboard/param/selector.html'"/>
                                 </div>
@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div ng-switch-default class="row">
-                <div class="col-lg-12 box" style="padding: 10px 0">
+                <div class="col-lg-12">
                     <div ng-repeat="widget in row.widgets track by $index">
                         <!-- 看板数据 -->
                         <div ng-if="widget.show" ng-show="!widget.sourceId || widget.showDiv">

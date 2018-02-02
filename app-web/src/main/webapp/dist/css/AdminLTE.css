@@ -1633,7 +1633,7 @@ a:focus {
 .small-box {
   display: flex;
   flex-direction: row;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border-color: #e7eaec;
   border-image: none;
   /*border-style: solid solid none;*/
