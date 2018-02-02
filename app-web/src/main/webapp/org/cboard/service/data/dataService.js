@@ -112,12 +112,24 @@ cBoard.service('dataService', function ($http, $q, updateService) {
         }
     };
 
-    var getDimensionConfig = function (array) {
+    var getDimensionConfig = function (array,type) {
         var result = [];
         if (array) {
             _.each(array, function (e) {
                 if (_.isUndefined(e.group)) {
-                    result.push({columnName: e.col, filterType: e.type, values: e.values, id: e.id});
+                    if(type && type === 'boardFilters'){
+                        result.push(
+                            {
+                                columnName: e.col,
+                                filterType: e.type,
+                                values: e.values,
+                                id: e.id,
+                                isBoard: true,
+                            }
+                        );
+                    }else {
+                        result.push({columnName: e.col, filterType: e.type, values: e.values, id: e.id});
+                    }
                 } else {
                     _.each(e.filters, function (f) {
                         result.push({columnName: f.col, filterType: f.type, values: f.values});
@@ -166,7 +178,7 @@ cBoard.service('dataService', function ($http, $q, updateService) {
             cfg.rows = getDimensionConfig(chartConfig.keys);
             cfg.columns = getDimensionConfig(chartConfig.groups);
             cfg.filters = getDimensionConfig(chartConfig.filters);
-            cfg.filters = cfg.filters.concat(getDimensionConfig(chartConfig.boardFilters));
+            cfg.filters = cfg.filters.concat(getDimensionConfig(chartConfig.boardFilters,'boardFilters'));
             cfg.filters = cfg.filters.concat(getDimensionConfig(chartConfig.boardWidgetFilters));
             cfg.values = _.map(dataSeries, function (s) {
                 return {column: s.name, aggType: s.aggregate};
