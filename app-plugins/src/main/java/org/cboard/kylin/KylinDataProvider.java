@@ -195,7 +195,7 @@ public class KylinDataProvider extends DataProvider implements Aggregatable, Ini
 
     @Override
     public AggregateResult queryAggData(AggConfig config) throws Exception {
-        String exec = sqlHelper.assembleAggDataSql(config);
+        String exec = sqlHelper.assembleAggDataSqlv2(config);
         List<String[]> list = new LinkedList<>();
         LOG.info(exec);
         try (
