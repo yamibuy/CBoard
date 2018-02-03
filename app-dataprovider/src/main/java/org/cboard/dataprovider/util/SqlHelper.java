@@ -175,6 +175,8 @@ public class SqlHelper {
         	}
 			
 		}
+        
+        
         if (hasNow) {
 			for (DimensionConfig dimensionConfig : sameFilter) {
 				String biao = "\""+dimensionConfig.getColumnName().substring(0, dimensionConfig.getColumnName().indexOf("."))+"\"";

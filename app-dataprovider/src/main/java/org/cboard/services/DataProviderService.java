@@ -89,6 +89,11 @@ public class DataProviderService {
     	for (ConfigComponent configComponent : config.getFilters()) {
 			filterList.add((DimensionConfig) configComponent);
 		}
+    	for (DimensionConfig dimensionConfig : config.getRows()) {
+    		if (!dimensionConfig.getFilterType().equals("eq")) {
+    			filterList.add(dimensionConfig);
+			}
+		}
     	
     	//检验是否含有相同字段
     	Boolean hasNow = false;
@@ -143,6 +148,7 @@ public class DataProviderService {
 				config.getFilters().add(dimensionConfig);
 			}
 		}
+    	config.setRows(new ArrayList<DimensionConfig>());
     }
 
     public DataProviderResult getColumns(Long datasourceId, Map<String, String> query, Long datasetId, boolean reload) {
