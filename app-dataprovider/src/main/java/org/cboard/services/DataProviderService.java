@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.hadoop.hive.metastore.api.ThriftHiveMetastore.Processor.list_privileges;
 import org.cboard.dao.DatasetDao;
 import org.cboard.dao.DatasourceDao;
 import org.cboard.dataprovider.DataProvider;
@@ -84,21 +85,26 @@ public class DataProviderService {
     //检验是否含有相同字段条件，用看板条件替换图表条件的值
     private void filterCheck(AggConfig config) throws ParseException{
     	List<DimensionConfig> filterList = new ArrayList<DimensionConfig>();
+    	List<DimensionConfig> filterList2 = new ArrayList<DimensionConfig>();
 		List<DimensionConfig> newFilterList = new ArrayList<DimensionConfig>();
 		String clName="";
     	for (ConfigComponent configComponent : config.getFilters()) {
 			filterList.add((DimensionConfig) configComponent);
+			filterList2.add((DimensionConfig) configComponent);
+		}
+    	for (DimensionConfig dimensionConfig : config.getRows()) {
+			filterList2.add(dimensionConfig);
 		}
     	
     	//检验是否含有相同字段
     	Boolean hasNow = false;
-    	for(int i=0;i<filterList.size();i++){
-    		for (int j = i+1; j < filterList.size(); j++) {
-				if (filterList.get(i).getColumnName().equals(filterList.get(j).getColumnName())) {
-					if (filterList.get(i).getIsBoard()=="true") {
-						clName = filterList.get(i).getValues().get(0);
-					}else if (filterList.get(j).getIsBoard()=="true") {
-						clName = filterList.get(j).getValues().get(0);
+    	for(int i=0;i<filterList2.size();i++){
+    		for (int j = i+1; j < filterList2.size(); j++) {
+				if (filterList2.get(i).getColumnName().equals(filterList2.get(j).getColumnName())) {
+					if (filterList2.get(i).getIsBoard()=="true") {
+						clName = filterList2.get(i).getValues().get(0);
+					}else if (filterList2.get(j).getIsBoard()=="true") {
+						clName = filterList2.get(j).getValues().get(0);
 					}
 					hasNow = true;
 				}
@@ -143,8 +149,16 @@ public class DataProviderService {
 			}
 		}
     	if (newFilterList.size()>0) {
+    		List<DimensionConfig> filterList3 = new ArrayList<DimensionConfig>();
     		config.setFilters(new ArrayList<ConfigComponent>());
 			for (DimensionConfig dimensionConfig : newFilterList) {
+				if (dimensionConfig.getIsBoard() == null) {
+					config.getFilters().add(dimensionConfig);
+				}else {
+					filterList3.add(dimensionConfig);
+				}
+			}
+			for (DimensionConfig dimensionConfig : filterList3) {
 				config.getFilters().add(dimensionConfig);
 			}
 		}
