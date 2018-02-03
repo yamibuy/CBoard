@@ -178,40 +178,134 @@ public class SqlHelper {
         
         
         if (hasNow) {
-			for (DimensionConfig dimensionConfig : sameFilter) {
-				String biao = "\""+dimensionConfig.getColumnName().substring(0, dimensionConfig.getColumnName().indexOf("."))+"\"";
-				String cloumn = "\""+dimensionConfig.getColumnName().substring(dimensionConfig.getColumnName().indexOf(".")+1, dimensionConfig.getColumnName().length())+"\" ";
-				String filterType = "";
-				List<String> valueList = new ArrayList<String>();
-				for (String str : dimensionConfig.getValues()) {
-					valueList.add("'"+str+"'");
-				}
-				String values = "("+valueList.toString().replace("[", "").replace("]", "")+")";
-				String abString = "";
-				if (dimensionConfig.getFilterType().equals("=")) {
-					filterType = "IN ";
-				}else if(dimensionConfig.getFilterType().equals("≠")){
-					filterType = "NOT IN ";
-				}else if (dimensionConfig.getFilterType().equals("≥")) {
-					filterType = ">= ";
-				}else if (dimensionConfig.getFilterType().equals("≤")) {
-					filterType = "<= ";
-				}else if (dimensionConfig.getFilterType().equals("[a,b]")) {
-					abString = biao+"."+cloumn +">= "+"("+valueList.get(0)+")"+" AND "+biao+"."+cloumn+"<= "+"("+valueList.get(1)+")";
-					if (whereStr.toString().equals("")) {
-						whereStr.append("WHERE "+abString);
-					}else {
-						whereStr.append(" OR ("+abString+")");
+        	if (sameFilter.size() == 2) {
+				if ((sameFilter.get(0).getFilterType().equals("=")&&(sameFilter.get(1).getFilterType().equals("≥")||sameFilter.get(1).getFilterType().equals("≤")))||
+						(sameFilter.get(1).getFilterType().equals("=")&&(sameFilter.get(0).getFilterType().equals("≥")||sameFilter.get(0).getFilterType().equals("≤")))) {
+					String biao1 = "\""+sameFilter.get(0).getColumnName().substring(0, sameFilter.get(0).getColumnName().indexOf("."))+"\"";
+					String biao2 = "\""+sameFilter.get(1).getColumnName().substring(0, sameFilter.get(1).getColumnName().indexOf("."))+"\"";
+					String cloumn1 = "\""+sameFilter.get(0).getColumnName().substring(sameFilter.get(0).getColumnName().indexOf(".")+1, sameFilter.get(0).getColumnName().length())+"\" ";
+					String cloumn2 = "\""+sameFilter.get(1).getColumnName().substring(sameFilter.get(1).getColumnName().indexOf(".")+1, sameFilter.get(1).getColumnName().length())+"\" ";
+					List<String> valueList1 = new ArrayList<String>();
+					List<String> valueList2 = new ArrayList<String>();
+					for (String str : sameFilter.get(0).getValues()) {
+						valueList1.add("'"+str+"'");
 					}
-					break;
-				}
-				if (whereStr.toString().equals("")) {
-					whereStr.append("WHERE ("+biao+"."+cloumn+filterType+values);
+					for (String str : sameFilter.get(1).getValues()) {
+						valueList2.add("'"+str+"'");
+					}
+					String values1 = "("+valueList1.toString().replace("[", "").replace("]", "")+")";
+					String values2 = "("+valueList2.toString().replace("[", "").replace("]", "")+")";
+//					String filterType1 = "";
+//					String filterType2 = "";
+//					if (sameFilter.get(0).getFilterType().equals("=")) {
+//						filterType1 = "IN ";
+//					}else if(sameFilter.get(0).getFilterType().equals("≠")){
+//						filterType1 = "NOT IN ";
+//					}else if (sameFilter.get(0).getFilterType().equals("≥")) {
+//						filterType1 = ">= ";
+//					}else if (sameFilter.get(0).getFilterType().equals("≤")) {
+//						filterType1 = "<= ";
+//					}else {
+//						filterType1 = sameFilter.get(0).getFilterType();
+//					}
+//					
+//					if (sameFilter.get(1).getFilterType().equals("=")) {
+//						filterType2 = "IN ";
+//					}else if(sameFilter.get(1).getFilterType().equals("≠")){
+//						filterType2 = "NOT IN ";
+//					}else if (sameFilter.get(1).getFilterType().equals("≥")) {
+//						filterType2 = ">= ";
+//					}else if (sameFilter.get(1).getFilterType().equals("≤")) {
+//						filterType2 = "<= ";
+//					}else {
+//						filterType2 = sameFilter.get(1).getFilterType();
+//					}
+					if (whereStr.toString().equals("")) {
+						whereStr.append("WHERE ("+biao1+"."+cloumn1+">= "+values1+" AND "+biao2+"."+cloumn2+"<= "+values2+") ");
+					}else {
+						whereStr.append("AND ("+biao1+"."+cloumn1+">="+values1+"AND"+biao2+"."+cloumn2+"<="+values2+")");
+					}
 				}else {
-					whereStr.append(" OR "+biao+"."+cloumn+filterType+values);
+					String biao1 = "\""+sameFilter.get(0).getColumnName().substring(0, sameFilter.get(0).getColumnName().indexOf("."))+"\"";
+					String biao2 = "\""+sameFilter.get(1).getColumnName().substring(0, sameFilter.get(1).getColumnName().indexOf("."))+"\"";
+					String cloumn1 = "\""+sameFilter.get(0).getColumnName().substring(sameFilter.get(0).getColumnName().indexOf(".")+1, sameFilter.get(0).getColumnName().length())+"\" ";
+					String cloumn2 = "\""+sameFilter.get(1).getColumnName().substring(sameFilter.get(1).getColumnName().indexOf(".")+1, sameFilter.get(1).getColumnName().length())+"\" ";
+					String filterType1 = "";
+					String filterType2 = "";
+					List<String> valueList1 = new ArrayList<String>();
+					List<String> valueList2 = new ArrayList<String>();
+					for (String str : sameFilter.get(0).getValues()) {
+						valueList1.add("'"+str+"'");
+					}
+					for (String str : sameFilter.get(1).getValues()) {
+						valueList2.add("'"+str+"'");
+					}
+					String values1 = "("+valueList1.toString().replace("[", "").replace("]", "")+")";
+					String values2 = "("+valueList2.toString().replace("[", "").replace("]", "")+")";
+					if (sameFilter.get(0).getFilterType().equals("=")) {
+						filterType1 = "IN ";
+					}else if(sameFilter.get(0).getFilterType().equals("≠")){
+						filterType1 = "NOT IN ";
+					}else if (sameFilter.get(0).getFilterType().equals("≥")) {
+						filterType1 = ">= ";
+					}else if (sameFilter.get(0).getFilterType().equals("≤")) {
+						filterType1 = "<= ";
+					}else {
+						filterType1 = sameFilter.get(0).getFilterType();
+					}
+					
+					if (sameFilter.get(1).getFilterType().equals("=")) {
+						filterType2 = "IN ";
+					}else if(sameFilter.get(1).getFilterType().equals("≠")){
+						filterType2 = "NOT IN ";
+					}else if (sameFilter.get(1).getFilterType().equals("≥")) {
+						filterType2 = ">= ";
+					}else if (sameFilter.get(1).getFilterType().equals("≤")) {
+						filterType2 = "<= ";
+					}else {
+						filterType2 = sameFilter.get(1).getFilterType();
+					}
+					if (whereStr.toString().equals("")) {
+						whereStr.append("WHERE ("+biao1+"."+cloumn1+filterType1+values1+"OR"+biao2+"."+cloumn2+filterType2+values2+")");
+					}else {
+						whereStr.append("AND ("+biao1+"."+cloumn1+filterType1+values1+"OR"+biao2+"."+cloumn2+filterType2+values2+")");
+					}
 				}
 			}
-			whereStr.append(") ");
+//			for (DimensionConfig dimensionConfig : sameFilter) {
+//				String biao = "\""+dimensionConfig.getColumnName().substring(0, dimensionConfig.getColumnName().indexOf("."))+"\"";
+//				String cloumn = "\""+dimensionConfig.getColumnName().substring(dimensionConfig.getColumnName().indexOf(".")+1, dimensionConfig.getColumnName().length())+"\" ";
+//				String filterType = "";
+//				List<String> valueList = new ArrayList<String>();
+//				for (String str : dimensionConfig.getValues()) {
+//					valueList.add("'"+str+"'");
+//				}
+//				String values = "("+valueList.toString().replace("[", "").replace("]", "")+")";
+//				String abString = "";
+//				if (dimensionConfig.getFilterType().equals("=")) {
+//					filterType = "IN ";
+//				}else if(dimensionConfig.getFilterType().equals("≠")){
+//					filterType = "NOT IN ";
+//				}else if (dimensionConfig.getFilterType().equals("≥")) {
+//					filterType = ">= ";
+//				}else if (dimensionConfig.getFilterType().equals("≤")) {
+//					filterType = "<= ";
+//				}else if (dimensionConfig.getFilterType().equals("[a,b]")) {
+//					abString = biao+"."+cloumn +">= "+"("+valueList.get(0)+")"+" AND "+biao+"."+cloumn+"<= "+"("+valueList.get(1)+")";
+//					if (whereStr.toString().equals("")) {
+//						whereStr.append("WHERE "+abString);
+//					}else {
+//						whereStr.append(" OR ("+abString+")");
+//					}
+//					break;
+//				}
+//				if (whereStr.toString().equals("")) {
+//					whereStr.append("WHERE ("+biao+"."+cloumn+filterType+values);
+//				}else {
+//					whereStr.append(" OR "+biao+"."+cloumn+filterType+values);
+//				}
+//			}
+//			whereStr.append(") ");
 			for (DimensionConfig dimensionConfig : orderFilte) {
 				String biao = "\""+dimensionConfig.getColumnName().substring(0, dimensionConfig.getColumnName().indexOf("."))+"\"";
 				String cloumn = "\""+dimensionConfig.getColumnName().substring(dimensionConfig.getColumnName().indexOf(".")+1, dimensionConfig.getColumnName().length())+"\" ";
@@ -239,7 +333,11 @@ public class SqlHelper {
 					}
 					break;
 				}
-				whereStr.append("AND "+biao+"."+cloumn+filterType+values);
+				if (whereStr.toString().equals("")) {
+					whereStr.append("WHERE "+biao+"."+cloumn+filterType+values);
+				}else {
+					whereStr.append("AND "+biao+"."+cloumn+filterType+values);
+				}
 			}
 		}else {
 			for (DimensionConfig dimensionConfig : filterList) {

@@ -111,6 +111,11 @@ public class DataProviderService {
     	}
     	
     	if (hasNow) {
+    		for (DimensionConfig dimensionConfig : config.getRows()) {
+        		if (!dimensionConfig.getFilterType().equals("eq")) {
+        			filterList.add(dimensionConfig);
+    			}
+    		}
     		List<String> clNameList = new ArrayList<String>();
     		for (DimensionConfig dimensionConfig : filterList) {
 				if (dimensionConfig.getIsBoard() == null) {
