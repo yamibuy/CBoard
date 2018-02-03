@@ -89,11 +89,6 @@ public class DataProviderService {
     	for (ConfigComponent configComponent : config.getFilters()) {
 			filterList.add((DimensionConfig) configComponent);
 		}
-    	for (DimensionConfig dimensionConfig : config.getRows()) {
-    		if (!dimensionConfig.getFilterType().equals("eq")) {
-    			filterList.add(dimensionConfig);
-			}
-		}
     	
     	//检验是否含有相同字段
     	Boolean hasNow = false;
