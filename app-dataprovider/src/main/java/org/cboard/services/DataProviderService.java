@@ -77,7 +77,7 @@ public class DataProviderService {
             return dataProvider.getAggData(config, reload);
         } catch (Exception e) {
             LOG.error("", e);
-            throw new CBoardException(e.getMessage());
+            throw new CBoardException("系统异常,请联系亚米网IT人员");
         }
     }
     
