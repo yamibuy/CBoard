@@ -48,8 +48,6 @@ cBoard.controller('paramCtrl', function ($scope, $uibModal, $http) {
     };
 
     $scope.init = function () {
-        console.log($scope.datasetList);
-        console.log($scope.$parent.param);
         $scope.param = $scope.$parent.param;
         $scope.param.selects = [];
         if(!$scope.param.type) $scope.param.type = '=';
@@ -131,7 +129,7 @@ cBoard.controller('paramCtrl', function ($scope, $uibModal, $http) {
         $scope.$emit('paramInitFinish', $scope.param);
     };
 
-    $scope.editParam = function () {
+    $scope.editParam = function (flag) {
         $uibModal.open({
             // templateUrl: 'org/cboard/view/dashboard/modal/param.html',
             // 修改过滤条件modal(旧的保留)
@@ -141,7 +139,7 @@ cBoard.controller('paramCtrl', function ($scope, $uibModal, $http) {
             size: 'lg',
             resolve: {
                 disabled: function(){
-                    return false;
+                    return flag ? true : false;
                 },
                 param: function () {
                     if ($scope.param) {

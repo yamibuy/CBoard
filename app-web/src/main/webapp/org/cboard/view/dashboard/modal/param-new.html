@@ -118,6 +118,21 @@
                                 </option>
                             </select>
                         </div>
+                        <div class="col-xs-12 col-md-12 col-lg-9" style="margin-top: 5px">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="rangeItem.selected" placeholder="试试手动输入想要搜索的属性值">
+                                <div class="input-group-btn">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" ng-click="setInputValue()" ng-disabled="!rangeItem.selected">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <small class="text-danger" ng-if="exist_other">
+                                已存在
+                            </small>
+                        </div>
                     </div>
                 </div>
                 <!--年/月/日-->
@@ -132,7 +147,7 @@
                                 <input type="text" ng-if="selectedAttrKey === 'D'" ngdatepicker class="form-control time-day" ng-model="rangeItem.selected" placeholder="请选择日" minview="0">
                                 <div class="input-group-btn">
                                     <div class="input-group-btn"
-                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html?i=111'">
+                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
                                     </div>
                                 </div>
                             </div>
@@ -156,7 +171,7 @@
                                 <input type="text" ngdatepicker ng-if="selectedAttrKey === 'D'" minview="0" class="form-control time-day" ng-model="rangeItem.selected" placeholder="请选择日">
                                 <div class="input-group-btn">
                                     <div class="input-group-btn"
-                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html?i=111'">
+                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
                                     </div>
                                 </div>
                             </div>
@@ -238,6 +253,7 @@
                 </div>
             </div>
             <div class="hr-line-dashed"></div>
+            <!-- 选定值 -->
             <div class="form-group">
                 <label class="col-lg-2 control-label">
                     选定值：

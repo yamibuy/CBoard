@@ -3,28 +3,6 @@
  */
 cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance, dataService, param, filter, getSelects, ok,disabled) {
     // 初始化部分数据
-    $scope.type = [
-        {
-            title: '等于',
-            value: '='
-        },
-        {
-            title: '不等于',
-            value: '≠'
-        },
-        {
-            title: '大于等于',
-            value: '≥'
-        },
-        {
-            title: '小于等于',
-            value: '≤'
-        },
-        {
-            title: '范围[上限,下限]',
-            value: '[a,b]'
-        },
-    ];
     $scope.dropList = {
         Y: [
             {
@@ -59,6 +37,10 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             },
         ],
         D: [
+            {
+                key: "{now('D',-1,'yyyy-MM-dd')}",
+                title: '最近第1天',
+            },
             {
                 key: "{now('D',-7,'yyyy-MM-dd')}",
                 title: '最近第7天',
@@ -105,7 +87,6 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             },
         ]
     };
-
     $scope.disabled = disabled;
     $scope.param = angular.copy(param);
     $scope.param.cloneValue = angular.copy(param.values);
@@ -124,14 +105,36 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
     // 初始进来需要设置默认值
     if(param.hasOwnProperty('fileType')){
         $scope.selectedAttrKey = param.fileType;
-    }else if(param.col && param.col.length == 1){
-        $scope.selectedAttrKey = param.col[0].fileType;
+    }else if(param.col && param.col.length > 0){
+        $scope.selectedAttrKey = param.col[0].fileType || 'other';
     }else {
         $scope.selectedAttrKey = 'other'
     }
 
 
     if($scope.selectedAttrKey !== 'other'){
+        $scope.type = [
+            {
+                title: '等于',
+                value: '='
+            },
+            {
+                title: '不等于',
+                value: '≠'
+            },
+            {
+                title: '大于等于',
+                value: '≥'
+            },
+            {
+                title: '小于等于',
+                value: '≤'
+            },
+            {
+                title: '范围[上限,下限]',
+                value: '[a,b]'
+            },
+        ];
         $scope.currentDropList = $scope.dropList[$scope.selectedAttrKey];
         _.forEach($scope.param.cloneValue,function(v,i){
             _.forEach($scope.currentDropList,function(val){
@@ -140,6 +143,17 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
                 }
             });
         })
+    }else {
+        $scope.type = [
+            {
+                title: '等于',
+                value: '='
+            },
+            {
+                title: '不等于',
+                value: '≠'
+            }
+        ];
     }
     $scope.findTypeOf = function(param){
         return typeof(param)
@@ -297,6 +311,8 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
                 $scope.param.cloneValue[0] = $scope.rangeItem.capped;
                 $scope.param.cloneValue[1] = $scope.rangeItem.lowerLimit;
             }
+        }else if(!type){
+
         }
     }
     //
@@ -359,4 +375,16 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             $scope.param.cloneValue.splice(index, 1);
         }
     };
+    //
+    $scope.setInputValue = function(){
+        if($.inArray($scope.rangeItem.selected,$scope.param.cloneValue) != -1){
+            $scope.exist_other = true;
+            $timeout(function(){
+                $scope.exist_other = false;
+            },1500)
+            return;
+        }
+        $scope.param.cloneValue.push($scope.rangeItem.selected);
+        $scope.rangeItem.selected = '';
+    }
 });
