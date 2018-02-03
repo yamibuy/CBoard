@@ -185,16 +185,16 @@ public class SqlHelper {
 					String biao2 = "\""+sameFilter.get(1).getColumnName().substring(0, sameFilter.get(1).getColumnName().indexOf("."))+"\"";
 					String cloumn1 = "\""+sameFilter.get(0).getColumnName().substring(sameFilter.get(0).getColumnName().indexOf(".")+1, sameFilter.get(0).getColumnName().length())+"\" ";
 					String cloumn2 = "\""+sameFilter.get(1).getColumnName().substring(sameFilter.get(1).getColumnName().indexOf(".")+1, sameFilter.get(1).getColumnName().length())+"\" ";
-					List<String> valueList1 = new ArrayList<String>();
-					List<String> valueList2 = new ArrayList<String>();
-					for (String str : sameFilter.get(0).getValues()) {
-						valueList1.add("'"+str+"'");
-					}
-					for (String str : sameFilter.get(1).getValues()) {
-						valueList2.add("'"+str+"'");
-					}
-					String values1 = "("+valueList1.toString().replace("[", "").replace("]", "")+")";
-					String values2 = "("+valueList2.toString().replace("[", "").replace("]", "")+")";
+//					List<String> valueList1 = new ArrayList<String>();
+//					List<String> valueList2 = new ArrayList<String>();
+//					for (String str : sameFilter.get(0).getValues()) {
+//						valueList1.add("'"+str+"'");
+//					}
+//					for (String str : sameFilter.get(1).getValues()) {
+//						valueList2.add("'"+str+"'");
+//					}
+					String values1 = "('"+sameFilter.get(0).getValues().get(0)+"')";
+					String values2 = "('"+sameFilter.get(1).getValues().get(0)+"')";
 //					String filterType1 = "";
 //					String filterType2 = "";
 //					if (sameFilter.get(0).getFilterType().equals("=")) {
