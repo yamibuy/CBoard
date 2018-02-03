@@ -168,9 +168,10 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
             {name: translate('CONFIG.WIDGET.RED'), value: 'bg-red'},
             {name: translate('CONFIG.WIDGET.GREEN'), value: 'bg-green'},
             {name: translate('CONFIG.WIDGET.YELLOW'), value: 'bg-yellow'},
-
+            // 新加颜色选项
             {name: translate('CONFIG.WIDGET.DIY_BLUE'), value: 'bg-diy-blue'},
-            {name: translate('CONFIG.WIDGET.DIY_GREEN'), value: 'bg-diy-green'},
+            {name: translate('CONFIG.WIDGET.DIY_GREEN_DEEP'), value: 'bg-diy-green-deep'},
+            {name: translate('CONFIG.WIDGET.DIY_GREEN_SHALLOW'), value: 'bg-diy-green-shallow'},
             {name: translate('CONFIG.WIDGET.DIY_YELLOW'), value: 'bg-diy-yellow'}
 
         ];

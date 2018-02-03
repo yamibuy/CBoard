@@ -33,8 +33,8 @@
     "FILTER_GROUP": "可选过滤",
     "SAVE_AS": "另存为",
     "PARAM": "条件",
-    "DRILL_DOWN": "下钻",
-    "ROLL_UP": "上卷",
+    "DRILL_DOWN": "详情",
+    "ROLL_UP": "返回",
     "WANRING": "警告！",
     "COLLAPSE": "最小化",
     "REMOVE": "关闭",
@@ -229,7 +229,8 @@
       "CHINA_MAP_BMAP":"中国地图（百度）",
       "RELATION": "关系图",
       "DIY_BLUE": "自定义蓝色",
-      "DIY_GREEN": "自定义绿色",
+      "DIY_GREEN_DEEP": "自定义深绿色",
+      "DIY_GREEN_SHALLOW": "自定义浅绿色",
       "DIY_YELLOW": "自定义黄色"
     },
     "DASHBOARD": {
