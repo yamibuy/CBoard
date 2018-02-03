@@ -211,30 +211,36 @@
                 </div>
                 <!-- 季度/周 -->
                 <div ng-if="selectedAttrKey === 'Q' || selectedAttrKey === 'W'" class="col-xs-12 col-md-12 col-lg-10">
-                    <div class="col-lg-4" ng-if="operate.equal">
-                        <div class="input-group">
-                            <input type="text" class="form-control" ng-model="rangeItem.selected" placeholder="{{selectedAttrKey == 'W' ? '如：2018-1或2018-52': '如：2018-1或2018-4'}}">
-                            <div class="input-group-btn">
+                    <div class="col-lg-12" ng-if="operate.equal">
+                        <div class="col-lg-4 pleft-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="rangeItem.selected" placeholder="{{selectedAttrKey == 'W' ? '如：2018-1或2018-52': '如：2018-1或2018-4'}}">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-primary" ng-click="selectRange('qorw')" ng-disabled="!rangeItem.selected">
-                                        <i class="fa fa-check"></i>
-                                    </button>
+                                    <div class="input-group-btn"
+                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <button class="btn btn-primary" ng-click="selectRange('qorw')" ng-disabled="!rangeItem.selected">
+                            <i class="fa fa-check"></i>
+                        </button>
                     </div>
 
-                    <div class="col-lg-4" ng-if="operate.openInterval">
-                        <div class="input-group">
-                            <input type="text" class="form-control" ng-model="rangeItem.selected" placeholder="{{selectedAttrKey == 'W' ? '如：2018-1或2018-52': '如：2018-1或2018-4'}}">
-                            <div class="input-group-btn">
+                    <div class="col-lg-12" ng-if="operate.openInterval">
+                        <div class="col-lg-4 pleft-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="rangeItem.selected" placeholder="{{selectedAttrKey == 'W' ? '如：2018-1或2018-52': '如：2018-1或2018-4'}}">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-primary" ng-click="selectRange('qorw')" ng-disabled="!rangeItem.selected">
-                                        <i class="fa fa-check"></i>
-                                    </button>
+                                    <div class="input-group-btn"
+                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <button class="btn btn-primary" ng-click="selectRange('qorw')" ng-disabled="!rangeItem.selected">
+                            <i class="fa fa-check"></i>
+                        </button>
                     </div>
 
                     <div class="col-lg-10 pall-0" ng-if="operate.closeInterval">

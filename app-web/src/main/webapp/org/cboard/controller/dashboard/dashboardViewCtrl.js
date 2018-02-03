@@ -569,86 +569,203 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
         Y: [
             {
                 key: "{now('Y',0,'yyyy')}",
+                distance: 0,
                 title: '本年',
+                format: '',
             },
             {
                 key: "{now('Y',-1,'yyyy')}",
+                distance: -1,
                 title: '去年',
+                format: '',
             },
         ],
         M: [
             {
                 key: "{now('M',0,'yyyy-MM')}",
+                distance: 0,
                 title: '本月',
+                format: '',
             },
             {
                 key: "{now('M',-1,'yyyy-MM')}",
+                distance: -1,
                 title: '上月',
+                format: '',
             },
             {
                 key: "{now('M',-3,'yyyy-MM')}",
+                distance: -3,
                 title: '最近第3月',
+                format: '',
             },
             {
                 key: "{now('M',-6,'yyyy-MM')}",
+                distance: -6,
                 title: '最近第6月',
+                format: '',
             },
             {
                 key: "{now('M',-12,'yyyy-MM')}",
+                distance: -12,
                 title: '最近第12月',
+                format: '',
             },
         ],
         D: [
             {
                 key: "{now('D',-1,'yyyy-MM-dd')}",
+                distance: -1,
                 title: '最近第1天',
+                format: '',
             },
             {
                 key: "{now('D',-7,'yyyy-MM-dd')}",
+                distance: -7,
                 title: '最近第7天',
+                format: '',
             },
             {
                 key: "{now('D',-15,'yyyy-MM-dd')}",
+                distance: -15,
                 title: '最近第15天',
+                format: '',
             },
             {
                 key: "{now('D',-30,'yyyy-MM-dd')}",
+                distance: -30,
                 title: '最近第30天',
+                format: '',
             },
             {
                 key: "{now('D',-60,'yyyy-MM-dd')}",
+                distance: -60,
                 title: '最近第60天',
+                format: '',
             },
             {
                 key: "{now('D',-90,'yyyy-MM-dd')}",
+                distance: -90,
                 title: '最近第90天',
+                format: '',
             },
             {
                 key: "{now('D',-180,'yyyy-MM-dd')}",
+                distance: -180,
                 title: '最近半年',
+                format: '',
             },
         ],
         Q: [
             {
                 key: "{now('Q',0,'yyyy-Q')}",
+                distance: 0,
                 title: '本季度',
+                format: '',
             },
             {
                 key: "{now('Q',-1,'yyyy-Q')}",
-                title: '上季度'
+                distance: -1,
+                title: '上季度',
+                format: '',
             }
         ],
         W: [
             {
                 key: "{now('W',0,'yyyy-W')}",
+                distance: 0,
                 title: '本周',
+                format: '',
             },
             {
                 key: "{now('W',-1,'yyyy-W')}",
-                title: '上周'
+                distance: -1,
+                title: '上周',
+                format: '',
             },
         ]
     };
+    // 获取若干天前（后）的日
+    var getDateStr = function (AddDayCount) {
+        var dd = new Date();
+        dd.setDate(dd.getDate() + AddDayCount);
+        var y = dd.getFullYear();
+        var m = dd.getMonth() + 1;
+        var d = dd.getDate();
+        return y+"-"+m+"-"+d;
+    };
+    // 获取若干月前（后）的月
+    var getMonthStr = function (AddMonthCount) {
+        var dd = new Date();
+        dd.setMonth(dd.getMonth() + AddMonthCount);
+        var y = dd.getFullYear();
+        var m = dd.getMonth()+1;
+        return y+"-"+m
+    };
+    // 获取若干年前（后）的年
+    var getYearStr = function (AddYearCount) {
+        var dd = new Date();
+        dd.setYear(dd.getFullYear() + AddYearCount);//获取AddDayCount天后的日期
+        var y = dd.getFullYear();
+        return y
+    };
+    // 获取若干周前（后）的周
+    var getWeekStr = function (AddWeekCount) {
+        var today = new Date();
+        var firstDay = new Date(today.getFullYear(),0, 1);
+        var dayOfWeek = firstDay.getDay();
+        var spendDay= 1;
+        if (dayOfWeek !=0) {
+            spendDay=7-dayOfWeek+1;
+        }
+        firstDay = new Date(today.getFullYear(),0, 1+spendDay);
+        var d =Math.ceil((today.valueOf()- firstDay.valueOf())/ 86400000);
+        var result =Math.ceil(d/7);
+        var w = (result + 1) + AddWeekCount;
+        if(w <= 0){
+            return today.getFullYear()-1 + '-' + (52+w);
+        }else {
+            return today.getFullYear() + '-' + w;
+        }
+    };
+    // 获取若干季前（后）的季
+    var getQuarterlyStr = function (AddQuarterlyCount) {
+        var dd = new Date();
+        var y = dd.getFullYear();
+        var m = dd.getMonth() + 1;
+        var q;
+        if(m <= 3){
+            q = 1;
+        }else if(m <= 6){
+            q = 2;
+        }else if(m <= 9){
+            q = 3;
+        }else if(m <= 12){
+            q = 4;
+        };
+        if((q + AddQuarterlyCount) <= 0){
+            q = 4;
+            y = y - 1;
+        }
+        return y + '-' + q;
+    };
+
+    _.each(dropList.D,function(v,i){
+        v.format = getDateStr(v.distance);
+    });
+    _.each(dropList.M,function(v,i){
+        v.format = getMonthStr(v.distance);
+    });
+    _.each(dropList.Y,function(v,i){
+        v.format = getYearStr(v.distance);
+    });
+    _.each(dropList.Q,function(v,i){
+        v.format = getQuarterlyStr(v.distance);
+    });
+    _.each(dropList.W,function(v,i){
+        v.format = getWeekStr(v.distance);
+    });
+
     var updateParamTitle = function () {
         _.each($scope.board.layout.rows, function (row) {
             _.each(row.params, function (param) {
@@ -664,7 +781,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                             for(var j in dropList){
                                 for(var k in dropList[j]){
                                     if(dropList[j][k].key == v){
-                                        arr[i] = dropList[j][k].title
+                                        arr[i] = dropList[j][k].format
                                     }
                                 }
                             };
@@ -680,7 +797,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                             for(var j in dropList){
                                 for(var k in dropList[j]){
                                     if(dropList[j][k].key == v){
-                                        arr[i] = dropList[j][k].title
+                                        arr[i] = dropList[j][k].format
                                     }
                                 }
                             };
