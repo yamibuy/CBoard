@@ -148,7 +148,6 @@ public class DataProviderService {
 				config.getFilters().add(dimensionConfig);
 			}
 		}
-    	config.setRows(new ArrayList<DimensionConfig>());
     }
 
     public DataProviderResult getColumns(Long datasourceId, Map<String, String> query, Long datasetId, boolean reload) {
