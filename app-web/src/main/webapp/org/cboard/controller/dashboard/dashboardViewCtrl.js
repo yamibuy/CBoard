@@ -2,13 +2,14 @@
  * Created by yfyuan on 2016/8/2.
  */
 
-cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $state, $stateParams, $http, ModalUtils, chartService, $interval, $uibModal, dataService) {
+cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $state, $stateParams, $http, ModalUtils, chartService, $interval, $uibModal, dataService, userService) {
     $scope.loading = true;
     $scope.loadingData = true;
     $scope.paramInit = 0;
     $scope.relations = JSON.stringify([]);
     $http.get("dashboard/getDatasetList.do").success(function (response) {
         $scope.datasetList = response;
+        userService(response);
         $scope.realtimeDataset = {};
         $scope.datasetMeta = {};
         $scope.intervals = [];

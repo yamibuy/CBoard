@@ -2,17 +2,23 @@
  * Created by yfyuan on 2016/8/12.
  */
 'use strict';
-cBoard.service('dataService', function ($http, $q, updateService) {
+cBoard.service('dataService', function ($http, $q, updateService,userService) {
 
     var datasetList;
+
     var getDatasetList = function () {
         var deferred = $q.defer();
         if (datasetList) {
             deferred.resolve(angular.copy(datasetList));
         } else {
-            $http.get("dashboard/getDatasetList.do").success(function (data) {
-                deferred.resolve(data);
-            });
+            var uData = userService([],[]).datasetList;
+            if(uData.length > 0){
+                deferred.resolve(uData);
+            }else {
+                $http.get("dashboard/getDatasetList.do").success(function (data) {
+                    deferred.resolve(data);
+                });
+            }
         }
         return deferred.promise;
     };
