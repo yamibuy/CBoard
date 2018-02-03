@@ -1,15 +1,21 @@
 package org.cboard.services;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONPath;
-import com.google.common.base.Functions;
-import com.google.common.collect.Maps;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+
 import org.apache.commons.lang3.StringUtils;
 import org.cboard.dao.DatasetDao;
 import org.cboard.dao.DatasourceDao;
 import org.cboard.dataprovider.DataProvider;
 import org.cboard.dataprovider.DataProviderManager;
 import org.cboard.dataprovider.config.AggConfig;
+import org.cboard.dataprovider.config.ConfigComponent;
 import org.cboard.dataprovider.config.DimensionConfig;
 import org.cboard.dataprovider.result.AggregateResult;
 import org.cboard.dto.DataProviderResult;
@@ -21,8 +27,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.Map;
-import java.util.function.Consumer;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPath;
+import com.google.common.base.Functions;
+import com.google.common.collect.Maps;
+import com.googlecode.aviator.AviatorEvaluator;
 
 /**
  * Created by yfyuan on 2016/8/15.
@@ -64,11 +73,76 @@ public class DataProviderService {
             Dataset dataset = getDataset(datasetId);
             attachCustom(dataset, config);
             DataProvider dataProvider = getDataProvider(datasourceId, query, dataset);
+            filterCheck(config);
             return dataProvider.getAggData(config, reload);
         } catch (Exception e) {
             LOG.error("", e);
             throw new CBoardException(e.getMessage());
         }
+    }
+    
+    //检验是否含有相同字段条件，用看板条件替换图表条件的值
+    private void filterCheck(AggConfig config) throws ParseException{
+    	List<DimensionConfig> filterList = new ArrayList<DimensionConfig>();
+		List<DimensionConfig> newFilterList = new ArrayList<DimensionConfig>();
+		String clName="";
+    	for (ConfigComponent configComponent : config.getFilters()) {
+			filterList.add((DimensionConfig) configComponent);
+		}
+    	
+    	//检验是否含有相同字段
+    	Boolean hasNow = false;
+    	for(int i=0;i<filterList.size();i++){
+    		for (int j = i+1; j < filterList.size(); j++) {
+				if (filterList.get(i).getColumnName().equals(filterList.get(j).getColumnName())) {
+					if (filterList.get(i).getIsBoard()=="true") {
+						clName = filterList.get(i).getValues().get(0);
+					}else if (filterList.get(j).getIsBoard()=="true") {
+						clName = filterList.get(j).getValues().get(0);
+					}
+					hasNow = true;
+				}
+			}
+    	}
+    	
+    	if (hasNow) {
+    		List<String> clNameList = new ArrayList<String>();
+    		for (DimensionConfig dimensionConfig : filterList) {
+				if (dimensionConfig.getIsBoard() == null) {
+					for (String cloumn : dimensionConfig.getValues()) {
+						if (cloumn.indexOf("now") != -1) {
+							String [] strings = cloumn.split(",");
+							if (strings.length == 3) {
+								SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd");
+								Calendar calendar = Calendar.getInstance();
+								if (clName.indexOf("now") != -1) {
+									clName = AviatorEvaluator.compile(clName.substring(1, clName.length() - 1), true).execute().toString();
+								}
+								calendar.setTime(sFormat.parse(clName));
+								calendar.add(Calendar.DATE, Integer.parseInt(strings[1]));
+								String newClName = sFormat.format(calendar.getTime());
+								clNameList.add(newClName);
+							}else {
+								clNameList.add(clName);
+							}
+						}else {
+							clNameList.add(cloumn);
+						}
+					}
+					dimensionConfig.setValues(new ArrayList<String>());
+					dimensionConfig.setValues(clNameList);
+					newFilterList.add(dimensionConfig);
+				}else {
+					newFilterList.add(dimensionConfig);
+				}
+			}
+		}
+    	if (newFilterList.size()>0) {
+    		config.setFilters(new ArrayList<ConfigComponent>());
+			for (DimensionConfig dimensionConfig : newFilterList) {
+				config.getFilters().add(dimensionConfig);
+			}
+		}
     }
 
     public DataProviderResult getColumns(Long datasourceId, Map<String, String> query, Long datasetId, boolean reload) {
