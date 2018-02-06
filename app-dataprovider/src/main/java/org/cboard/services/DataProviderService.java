@@ -131,8 +131,8 @@ public class DataProviderService {
         									clName = AviatorEvaluator.compile(clName.substring(1, clName.length() - 1), true).execute().toString();
         								}
         								calendar.setTime(sFormat.parse(clName));
-        								strings[1].trim();
-        								calendar.add(Calendar.DATE, Integer.parseInt(strings[1]));
+        								String num = strings[1].replace(" ", "");
+        								calendar.add(Calendar.DATE, Integer.parseInt(num));
         								String newClName = sFormat.format(calendar.getTime());
         								clNameList.add(newClName);
         							}else {
@@ -155,7 +155,8 @@ public class DataProviderService {
         									clName = AviatorEvaluator.compile(clName.substring(1, clName.length() - 1), true).execute().toString();
         								}
         								calendar.setTime(sFormat.parse(clName));
-        								calendar.add(Calendar.DATE, Integer.parseInt(strings[1]));
+        								String num = strings[1].replace(" ", "");
+        								calendar.add(Calendar.DATE, Integer.parseInt(num));
         								String newClName = sFormat.format(calendar.getTime());
         								clNameList.add(newClName);
         							}else {
