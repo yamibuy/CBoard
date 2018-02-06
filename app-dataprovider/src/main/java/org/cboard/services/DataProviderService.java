@@ -131,6 +131,7 @@ public class DataProviderService {
         									clName = AviatorEvaluator.compile(clName.substring(1, clName.length() - 1), true).execute().toString();
         								}
         								calendar.setTime(sFormat.parse(clName));
+        								strings[1].trim();
         								calendar.add(Calendar.DATE, Integer.parseInt(strings[1]));
         								String newClName = sFormat.format(calendar.getTime());
         								clNameList.add(newClName);
