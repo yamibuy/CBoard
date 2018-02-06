@@ -686,9 +686,18 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
             },
         ]
     };
+    var getTimeByTimeZone = function(timeZone) {
+        var d = new Date();
+        localTime = d.getTime(),
+            localOffset=d.getTimezoneOffset()*60000, //获得当地时间偏移的毫秒数,这里可能是负数
+            utc = localTime + localOffset, //utc即GMT时间
+            offset = timeZone, //时区，北京市+8  美国华盛顿为 -5
+            localSecondTime = utc + (3600000*offset);  //本地对应的毫秒数
+        return new Date(localSecondTime);
+    };
     // 获取若干天前（后）的日
     var getDateStr = function (AddDayCount) {
-        var dd = new Date();
+        var dd = getTimeByTimeZone(-8);
         dd.setDate(dd.getDate() + AddDayCount);
         var y = dd.getFullYear();
         var m = dd.getMonth() + 1;
@@ -697,7 +706,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
     };
     // 获取若干月前（后）的月
     var getMonthStr = function (AddMonthCount) {
-        var dd = new Date();
+        var dd = getTimeByTimeZone(-8);
         dd.setMonth(dd.getMonth() + AddMonthCount);
         var y = dd.getFullYear();
         var m = dd.getMonth()+1;
@@ -705,7 +714,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
     };
     // 获取若干年前（后）的年
     var getYearStr = function (AddYearCount) {
-        var dd = new Date();
+        var dd = getTimeByTimeZone(-8);
         dd.setYear(dd.getFullYear() + AddYearCount);//获取AddDayCount天后的日期
         var y = dd.getFullYear();
         return y
@@ -731,7 +740,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
     };
     // 获取若干季前（后）的季
     var getQuarterlyStr = function (AddQuarterlyCount) {
-        var dd = new Date();
+        var dd = getTimeByTimeZone(-8);
         var y = dd.getFullYear();
         var m = dd.getMonth() + 1;
         var q;
