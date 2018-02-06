@@ -92,6 +92,9 @@ public class DataProviderService {
 			filterList2.add((DimensionConfig) configComponent);
 		}
     	for (DimensionConfig dimensionConfig : config.getRows()) {
+    		if (!dimensionConfig.getFilterType().equals("eq")) {
+    			filterList.add(dimensionConfig);
+			}
 			filterList2.add(dimensionConfig);
 		}
     	
@@ -111,11 +114,6 @@ public class DataProviderService {
     	}
     	
     	if (hasNow) {
-    		for (DimensionConfig dimensionConfig : config.getRows()) {
-        		if (!dimensionConfig.getFilterType().equals("eq")) {
-        			filterList.add(dimensionConfig);
-    			}
-    		}
     		List<String> clNameList = new ArrayList<String>();
     		for (int i=0;i<filterList.size();i++) {
     			for (int j = i+1; j < filterList.size(); j++) {
