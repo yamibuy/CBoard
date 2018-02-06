@@ -4,7 +4,7 @@
 
 cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $state, $stateParams, $http, ModalUtils, chartService, $interval, $uibModal, dataService, userService) {
     $scope.loading = true;
-    $scope.loadingData = true;
+    $rootScope.loadingData = true;
     $scope.paramInit = 0;
     $scope.relations = JSON.stringify([]);
     $http.get("dashboard/getDatasetList.do").success(function (response) {
@@ -111,7 +111,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                 }).then(function (d) {
                     widget.realTimeTicket = d;
                     widget.loading = false;
-                    $scope.loadingData = false;
+                    $rootScope.loadingData = false;
                 });
             }
             widget.realTimeOption = {optionFilter: optionFilter, scope: scope};
@@ -251,7 +251,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
     $scope.load = function (reload) {
         $scope.paramInit = 0;
         $scope.loading = true;
-        $scope.loadingData = true;
+        $rootScope.loadingData = true;
         $("#relations").val(JSON.stringify([]));
         _.each($scope.intervals, function (e) {
             $interval.cancel(e);
@@ -391,14 +391,14 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
     };
 
     $scope.applyParamFilter = function () {
-        $scope.loadingData = true;
+        $rootScope.loadingData = true;
         paramToFilter();
         _.each($scope.board.layout.rows, function (row) {
             _.each(row.widgets, function (w) {
                 try {
                     chartService.realTimeRender(w.realTimeTicket, injectFilter(w.widget).data, null, $scope, w, true);
                 } catch (e) {
-                    $scope.loadingData = false;
+                    $rootScope.loadingData = false;
                     console.error(e);
                 }
             });
@@ -475,7 +475,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
     };
 
     $scope.reload = function (widget) {
-        $scope.loadingData = true;
+        $rootScope.loadingData = true;
         paramToFilter();
         widget.widget.data = injectFilter(widget.widget).data;
         widget.show = false;
@@ -491,7 +491,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                     reload: true
                 });
                 widget.loading = false;
-                $scope.loadingData = false;
+                $rootScope.loadingData = false;
             } else {
                 chartService.renderChart(content, widgetConfig, {
                     optionFilter: optionFilter,
@@ -501,7 +501,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                 }).then(function (d) {
                     widget.realTimeTicket = d;
                     widget.loading = false;
-                    $scope.loadingData = false;
+                    $rootScope.loadingData = false;
                 });
             }
             widget.realTimeOption = {optionFilter: optionFilter, scope: scope};

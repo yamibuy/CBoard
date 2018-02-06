@@ -2,7 +2,7 @@
  * Created by yfyuan on 2016/10/28.
  */
 'use strict';
-cBoard.service('chartService', function ($q, dataService, chartPieService, chartLineService, chartFunnelService,
+cBoard.service('chartService', function ($rootScope, $q, dataService, chartPieService, chartLineService, chartFunnelService,
                                          chartSankeyService, chartTableService, chartKpiService, chartRadarService,
                                          chartMapService, chartScatterService, chartGaugeService, chartWordCloudService,
                                          chartTreeMapService, chartAreaMapService, chartHeatMapCalendarService, chartHeatMapTableService,
@@ -31,6 +31,7 @@ cBoard.service('chartService', function ($q, dataService, chartPieService, chart
                     }
                     if (data.drill) {
                         data.drill.drillDown = function (id, value, render) {
+                            $rootScope.loadingData = true;
                             dataService.getDrillPath(widgetConfig.datasetId, id).then(function (path) {
                                 var i = 0;
                                 _.each(path, function (e, _i) {
@@ -74,10 +75,12 @@ cBoard.service('chartService', function ($q, dataService, chartPieService, chart
                                         optionFilter(option);
                                     }
                                     render(option, data.drill.config);
+                                    $rootScope.loadingData = false;
                                 });
                             });
                         };
                         data.drill.drillUp = function (id, render) {
+                            $rootScope.loadingData = true;
                             _.find(widgetConfig.config.keys, function (e, _i) {
                                 if (e.id == id) {
                                     widgetConfig.config.keys[_i - 1].values = [];
@@ -103,6 +106,7 @@ cBoard.service('chartService', function ($q, dataService, chartPieService, chart
                                     optionFilter(option);
                                 }
                                 render(option, data.drill.config);
+                                $rootScope.loadingData = false;
                             });
                         };
                     }
