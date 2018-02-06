@@ -86,7 +86,6 @@ public class DataProviderService {
     private void filterCheck(AggConfig config) throws ParseException{
     	List<DimensionConfig> filterList = new ArrayList<DimensionConfig>();
     	List<DimensionConfig> filterList2 = new ArrayList<DimensionConfig>();
-		List<DimensionConfig> newFilterList = new ArrayList<DimensionConfig>();
 		String clName="";
     	for (ConfigComponent configComponent : config.getFilters()) {
 			filterList.add((DimensionConfig) configComponent);
@@ -118,40 +117,66 @@ public class DataProviderService {
     			}
     		}
     		List<String> clNameList = new ArrayList<String>();
-    		for (DimensionConfig dimensionConfig : filterList) {
-				if (dimensionConfig.getIsBoard() == null) {
-					for (String cloumn : dimensionConfig.getValues()) {
-						if (cloumn.indexOf("now") != -1) {
-							String [] strings = cloumn.split(",");
-							if (strings.length == 3) {
-								SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd");
-								Calendar calendar = Calendar.getInstance();
-								if (clName.indexOf("now") != -1) {
-									clName = AviatorEvaluator.compile(clName.substring(1, clName.length() - 1), true).execute().toString();
-								}
-								calendar.setTime(sFormat.parse(clName));
-								calendar.add(Calendar.DATE, Integer.parseInt(strings[1]));
-								String newClName = sFormat.format(calendar.getTime());
-								clNameList.add(newClName);
-							}else {
-								clNameList.add(clName);
-							}
-						}else {
-							clNameList.add(cloumn);
-						}
-					}
-					dimensionConfig.setValues(new ArrayList<String>());
-					dimensionConfig.setValues(clNameList);
-					newFilterList.add(dimensionConfig);
-				}else {
-					newFilterList.add(dimensionConfig);
+    		for (int i=0;i<filterList.size();i++) {
+    			for (int j = i+1; j < filterList.size(); j++) {
+    				if (filterList.get(i).getColumnName().equals(filterList.get(j).getColumnName())) {
+    					if (filterList.get(i).getIsBoard() == null) {
+        					for (String cloumn : filterList.get(i).getValues()) {
+        						if (cloumn.indexOf("now") != -1) {
+        							String [] strings = cloumn.split(",");
+        							if (strings.length == 3) {
+        								SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd");
+        								Calendar calendar = Calendar.getInstance();
+        								if (clName.indexOf("now") != -1) {
+        									clName = AviatorEvaluator.compile(clName.substring(1, clName.length() - 1), true).execute().toString();
+        								}
+        								calendar.setTime(sFormat.parse(clName));
+        								String num = strings[1].replace(" ", "");
+        								calendar.add(Calendar.DATE, Integer.parseInt(num));
+        								String newClName = sFormat.format(calendar.getTime());
+        								clNameList.add(newClName);
+        							}else {
+        								clNameList.add(clName);
+        							}
+        						}else {
+        							clNameList.add(cloumn);
+        						}
+        					}
+        					filterList.get(i).setValues(new ArrayList<String>());
+        					filterList.get(i).setValues(clNameList);
+        				}else {
+        					for (String cloumn : filterList.get(j).getValues()) {
+        						if (cloumn.indexOf("now") != -1) {
+        							String [] strings = cloumn.split(",");
+        							if (strings.length == 3) {
+        								SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd");
+        								Calendar calendar = Calendar.getInstance();
+        								if (clName.indexOf("now") != -1) {
+        									clName = AviatorEvaluator.compile(clName.substring(1, clName.length() - 1), true).execute().toString();
+        								}
+        								calendar.setTime(sFormat.parse(clName));
+        								String num = strings[1].replace(" ", "");
+        								calendar.add(Calendar.DATE, Integer.parseInt(num));
+        								String newClName = sFormat.format(calendar.getTime());
+        								clNameList.add(newClName);
+        							}else {
+        								clNameList.add(clName);
+        							}
+        						}else {
+        							clNameList.add(cloumn);
+        						}
+        					}
+        					filterList.get(j).setValues(new ArrayList<String>());
+        					filterList.get(j).setValues(clNameList);
+        				}
+    				}
 				}
 			}
 		}
-    	if (newFilterList.size()>0) {
+    	if (filterList.size()>0) {
     		List<DimensionConfig> filterList3 = new ArrayList<DimensionConfig>();
     		config.setFilters(new ArrayList<ConfigComponent>());
-			for (DimensionConfig dimensionConfig : newFilterList) {
+			for (DimensionConfig dimensionConfig : filterList) {
 				if (dimensionConfig.getIsBoard() == null) {
 					config.getFilters().add(dimensionConfig);
 				}else {
