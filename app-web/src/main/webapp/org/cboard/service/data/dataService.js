@@ -186,6 +186,15 @@ cBoard.service('dataService', function ($http, $q, updateService,userService) {
             cfg.filters = getDimensionConfig(chartConfig.filters);
             cfg.filters = cfg.filters.concat(getDimensionConfig(chartConfig.boardFilters,'boardFilters'));
             cfg.filters = cfg.filters.concat(getDimensionConfig(chartConfig.boardWidgetFilters));
+
+            _.forEach(cfg.rows,function(value,index){
+                if(value.filterType !== 'eq'){
+                    cfg.filters.push(value);
+                    cfg.rows[index].values = [];
+                    cfg.rows[index].filterType = 'eq';
+                }
+            });
+
             cfg.values = _.map(dataSeries, function (s) {
                 return {column: s.name, aggType: s.aggregate};
             });

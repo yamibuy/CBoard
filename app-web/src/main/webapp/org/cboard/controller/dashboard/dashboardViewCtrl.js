@@ -142,11 +142,30 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
             return;
         }
         $scope.exportStatus = true;
+        var filters = [];
+        _.forEach($scope.board.layout.rows,function(v,i){
+            if(v.type === 'param'){
+                var par = {};
+                _.forEach(v.params,function(val,j){
+                    par.values = val.values;
+                    par.type = val.type;
+                    par.column = [];
+                    _.forEach(val.col,function(value,k){
+                        par.column.push(value.column);
+                    });
+                });
+                filters.push(par);
+            }
+        })
         $http({
-            url: "dashboard/exportBoard.do?id=" + $stateParams.id,
+            url: "dashboard/exportBoard.do",
             method: "POST",
             headers: {
                 'Content-type': 'application/json'
+            },
+            params: {
+                id: $stateParams.id,
+                filters: filters
             },
             responseType: 'arraybuffer'
         }).success(function (data) {
@@ -721,7 +740,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
     };
     // 获取若干周前（后）的周
     var getWeekStr = function (AddWeekCount) {
-        var today = new Date();
+        var today = getTimeByTimeZone(-8);
         var firstDay = new Date(today.getFullYear(),0, 1);
         var dayOfWeek = firstDay.getDay();
         var spendDay= 1;
