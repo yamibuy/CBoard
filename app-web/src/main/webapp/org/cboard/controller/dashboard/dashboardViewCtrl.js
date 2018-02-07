@@ -158,7 +158,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
             }
         })
         $http({
-            url: "dashboard/exportBoard.do",
+            url: "dashboard/exportBoardV1.do",
             method: "POST",
             headers: {
                 'Content-type': 'application/json'
