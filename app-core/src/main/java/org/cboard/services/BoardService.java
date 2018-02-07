@@ -142,6 +142,22 @@ public class BoardService {
         }
         return null;
     }
+    
+    public byte[] exportBoardV1(Long id, String userId,String filters) {
+        PersistContext persistContext = persistService.persistV1(id, userId,filters);
+        List<PersistContext> workbookList = new ArrayList<>();
+        workbookList.add(persistContext);
+        HSSFWorkbook workbook = xlsProcessService.dashboardToXls(workbookList);
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            outputStream.close();
+            return outputStream.toByteArray();
+        } catch (IOException e) {
+            LOG.error("", e);
+        }
+        return null;
+    }
 
     public List<DashboardBoard> getBoardListByFolderIds(Integer[] folderIds){
         if (folderIds == null || folderIds.length == 0) {

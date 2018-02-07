@@ -454,6 +454,14 @@ public class DashboardController extends BaseController {
         headers.setContentDispositionFormData("attachment", "report.xls");
         return new ResponseEntity<>(boardService.exportBoard(id, user.getUserId()), headers, HttpStatus.CREATED);
     }
+    
+    @RequestMapping(value = "/exportBoardV1")
+    public ResponseEntity<byte[]> exportBoardV1(@RequestParam(name = "id") Long id,@RequestParam(name = "filters", required = false) String filters) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "report.xls");
+        return new ResponseEntity<>(boardService.exportBoardV1(id, user.getUserId(),filters), headers, HttpStatus.CREATED);
+    }
 
     @RequestMapping(value = "/tableToxls")
     public ResponseEntity<byte[]> tableToxls(@RequestParam(name = "data") String data) {

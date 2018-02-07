@@ -87,6 +87,60 @@ public class PersistService {
             throw new CBoardException(e.getMessage());
         }
     }
+    
+    public PersistContext persistV1(Long dashboardId, String userId,String filters) {
+        String persistId = UUID.randomUUID().toString().replaceAll("-", "");
+        Process process = null;
+        try {
+            if (boardDao.getBoard(dashboardId) == null) {
+                throw new CBoardException(String.format("Dashbaord ID [%s] doesn't exist!", dashboardId));
+            }
+            PersistContext context = new PersistContext(dashboardId);
+            TASK_MAP.put(persistId, context);
+            String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+            LocalSecurityFilter.put(uuid, userId);
+            String phantomUrl = new StringBuffer(LocalSecurityFilter.getSchema())
+                    .append("://127.0.0.1:")
+                    .append(LocalSecurityFilter.getContext())
+                    .append("/render.html")
+                    .append("?excelFilter=").append(filters)
+                    .append("&sid=").append(uuid)
+                    .append("#?id=").append(dashboardId)
+                    .append("&pid=").append(persistId)
+                    .toString();
+            scriptPath = URLDecoder.decode(scriptPath, "UTF-8"); // decode whitespace
+            String cmd = String.format("%s %s %s", phantomjsPath, scriptPath, phantomUrl);
+            LOG.info("Run phantomjs command: {}", cmd);
+            process = Runtime.getRuntime().exec(cmd);
+            final Process p = process;
+            new Thread(() -> {
+                InputStreamReader ir = new InputStreamReader(p.getInputStream());
+                LineNumberReader input = new LineNumberReader(ir);
+                String line;
+                try {
+                    while ((line = input.readLine()) != null) {
+                        LOG.info(line);
+                    }
+                    LOG.info("Finished command " + cmd);
+                } catch (Exception e) {
+                    LOG.error("Error", e);
+                    p.destroy();
+                }
+            }).start();
+            synchronized (context) {
+                context.wait(10 * 60 * 1000);
+            }
+            process.destroy();
+            TASK_MAP.remove(persistId);
+            return context;
+        } catch (Exception e) {
+            if (process != null) {
+                process.destroy();
+            }
+            LOG.error(getClass().getName(), e);
+            throw new CBoardException(e.getMessage());
+        }
+    }
 
     public String persistCallback(String persistId, JSONObject data) {
         PersistContext context = TASK_MAP.get(persistId);
