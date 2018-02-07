@@ -161,36 +161,34 @@ public class SqlHelper {
     				if (filterList.get(i).getColumnName().equals(filterList.get(j).getColumnName())) {
     					if ((filterList.get(i).getFilterType().equals("=")&&(filterList.get(j).getFilterType().equals("≥")||filterList.get(j).getFilterType().equals("≤")))||
     						(filterList.get(j).getFilterType().equals("=")&&(filterList.get(i).getFilterType().equals("≥")||filterList.get(i).getFilterType().equals("≤")))) {
-    						if ((!filterList.get(i).getFilterType().equals("eq")&&filterList.get(i).getValues().size()>0)&&(!filterList.get(j).getFilterType().equals("eq")&&filterList.get(j).getValues().size()>0)) {
-    							if ((!filterList.get(i).getFilterType().equals("eq")&&filterList.get(i).getValues().size()>0)&&
-    									(!filterList.get(j).getFilterType().equals("eq")&&filterList.get(j).getValues().size()>0)) {
-    								String biao1 = "";
-    								String cloumn1 = "";
-    								if (filterList.get(i).getColumnName().indexOf(".") != -1) {
-    									biao1 = ""+filterList.get(i).getColumnName().substring(0, filterList.get(i).getColumnName().indexOf("."))+".";
-    									cloumn1 = ""+filterList.get(i).getColumnName().substring(filterList.get(i).getColumnName().indexOf(".")+1, filterList.get(i).getColumnName().length())+" ";
-									}else {
-										cloumn1 = filterList.get(i).getColumnName();
-									}
-    								String biao2 = "";
-    								String cloumn2 = "";
-    								if (filterList.get(j).getColumnName().indexOf(".") != -1) {
-    									biao2 = ""+filterList.get(j).getColumnName().substring(0, filterList.get(j).getColumnName().indexOf("."))+".";
-                						cloumn2 = ""+filterList.get(j).getColumnName().substring(filterList.get(j).getColumnName().indexOf(".")+1, filterList.get(j).getColumnName().length())+" ";
-									}else {
-										cloumn2 = filterList.get(j).getColumnName();
-									}
-            						String values1 = "('"+filterList.get(i).getValues().get(0)+"')";
-            						String values2 = "('"+filterList.get(j).getValues().get(0)+"')";
-            						if (whereStr.toString().equals("")) {
-            							whereStr.append("WHERE ("+biao1+cloumn1+">= "+values1+" AND "+biao2+cloumn2+"<= "+values2+") ");
-            						}else {
-            							whereStr.append(" AND ("+biao1+cloumn1+">= "+values1+" AND "+biao2+cloumn2+"<= "+values2+")");
-            						}
-            						filterList.remove(j);
-            						filterList.remove(i);
-            						whereCheck(filterList);
+    						if ((!filterList.get(i).getFilterType().equals("eq")&&filterList.get(i).getValues().size()>0)&&
+    								(!filterList.get(j).getFilterType().equals("eq")&&filterList.get(j).getValues().size()>0)) {
+    							String biao1 = "";
+								String cloumn1 = "";
+								if (filterList.get(i).getColumnName().indexOf(".") != -1) {
+									biao1 = ""+filterList.get(i).getColumnName().substring(0, filterList.get(i).getColumnName().indexOf("."))+".";
+									cloumn1 = ""+filterList.get(i).getColumnName().substring(filterList.get(i).getColumnName().indexOf(".")+1, filterList.get(i).getColumnName().length())+" ";
+								}else {
+									cloumn1 = filterList.get(i).getColumnName();
 								}
+								String biao2 = "";
+								String cloumn2 = "";
+								if (filterList.get(j).getColumnName().indexOf(".") != -1) {
+									biao2 = ""+filterList.get(j).getColumnName().substring(0, filterList.get(j).getColumnName().indexOf("."))+".";
+            						cloumn2 = ""+filterList.get(j).getColumnName().substring(filterList.get(j).getColumnName().indexOf(".")+1, filterList.get(j).getColumnName().length())+" ";
+								}else {
+									cloumn2 = filterList.get(j).getColumnName();
+								}
+        						String values1 = "('"+filterList.get(i).getValues().get(0)+"')";
+        						String values2 = "('"+filterList.get(j).getValues().get(0)+"')";
+        						if (whereStr.toString().equals("")) {
+        							whereStr.append("WHERE ("+biao1+cloumn1+">= "+values1+" AND "+biao2+cloumn2+"<= "+values2+") ");
+        						}else {
+        							whereStr.append(" AND ("+biao1+cloumn1+">= "+values1+" AND "+biao2+cloumn2+"<= "+values2+")");
+        						}
+        						filterList.remove(j);
+        						filterList.remove(i);
+        						whereCheck(filterList);
 							}
     					}else {
     						if ((!filterList.get(i).getFilterType().equals("eq")&&filterList.get(i).getValues().size()>0)&&(!filterList.get(j).getFilterType().equals("eq")&&filterList.get(j).getValues().size()>0)) {
@@ -255,6 +253,50 @@ public class SqlHelper {
     					}
     				}
     			}
+    			if (filterList.size()>0) {
+    				if (!filterList.get(i).getFilterType().equals("eq")&&filterList.get(i).getValues().size()>0) {
+    					String biao = "";
+    					String cloumn = "";
+    					if (filterList.get(i).getColumnName().indexOf(".") != -1) {
+    						biao = ""+filterList.get(i).getColumnName().substring(0, filterList.get(i).getColumnName().indexOf("."))+".";
+    						cloumn = ""+filterList.get(i).getColumnName().substring(filterList.get(i).getColumnName().indexOf(".")+1, filterList.get(i).getColumnName().length())+" ";
+    					}else {
+    						cloumn = filterList.get(i).getColumnName();
+    					}
+    					String filterType = "";
+    					List<String> valueList = new ArrayList<String>();
+    					for (String str : filterList.get(i).getValues()) {
+    						valueList.add("'"+str+"'");
+    					}
+    					String values = "("+valueList.toString().replace("[", "").replace("]", "")+")";
+    					String abString = "";
+    					if (filterList.get(i).getFilterType().equals("=")) {
+    						filterType = "IN ";
+    					}else if(filterList.get(i).getFilterType().equals("≠")){
+    						filterType = "NOT IN ";
+    					}else if (filterList.get(i).getFilterType().equals("≥")) {
+    						filterType = ">= ";
+    					}else if (filterList.get(i).getFilterType().equals("≤")) {
+    						filterType = "<= ";
+    					}else if (filterList.get(i).getFilterType().equals("[a,b]")||filterList.get(i).getFilterType().equals("(a,b)")||
+    							filterList.get(i).getFilterType().equals("(a,b]")||filterList.get(i).getFilterType().equals("[a,b)")) {
+    						abString = biao+cloumn +" >= "+"("+valueList.get(0)+")"+" AND "+biao+cloumn+" <= "+"("+valueList.get(1)+")";
+    						if (whereStr.toString().equals("")) {
+    							whereStr.append("WHERE "+abString);
+    						}else {
+    							whereStr.append(" OR ("+abString+")");
+    						}
+    						break;
+    					}
+    					if (whereStr.toString().equals("")) {
+    						whereStr.append("WHERE "+biao+cloumn+filterType+values);
+    					}else {
+    						whereStr.append(" AND "+biao+cloumn+filterType+values);
+    					}
+    					filterList.remove(i);
+    					whereCheck(filterList);
+    				}
+				}
 			}else {
 				if (!filterList.get(i).getFilterType().equals("eq")&&filterList.get(i).getValues().size()>0) {
 					String biao = "";
