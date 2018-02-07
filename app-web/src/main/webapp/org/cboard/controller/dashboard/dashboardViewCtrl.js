@@ -165,7 +165,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
             },
             params: {
                 id: $stateParams.id,
-                filters: JSON.stringify(filters)
+                filters: encodeURIComponent(filters)
             },
             responseType: 'arraybuffer'
         }).success(function (data) {

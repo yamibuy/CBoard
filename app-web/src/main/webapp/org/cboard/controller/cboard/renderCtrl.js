@@ -104,9 +104,9 @@ cBoard.controller('renderCtrl', function ($timeout, $rootScope, $scope, $state, 
                             _.forEach(val.widget.data.config.filters,function(v){
                                 v.filters.push(
                                     {
-                                        col: JSON.parse(params.excelFilter).column,
-                                        type: JSON.parse(params.excelFilter).type,
-                                        values: JSON.parse(params.excelFilter).values
+                                        col: decodeURIComponent(params.excelFilter).column,
+                                        type: decodeURIComponent(params.excelFilter).type,
+                                        values: decodeURIComponent(params.excelFilter).values
                                     }
                                 );
                             })
