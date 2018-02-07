@@ -39,7 +39,6 @@ cBoard.controller('renderCtrl', function ($timeout, $rootScope, $scope, $state, 
     };
 
     $scope.$watch('l', function (newValue) {
-        console.log(newValue);
         if (newValue == 0) {
             $timeout(function () {
                 runTask();
@@ -71,7 +70,18 @@ cBoard.controller('renderCtrl', function ($timeout, $rootScope, $scope, $state, 
             }
         });
     };
-
+    var GetRequest = function () {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for(var i = 0; i < strs.length; i ++) {
+                theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
     $scope.load = function (reload) {
         $scope.loading = true;
 
@@ -84,6 +94,28 @@ cBoard.controller('renderCtrl', function ($timeout, $rootScope, $scope, $state, 
         }
         $http.get("dashboard/getBoardData.do?id=" + $location.search().id).success(function (response) {
             $scope.loading = false;
+
+            // 获取Url的参数
+            var params = GetRequest();
+            var filterParams = null;
+            if(params.hasOwnProperty('filters') && params.filters){
+                _.forEach(function(value,index){
+                    if(value.type === 'widget'){
+                        _.forEach(value.widgets,function(val,idx){
+                            _.forEach(val.widget.data.config.filters,function(v,i){
+                                v.filters.push(
+                                    {
+                                        col: 'NNNNN',
+                                        type: '=',
+                                        values: []
+                                    }
+                                );
+                            })
+                        })
+                    }
+                });
+            }
+            console.log(response);
             $scope.board = response;
             _.each($scope.board.layout.rows, function (row) {
                 _.each(row.widgets, function (widget) {
@@ -99,5 +131,6 @@ cBoard.controller('renderCtrl', function ($timeout, $rootScope, $scope, $state, 
             $scope.l--;
         });
     };
+
     $scope.load(false);
 });
