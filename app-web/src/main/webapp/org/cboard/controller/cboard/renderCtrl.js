@@ -97,12 +97,11 @@ cBoard.controller('renderCtrl', function ($timeout, $rootScope, $scope, $state, 
 
             // 获取Url的参数
             var params = GetRequest();
-            var filterParams = null;
-            if(params.hasOwnProperty('filters') && params.filters){
-                _.forEach(function(value,index){
+            if(params.hasOwnProperty('filters') && params.excelFilter){
+                _.forEach(function(value){
                     if(value.type === 'widget'){
-                        _.forEach(value.widgets,function(val,idx){
-                            _.forEach(val.widget.data.config.filters,function(v,i){
+                        _.forEach(value.widgets,function(val){
+                            _.forEach(val.widget.data.config.filters,function(v){
                                 v.filters.push(
                                     {
                                         col: 'NNNNN',
