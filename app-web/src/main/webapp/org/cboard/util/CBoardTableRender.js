@@ -29,6 +29,16 @@ CBoardTableRender.prototype.do = function (tall, persist) {
         }
         _this.do(_this.tall);
     };
+    _.forEach(this.options.data,function(val){
+        if(Array.isArray(val)){
+            _.forEach(val,function(value){
+                if(value.property === 'data' && isNaN(parseFloat(value.data))){
+                    value.data = 'N/A';
+                }
+            })
+        }
+    });
+
     var args = {
         tall: divHeight,
         chartConfig: this.options.chartConfig,

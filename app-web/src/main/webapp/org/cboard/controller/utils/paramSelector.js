@@ -63,7 +63,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
             },
             {
                 key: "{now('D',-180,'yyyy-MM-dd')}",
-                title: '最近半年',
+                title: '最近180天',
             },
         ],
         Q: [

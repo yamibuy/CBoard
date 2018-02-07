@@ -672,7 +672,7 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
             {
                 key: "{now('D',-180,'yyyy-MM-dd')}",
                 distance: -180,
-                title: '最近半年',
+                title: '最近180天',
                 format: '',
             },
         ],

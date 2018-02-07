@@ -118,10 +118,11 @@ cBoard.service('chartGaugeService', function () {
         }
 
         var index = value.lastIndexOf("%");
+
         if (index != -1) {
             value = value.substring(0, index);
             option.tooltip.formatter = "{a} <br/>{b} : {c}%";
-            option.series[0].detail.formatter = "{value}%";
+            option.series[0].detail.formatter = isNaN(parseFloat(value)) ? 'N/A' : "{value}%";
         }
 
         option.series[0].data = [{name: name, value: value}];

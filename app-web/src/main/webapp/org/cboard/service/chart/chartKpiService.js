@@ -24,9 +24,9 @@ cBoard.service('chartKpiService', function (dataService, $compile, $filter) {
         var casted_values = data.series;
         var aggregate_data = data.data;
         var newValuesConfig = data.seriesConfig;
+        option.kpiValue = aggregate_data.length > 0 ? (isNaN(aggregate_data[0][0]) ? 'N/A' : aggregate_data[0][0]) : 'N/A';
 
-        option.kpiValue = aggregate_data.length > 0 ? aggregate_data[0][0] : 'N/A';
-        if (config.values[0].format) {
+        if (config.values[0].format && option.kpiValue !== 'N/A') {
             option.kpiValue = numbro(option.kpiValue).format(config.values[0].format);
         }
         option.kpiName = config.values[0].name;
