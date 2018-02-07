@@ -255,6 +255,48 @@ public class SqlHelper {
     					}
     				}
     			}
+    			if (!filterList.get(i).getFilterType().equals("eq")&&filterList.get(i).getValues().size()>0) {
+					String biao = "";
+					String cloumn = "";
+					if (filterList.get(i).getColumnName().indexOf(".") != -1) {
+						biao = ""+filterList.get(i).getColumnName().substring(0, filterList.get(i).getColumnName().indexOf("."))+".";
+						cloumn = ""+filterList.get(i).getColumnName().substring(filterList.get(i).getColumnName().indexOf(".")+1, filterList.get(i).getColumnName().length())+" ";
+					}else {
+						cloumn = filterList.get(i).getColumnName();
+					}
+					String filterType = "";
+					List<String> valueList = new ArrayList<String>();
+					for (String str : filterList.get(i).getValues()) {
+						valueList.add("'"+str+"'");
+					}
+					String values = "("+valueList.toString().replace("[", "").replace("]", "")+")";
+					String abString = "";
+					if (filterList.get(i).getFilterType().equals("=")) {
+						filterType = "IN ";
+					}else if(filterList.get(i).getFilterType().equals("≠")){
+						filterType = "NOT IN ";
+					}else if (filterList.get(i).getFilterType().equals("≥")) {
+						filterType = ">= ";
+					}else if (filterList.get(i).getFilterType().equals("≤")) {
+						filterType = "<= ";
+					}else if (filterList.get(i).getFilterType().equals("[a,b]")||filterList.get(i).getFilterType().equals("(a,b)")||
+							filterList.get(i).getFilterType().equals("(a,b]")||filterList.get(i).getFilterType().equals("[a,b)")) {
+						abString = biao+cloumn +" >= "+"("+valueList.get(0)+")"+" AND "+biao+cloumn+" <= "+"("+valueList.get(1)+")";
+						if (whereStr.toString().equals("")) {
+							whereStr.append("WHERE "+abString);
+						}else {
+							whereStr.append(" OR ("+abString+")");
+						}
+						break;
+					}
+					if (whereStr.toString().equals("")) {
+						whereStr.append("WHERE "+biao+cloumn+filterType+values);
+					}else {
+						whereStr.append(" AND "+biao+cloumn+filterType+values);
+					}
+					filterList.remove(i);
+					whereCheck(filterList);
+				}
 			}else {
 				if (!filterList.get(i).getFilterType().equals("eq")&&filterList.get(i).getValues().size()>0) {
 					String biao = "";
