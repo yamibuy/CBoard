@@ -197,8 +197,8 @@ cBoard.service('dataService', function ($http, $q, updateService,userService) {
             _.forEach(cfg.columns,function(value,index){
                 if(value.filterType !== 'eq'){
                     cfg.filters.push(angular.copy(value));
-                    cfg.rows[index].values = [];
-                    cfg.rows[index].filterType = 'eq';
+                    cfg.columns[index].values = [];
+                    cfg.columns[index].filterType = 'eq';
                 }
             });
 
