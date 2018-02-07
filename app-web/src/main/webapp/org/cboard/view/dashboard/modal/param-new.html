@@ -276,7 +276,6 @@
                 </div>
             </div>
             <div class="hr-line-dashed"></div>
-            <!-- </div> -->
         </div>
     </form>
 </div>
@@ -284,5 +283,5 @@
     <button type="button" class="btn btn-default pull-left" data-dismiss="modal" ng-click="close()">
         {{'COMMON.CANCEL'|translate}}
     </button>
-    <button type="button" class="btn btn-primary" ng-click="ok()">{{'COMMON.OK'|translate}}</button>
+    <button type="button" class="btn btn-primary" ng-click="ok()" ng-disabled="param.cloneValue.length == 0">{{'COMMON.OK'|translate}}</button>
 </div>
