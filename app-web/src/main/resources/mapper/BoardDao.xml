@@ -29,6 +29,7 @@
                u.user_name     AS userName,
                u.login_name    AS loginName,
                a.create_time   AS createTime,
+               a.orderNum      AS orderNum,
                a.update_time   AS updateTime
           FROM dashboard_board a
           LEFT JOIN dashboard_user u ON u.user_id = a.user_id
@@ -38,7 +39,7 @@
                FROM dashboard_user_role ur
                LEFT JOIN dashboard_role_res rr ON ur.role_id = rr.role_id
               WHERE ur.user_id = #{0} AND rr.res_type = 'board'
-          ) ORDER BY a.board_name
+          ) ORDER BY a.orderNum
     </select>
 
     <select id="getBoardListByFolderIds" resultType="org.cboard.pojo.DashboardBoard" parameterType="Map">
