@@ -161,11 +161,33 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
     $scope.onClickDropList = function(key){
         // 判断类型
         var obj = $scope.dropList[$scope.selectedAttrKey];
-        for(var i in obj){
-            if(obj[i].key == key){
-                $scope.param.cloneValue.push(obj[i]);
+        if($scope.operate.equal){
+            for(var i in obj){
+                if(obj[i].key == key){
+                    var val = obj[i];
+                }
+            };
+            if($.inArray(val,$scope.param.cloneValue) > -1){
+                $scope.exist_o = true;
+                $timeout(function(){
+                    $scope.exist_o = false;
+                },1500);
+                return;
             }
-        };
+            for(var i in obj){
+                if(obj[i].key == key){
+                    $scope.param.cloneValue.push(obj[i]);
+                }
+            };
+        }else if($scope.operate.openInterval){
+            for(var i in obj){
+                if(obj[i].key == key){
+                    $scope.param.cloneValue[0] = obj[i];
+                }
+            };
+        }else {
+
+        }
     };
 
     $scope.getSelects = function () {
