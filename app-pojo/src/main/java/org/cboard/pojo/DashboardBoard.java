@@ -20,9 +20,18 @@ public class DashboardBoard {
     private String permission;
     private Timestamp createTime;
     private Timestamp updateTime;
+    private Integer orderNum;
 
 
-    public String getPermission() {
+    public Integer getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(Integer orderNum) {
+		this.orderNum = orderNum;
+	}
+
+	public String getPermission() {
         return permission;
     }
 

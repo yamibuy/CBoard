@@ -27,6 +27,7 @@ public class ViewDashboardBoard {
     private String categoryName;
     private boolean edit;
     private boolean delete;
+    private Integer orderNum;
 
     public static final Function TO = new Function<DashboardBoard, ViewDashboardBoard>() {
         @Nullable
@@ -40,6 +41,7 @@ public class ViewDashboardBoard {
         this.id = board.getId();
         this.userId = board.getUserId();
         this.folderId = board.getFolderId();
+        this.orderNum = board.getOrderNum();
         this.folderName = board.getFolderName();
         this.folderIsPrivate = board.getFolderIsPrivate();
         this.name = board.getName();
@@ -145,7 +147,15 @@ public class ViewDashboardBoard {
         return folderName;
     }
 
-    public void setFolderName(String folderName) {
+    public Integer getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(Integer orderNum) {
+		this.orderNum = orderNum;
+	}
+
+	public void setFolderName(String folderName) {
         this.folderName = folderName;
     }
 
