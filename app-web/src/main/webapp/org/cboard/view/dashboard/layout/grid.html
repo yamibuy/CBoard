@@ -19,7 +19,7 @@
                         </div>
                         <div class="box-body">
                             <div class="col-lg-12">
-                                <div class="pull-left" ng-repeat="param in row.params | filter:{paramType:'selector'}:true" ng-controller="paramCtrl" ng-init="init()">
+                                <div class="pull-left" style="margin-right: 10px" ng-repeat="param in row.params | filter:{paramType:'selector'}:true" ng-controller="paramCtrl" ng-init="init()">
                                     <ng-include src="'org/cboard/view/dashboard/param/selector.html'"/>
                                 </div>
                                 <div class="col-lg-12" ng-repeat="param in row.params | filter:{paramType:'slider'}:true" ng-controller="paramCtrl" ng-init="init()">
