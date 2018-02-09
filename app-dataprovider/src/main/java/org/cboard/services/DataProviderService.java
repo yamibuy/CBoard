@@ -120,49 +120,73 @@ public class DataProviderService {
     				if (filterList.get(i).getColumnName().equals(filterList.get(j).getColumnName())) {
     					if (filterList.get(i).getIsBoard() == null) {
         					for (String cloumn : filterList.get(i).getValues()) {
-        						if (cloumn.indexOf("now") != -1) {
-        							String [] strings = cloumn.split(",");
-        							if (strings.length == 3) {
-        								SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd");
-        								Calendar calendar = Calendar.getInstance();
-        								if (clName.indexOf("now") != -1) {
-        									clName = AviatorEvaluator.compile(clName.substring(1, clName.length() - 1), true).execute().toString();
-        								}
-        								calendar.setTime(sFormat.parse(clName));
-        								String num = strings[1].replace(" ", "");
-        								calendar.add(Calendar.DATE, Integer.parseInt(num));
-        								String newClName = sFormat.format(calendar.getTime());
-        								clNameList.add(newClName);
-        							}else {
-        								clNameList.add(clName);
-        							}
-        						}else {
-        							clNameList.add(cloumn);
-        						}
+        						if (!"".equals(clName)) {
+        							if (cloumn.indexOf("now") != -1) {
+            							String [] strings = cloumn.split(",");
+            							if (strings.length == 3) {
+            								SimpleDateFormat sFormat = null;
+            								String dataType = cloumn.substring(6,7);
+            								if ("M".equals(dataType)) {
+            									sFormat = new SimpleDateFormat("yyyy-MM");
+    										}else if ("D".equals(dataType)) {
+    											sFormat = new SimpleDateFormat("yyyy-MM-dd");
+    										}else if ("Y".equals(dataType)) {
+    											sFormat = new SimpleDateFormat("yyyy");
+    										}else if ("W".equals(dataType)) {
+    											sFormat = new SimpleDateFormat("yyyy-WW");
+											}
+            								Calendar calendar = Calendar.getInstance();
+            								if (clName.indexOf("now") != -1) {
+            									clName = AviatorEvaluator.compile(clName.substring(1, clName.length() - 1), true).execute().toString();
+            								}
+            								calendar.setTime(sFormat.parse(clName));
+            								String num = strings[1].replace(" ", "");
+            								calendar.add(Calendar.DATE, Integer.parseInt(num));
+            								String newClName = sFormat.format(calendar.getTime());
+            								clNameList.add(newClName);
+            							}else {
+            								clNameList.add(clName);
+            							}
+            						}else {
+            							clNameList.add(cloumn);
+            						}
+								}
         					}
         					filterList.get(i).setValues(new ArrayList<String>());
         					filterList.get(i).setValues(clNameList);
         				}else {
         					for (String cloumn : filterList.get(j).getValues()) {
-        						if (cloumn.indexOf("now") != -1) {
-        							String [] strings = cloumn.split(",");
-        							if (strings.length == 3) {
-        								SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd");
-        								Calendar calendar = Calendar.getInstance();
-        								if (clName.indexOf("now") != -1) {
-        									clName = AviatorEvaluator.compile(clName.substring(1, clName.length() - 1), true).execute().toString();
-        								}
-        								calendar.setTime(sFormat.parse(clName));
-        								String num = strings[1].replace(" ", "");
-        								calendar.add(Calendar.DATE, Integer.parseInt(num));
-        								String newClName = sFormat.format(calendar.getTime());
-        								clNameList.add(newClName);
-        							}else {
-        								clNameList.add(clName);
-        							}
-        						}else {
-        							clNameList.add(cloumn);
-        						}
+        						if (!"".equals(clName)) {
+        							if (cloumn.indexOf("now") != -1) {
+            							String [] strings = cloumn.split(",");
+            							if (strings.length == 3) {
+            								SimpleDateFormat sFormat = null;
+            								String dataType = cloumn.substring(6,7);
+            								if ("M".equals(dataType)) {
+            									sFormat = new SimpleDateFormat("yyyy-MM");
+    										}else if ("D".equals(dataType)) {
+    											sFormat = new SimpleDateFormat("yyyy-MM-dd");
+    										}else if ("Y".equals(dataType)) {
+    											sFormat = new SimpleDateFormat("yyyy");
+    										}else if ("W".equals(dataType)) {
+    											sFormat = new SimpleDateFormat("yyyy-WW");
+											}
+            								Calendar calendar = Calendar.getInstance();
+            								if (clName.indexOf("now") != -1) {
+            									clName = AviatorEvaluator.compile(clName.substring(1, clName.length() - 1), true).execute().toString();
+            								}
+            								calendar.setTime(sFormat.parse(clName));
+            								String num = strings[1].replace(" ", "");
+            								calendar.add(Calendar.DATE, Integer.parseInt(num));
+            								String newClName = sFormat.format(calendar.getTime());
+            								clNameList.add(newClName);
+            							}else {
+            								clNameList.add(clName);
+            							}
+            						}else {
+            							clNameList.add(cloumn);
+            						}
+								}
         					}
         					filterList.get(j).setValues(new ArrayList<String>());
         					filterList.get(j).setValues(clNameList);
