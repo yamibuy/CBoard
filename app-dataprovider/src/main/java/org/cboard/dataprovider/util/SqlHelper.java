@@ -284,7 +284,7 @@ public class SqlHelper {
     						if (whereStr.toString().equals("")) {
     							whereStr.append("WHERE "+abString);
     						}else {
-    							whereStr.append(" OR ("+abString+")");
+    							whereStr.append(" AND ("+abString+")");
     						}
     						break;
     					}
@@ -328,7 +328,7 @@ public class SqlHelper {
 						if (whereStr.toString().equals("")) {
 							whereStr.append("WHERE "+abString);
 						}else {
-							whereStr.append(" OR ("+abString+")");
+							whereStr.append(" AND ("+abString+")");
 						}
 						break;
 					}
