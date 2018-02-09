@@ -133,7 +133,7 @@ public class DataProviderService {
     										}else if ("Y".equals(dataType)) {
     											sFormat = new SimpleDateFormat("yyyy");
     										}else if ("W".equals(dataType)) {
-    											sFormat = new SimpleDateFormat("yyyy-WW");
+												sFormat = new SimpleDateFormat("yyyy-WW");
 											}
             								Calendar calendar = Calendar.getInstance();
             								if (clName.indexOf("now") != -1) {
@@ -141,7 +141,15 @@ public class DataProviderService {
             								}
             								calendar.setTime(sFormat.parse(clName));
             								String num = strings[1].replace(" ", "");
-            								calendar.add(Calendar.DATE, Integer.parseInt(num));
+            								if ("M".equals(dataType)) {
+            									calendar.add(Calendar.MONTH, Integer.parseInt(num));
+    										}else if ("D".equals(dataType)) {
+    											calendar.add(Calendar.DATE, Integer.parseInt(num));
+    										}else if ("Y".equals(dataType)) {
+    											calendar.add(Calendar.YEAR, Integer.parseInt(num));
+    										}else if ("W".equals(dataType)) {
+    											calendar.add(Calendar.DAY_OF_WEEK, Integer.parseInt(num));
+											}
             								String newClName = sFormat.format(calendar.getTime());
             								clNameList.add(newClName);
             							}else {
@@ -169,7 +177,7 @@ public class DataProviderService {
     										}else if ("Y".equals(dataType)) {
     											sFormat = new SimpleDateFormat("yyyy");
     										}else if ("W".equals(dataType)) {
-    											sFormat = new SimpleDateFormat("yyyy-WW");
+												sFormat = new SimpleDateFormat("yyyy-WW");
 											}
             								Calendar calendar = Calendar.getInstance();
             								if (clName.indexOf("now") != -1) {
@@ -177,7 +185,15 @@ public class DataProviderService {
             								}
             								calendar.setTime(sFormat.parse(clName));
             								String num = strings[1].replace(" ", "");
-            								calendar.add(Calendar.DATE, Integer.parseInt(num));
+            								if ("M".equals(dataType)) {
+            									calendar.add(Calendar.MONTH, Integer.parseInt(num));
+    										}else if ("D".equals(dataType)) {
+    											calendar.add(Calendar.DATE, Integer.parseInt(num));
+    										}else if ("Y".equals(dataType)) {
+    											calendar.add(Calendar.YEAR, Integer.parseInt(num));
+    										}else if ("W".equals(dataType)) {
+    											calendar.add(Calendar.DAY_OF_WEEK, Integer.parseInt(num));
+											}
             								String newClName = sFormat.format(calendar.getTime());
             								clNameList.add(newClName);
             							}else {
