@@ -169,7 +169,7 @@ public class SqlHelper {
 									biao1 = ""+filterList.get(i).getColumnName().substring(0, filterList.get(i).getColumnName().indexOf("."))+".";
 									cloumn1 = ""+filterList.get(i).getColumnName().substring(filterList.get(i).getColumnName().indexOf(".")+1, filterList.get(i).getColumnName().length())+" ";
 								}else {
-									cloumn1 = filterList.get(i).getColumnName();
+									cloumn1 = filterList.get(i).getColumnName()+" ";
 								}
 								String biao2 = "";
 								String cloumn2 = "";
@@ -177,7 +177,7 @@ public class SqlHelper {
 									biao2 = ""+filterList.get(j).getColumnName().substring(0, filterList.get(j).getColumnName().indexOf("."))+".";
             						cloumn2 = ""+filterList.get(j).getColumnName().substring(filterList.get(j).getColumnName().indexOf(".")+1, filterList.get(j).getColumnName().length())+" ";
 								}else {
-									cloumn2 = filterList.get(j).getColumnName();
+									cloumn2 = filterList.get(j).getColumnName()+" ";
 								}
         						String values1 = "('"+filterList.get(i).getValues().get(0)+"')";
         						String values2 = "('"+filterList.get(j).getValues().get(0)+"')";
@@ -198,13 +198,15 @@ public class SqlHelper {
     								biao1 = ""+filterList.get(i).getColumnName().substring(0, filterList.get(i).getColumnName().indexOf("."))+".";
     								cloumn1 = ""+filterList.get(i).getColumnName().substring(filterList.get(i).getColumnName().indexOf(".")+1, filterList.get(i).getColumnName().length())+" ";
 								}else {
-									cloumn1 = filterList.get(i).getColumnName();
+									cloumn1 = filterList.get(i).getColumnName()+" ";
 								}
     							String biao2 = "";
     							String cloumn2 = "";
     							if (filterList.get(j).getColumnName().indexOf(".") != -1) {
     								biao2 = ""+filterList.get(j).getColumnName().substring(0, filterList.get(j).getColumnName().indexOf("."))+".";
     								cloumn2 = ""+filterList.get(j).getColumnName().substring(filterList.get(j).getColumnName().indexOf(".")+1, filterList.get(j).getColumnName().length())+" ";
+								}else {
+									cloumn2 = filterList.get(j).getColumnName()+" ";
 								}
         						String filterType1 = "";
         						String filterType2 = "";
@@ -261,7 +263,7 @@ public class SqlHelper {
     						biao = ""+filterList.get(i).getColumnName().substring(0, filterList.get(i).getColumnName().indexOf("."))+".";
     						cloumn = ""+filterList.get(i).getColumnName().substring(filterList.get(i).getColumnName().indexOf(".")+1, filterList.get(i).getColumnName().length())+" ";
     					}else {
-    						cloumn = filterList.get(i).getColumnName();
+    						cloumn = filterList.get(i).getColumnName()+" ";
     					}
     					String filterType = "";
     					List<String> valueList = new ArrayList<String>();
@@ -305,7 +307,7 @@ public class SqlHelper {
 						biao = ""+filterList.get(i).getColumnName().substring(0, filterList.get(i).getColumnName().indexOf("."))+".";
 						cloumn = ""+filterList.get(i).getColumnName().substring(filterList.get(i).getColumnName().indexOf(".")+1, filterList.get(i).getColumnName().length())+" ";
 					}else {
-						cloumn = filterList.get(i).getColumnName();
+						cloumn = filterList.get(i).getColumnName()+" ";
 					}
 					String filterType = "";
 					List<String> valueList = new ArrayList<String>();

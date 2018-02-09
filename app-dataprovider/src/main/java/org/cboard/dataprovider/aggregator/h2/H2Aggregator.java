@@ -183,7 +183,7 @@ public class H2Aggregator extends InnerAggregator {
         Stopwatch stopwatch = Stopwatch.createStarted();
         SqlHelper sqlHelper = new SqlHelper(getTmpTblName(), false);
         sqlHelper.setSqlSyntaxHelper(new H2SyntaxHelper().setColumnTypes(getColumnType()));
-        String exec = sqlHelper.assembleAggDataSql(config);
+        String exec = sqlHelper.assembleAggDataSqlv2(config);
 
         List<String[]> list = new LinkedList<>();
         LOG.info(exec);
