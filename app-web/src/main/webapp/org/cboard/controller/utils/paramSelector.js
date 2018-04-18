@@ -398,15 +398,46 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
         }
     };
     //
+    $scope.clearSelectedAll = function(){
+        $scope.param.cloneValue = [];
+    };
+    //
     $scope.setInputValue = function(){
-        if($.inArray($scope.rangeItem.selected,$scope.param.cloneValue) != -1){
-            $scope.exist_other = true;
-            $timeout(function(){
-                $scope.exist_other = false;
-            },1500)
-            return;
+        var arr = $scope.rangeItem.selected ? $scope.rangeItem.selected.split(',') : [];
+        if($scope.param.cloneValue.length == 0){
+            $scope.param.cloneValue = arr;
+        }else {
+            for(var i in arr){
+                $scope.param.cloneValue.push(arr[i]);
+            }
+            // var repeatDataIndex = [];
+            // var noRepeatData = [];
+            // for(var i in arr){
+            //     for(var j in $scope.param.cloneValue){
+            //         if(arr[i] == $scope.param.cloneValue[j]){
+            //             repeatDataIndex.push(i);
+            //         }
+            //     }
+            // }
+            // for(var i in repeatDataIndex){
+            //     arr[repeatDataIndex[i]] = null;
+            // }
+            // for(var i in arr){
+            //     if(arr[i] !== null){
+            //         noRepeatData.push(arr[i]);
+            //     }
+            // }
+            // for(var i in noRepeatData){
+            //     $scope.param.cloneValue.push(noRepeatData[i]);
+            // }
         }
-        $scope.param.cloneValue.push($scope.rangeItem.selected);
+        // if($.inArray($scope.rangeItem.selected,$scope.param.cloneValue) != -1){
+        //     $scope.exist_other = true;
+        //     $timeout(function(){
+        //         $scope.exist_other = false;
+        //     },1500)
+        //     return;
+        // }
         $scope.rangeItem.selected = '';
     }
 });
