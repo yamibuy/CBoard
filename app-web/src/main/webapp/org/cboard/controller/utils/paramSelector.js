@@ -404,40 +404,26 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
     //
     $scope.setInputValue = function(){
         var arr = $scope.rangeItem.selected ? $scope.rangeItem.selected.split(',') : [];
-        if($scope.param.cloneValue.length == 0){
-            $scope.param.cloneValue = arr;
-        }else {
-            for(var i in arr){
-                $scope.param.cloneValue.push(arr[i]);
-            }
-            // var repeatDataIndex = [];
-            // var noRepeatData = [];
-            // for(var i in arr){
-            //     for(var j in $scope.param.cloneValue){
-            //         if(arr[i] == $scope.param.cloneValue[j]){
-            //             repeatDataIndex.push(i);
-            //         }
-            //     }
-            // }
-            // for(var i in repeatDataIndex){
-            //     arr[repeatDataIndex[i]] = null;
-            // }
-            // for(var i in arr){
-            //     if(arr[i] !== null){
-            //         noRepeatData.push(arr[i]);
-            //     }
-            // }
-            // for(var i in noRepeatData){
-            //     $scope.param.cloneValue.push(noRepeatData[i]);
-            // }
-        }
-        // if($.inArray($scope.rangeItem.selected,$scope.param.cloneValue) != -1){
-        //     $scope.exist_other = true;
-        //     $timeout(function(){
-        //         $scope.exist_other = false;
-        //     },1500)
-        //     return;
-        // }
+        // 去除空数据
+        arr = arr.notempty();
+        // 去重复数据
+        $scope.param.cloneValue = $scope.param.cloneValue.concat(arr).distinct();
         $scope.rangeItem.selected = '';
-    }
+    };
+
+    Array.prototype.notempty = function(){
+        return this.filter(t => t !== undefined && t !== null && t !== '');
+    };
+    Array.prototype.distinct = function(){
+        var arr = this,result = [],i,j,len = arr.length;
+        for(i = 0; i < len; i++){
+            for(j = i + 1; j < len; j++){
+                if(arr[i] === arr[j]){
+                    j = ++i;
+                }
+            }
+            result.push(arr[i]);
+        }
+        return result;
+    };
 });
