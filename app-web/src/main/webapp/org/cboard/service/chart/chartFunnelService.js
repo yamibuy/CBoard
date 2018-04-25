@@ -37,7 +37,7 @@ cBoard.service('chartFunnelService', function ($state, $window) {
                 label: {
                     normal: {
                         formatter: function (params) {
-                            return params.name + "\n" + params.value;// + params.data.percent + "%";
+                            return params.name + "\n" + params.value + "%";// + params.data.percent + "%";
                         },
                         show: true,
                         position: 'inside'
@@ -72,7 +72,7 @@ cBoard.service('chartFunnelService', function ($state, $window) {
             tooltip: {
                 trigger: 'item',
                 formatter: function (params) {
-                    return params.seriesName + " <br/>" + params.name + " : " + params.value;//+ "<br>" + params.data.percent + "%";
+                    return params.seriesName + " <br/>" + params.name + " : " + params.value + "%";//+ "<br>" + params.data.percent + "%";
                 }
             },
             gap: 0,
