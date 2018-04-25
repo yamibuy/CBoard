@@ -37,7 +37,7 @@ cBoard.service('chartFunnelService', function ($state, $window) {
                 label: {
                     normal: {
                         formatter: function (params) {
-                            return params.value + "\n" + params.data.percent + "%";
+                            return params.name + "\n" + params.value;// + params.data.percent + "%";
                         },
                         show: true,
                         position: 'inside'
@@ -57,8 +57,8 @@ cBoard.service('chartFunnelService', function ($state, $window) {
             for (var d = 0; d < string_values.length; d++) {
                 s.data.push({
                     name: string_values[d],
-                    value: aggregate_data[d][i],
-                    percent: (aggregate_data[d][i] / m * 100).toFixed(2)
+                    value: (aggregate_data[d][i] * 100).toFixed(2),
+                    // percent: (aggregate_data[d][i] * 100).toFixed(2),//(aggregate_data[d][i] / m * 100).toFixed(2)
                 });
             }
             series.push(s);
@@ -72,13 +72,14 @@ cBoard.service('chartFunnelService', function ($state, $window) {
             tooltip: {
                 trigger: 'item',
                 formatter: function (params) {
-                    return params.seriesName + " <br/>" + params.name + " : " + params.value + "<br>" + params.data.percent + "%";
+                    return params.seriesName + " <br/>" + params.name + " : " + params.value;//+ "<br>" + params.data.percent + "%";
                 }
             },
+            gap: 0,
             toolbox: false,
             series: series
         };
-
+        console.log(echartOption);
         updateEchartOptions(chartConfig.option, echartOption);
 
         return echartOption;
