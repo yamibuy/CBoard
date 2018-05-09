@@ -7,6 +7,8 @@ import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.hash.Hashing;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.cboard.dao.*;
 import org.cboard.dataprovider.DataProviderManager;
@@ -29,6 +31,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -464,14 +468,17 @@ public class DashboardController extends BaseController {
     }
 
     @RequestMapping(value = "/tableToxls")
-    public ResponseEntity<byte[]> tableToxls(@RequestParam(name = "data") String data) {
-        HSSFWorkbook wb = xlsProcessService.tableToxls(JSONObject.parseObject(data));
+    public ResponseEntity<byte[]> tableToxls(@RequestParam(name = "data") String data) throws UnsupportedEncodingException {
+    	JSONObject oData = JSONObject.parseObject(data);
+        HSSFWorkbook wb = xlsProcessService.tableToxls(oData);
+		String title = !StringUtils.isEmpty(oData.getString("title"))
+				? URLEncoder.encode(oData.getString("title"), "UTF-8") : "table";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             wb.write(out);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", "table.xls");
+			headers.setContentDispositionFormData("attachment", title + ".xls");
             return new ResponseEntity<>(out.toByteArray(), headers, HttpStatus.CREATED);
         } catch (IOException e) {
             LOG.error("", e);

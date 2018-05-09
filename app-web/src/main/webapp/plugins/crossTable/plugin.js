@@ -562,18 +562,24 @@ CBCrossTable.prototype.clickNextPrev = function (pagedData) {
     
 CBCrossTable.prototype.export = function () {
     var selector = "#" + this.toolbarDivId + " .exportBnt";
+    var filename = "table";
+    var title = $("#" + this.toolbarDivId).parent().parent().prev().find('.box-title').html();
+    var username = $(".username").text();
+    var description = $(".description").text();
+	    filename = !title ? (!username ? (!description ? filename : description)
+			: username) : title;
     var _this = this;
     $(selector).on('click', function () {
         var xhr = new XMLHttpRequest();
         var formData = new FormData();
-        formData.append('data', JSON.stringify({data: _this.data, type: 'table'}));
+        formData.append('data', JSON.stringify({data: _this.data, type: 'table', title: filename}));
         xhr.open('POST', 'dashboard/tableToxls.do');
         xhr.responseType = 'arraybuffer';
         xhr.onload = function (e) {
             var blob = new Blob([this.response], {type: "application/vnd.ms-excel"});
             var objectUrl = URL.createObjectURL(blob);
             var aForExcel = $("<a><span class='forExcel'>下载excel</span></a>").attr("href", objectUrl);
-            aForExcel.attr("download", "table.xls");
+            aForExcel.attr("download", filename + ".xls");
             $("body").append(aForExcel);
             $(".forExcel").click();
             aForExcel.remove();
