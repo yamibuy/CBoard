@@ -7,7 +7,7 @@ cBoard.service('chartService', function ($rootScope, $q, dataService, chartPieSe
                                          chartMapService, chartScatterService, chartGaugeService, chartWordCloudService,
                                          chartTreeMapService, chartAreaMapService, chartHeatMapCalendarService, chartHeatMapTableService,
                                          chartLiquidFillService, chartContrastService, chartChinaMapService, chartChinaMapBmapService,
-                                         chartRelationService) {
+                                         chartRelationService,chartUSAMapService) {
 
         this.renderChart = function (containerDom, widgetConfig, options) {
             var deferred = $q.defer();
@@ -151,6 +151,7 @@ cBoard.service('chartService', function ($rootScope, $q, dataService, chartPieSe
 
         var getChartServices = function (chartConfig) {
             var chart;
+            console.log(chartConfig.chart_type);
             switch (chartConfig.chart_type) {
                 case 'line':
                     chart = chartLineService;
@@ -212,9 +213,9 @@ cBoard.service('chartService', function ($rootScope, $q, dataService, chartPieSe
                 case 'relation':
                     chart = chartRelationService;
                     break;
-                // case 'usaMap':
-                //     chart = chartUSAMapService;
-                //     break;
+                case 'usaMap':
+                    chart = chartUSAMapService;
+                    break;
             }
             return chart;
         };
