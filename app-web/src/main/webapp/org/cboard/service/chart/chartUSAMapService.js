@@ -28,7 +28,7 @@ cBoard.service('chartUSAMapService', function () {
 
         var url;
         if (code == 'usa') {
-            url = 'plugins/FineMap/mapdata/usa.json'
+            url = 'plugins/FineMap/mapdata/usa.json';
         } else if (code.length > 2) {
             url = 'plugins/FineMap/mapdata/geometryCouties/' + code + '.json';
         } else {
