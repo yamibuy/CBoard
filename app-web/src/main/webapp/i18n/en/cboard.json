@@ -48,7 +48,8 @@
     "CREATE_TIME": "create time",
     "UPDATE_TIM": "last update time",
     "FOLD_TREE": "Fold all nodes",
-    "UNFOLD_TREE": "Unflod all nodes"
+    "UNFOLD_TREE": "Unflod all nodes",
+    "NODATA": "No data under current conditions"
   },
   "HOMEPAGE": {
     "TITLE": "HOMEPAGE",
@@ -228,10 +229,17 @@
       "CHINA_MAP":"China Map (Local)",
       "CHINA_MAP_BMAP":"China Map (Bmap)",
       "RELATION": "Relation",
+      "USA_MAP": "USA Map",
       "DIY_BLUE": "Custom blue",
       "DIY_GREEN_DEEP": "Custom deep green",
       "DIY_GREEN_SHALLOW": "Custom shallow green",
-      "DIY_YELLOW": "Custom yellow"
+      "DIY_YELLOW": "Custom yellow",
+      "SUM":"sum",
+      "COUNT":"count",
+      "AVG":"avg",
+      "MAX":"max",
+      "MIN":"min",
+      "DISTINCT":"distinct"
     },
     "DASHBOARD": {
       "CATEGORY": "Category",
@@ -424,7 +432,8 @@
     "PREVIOUS_PAGE": "Previous",
     "SHOW": "Show",
     "ENTRIES": "entries",
-    "EXPORT": "Export"
+    "EXPORT": "Export",
+    "NODATA": "No data under current conditions"
   },
   "HELP_MESSAGE":{
     "CHINAMAP":{

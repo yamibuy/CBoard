@@ -130,6 +130,13 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
                 row: translate('CONFIG.WIDGET.TIPS_DIM_NUM_1_2'),
                 column: translate('CONFIG.WIDGET.TIPS_DIM_NUM_1_2'),
                 measure: translate('CONFIG.WIDGET.TIPS_DIM_NUM_1')
+            },
+            //   20180515添加
+            {
+                name: translate('CONFIG.WIDGET.USA_MAP'), value: 'usaMap', class: 'cUSAMap',
+                row: translate('CONFIG.WIDGET.TIPS_DIM_NUM_1_MORE'),
+                column: translate('CONFIG.WIDGET.TIPS_DIM_NUM_0_MORE'),
+                measure: translate('CONFIG.WIDGET.TIPS_DIM_NUM_1_MORE')
             }
         ];
 
@@ -138,7 +145,7 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
             "funnel": true, "sankey": true, "radar": true, "map": true,
             "scatter": true, "gauge": true, "wordCloud": true, "treeMap": true,
             "heatMapCalendar": true, "heatMapTable": true, "liquidFill": true,
-            "areaMap": true, "contrast": true,"chinaMap":true,"chinaMapBmap":true,"relation":true
+            "areaMap": true, "contrast": true,"chinaMap":true,"chinaMapBmap":true,"relation":true,"usaMap":true
         };
 
         $scope.value_series_types = [
@@ -155,12 +162,12 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
         ];
 
         $scope.value_aggregate_types = [
-            {name: 'sum', value: 'sum'},
-            {name: 'count', value: 'count'},
-            {name: 'avg', value: 'avg'},
-            {name: 'max', value: 'max'},
-            {name: 'min', value: 'min'},
-            {name: 'distinct', value: 'distinct'}
+            {name: translate('CONFIG.WIDGET.SUM'), value: 'sum'},
+            {name: translate('CONFIG.WIDGET.COUNT'), value: 'count'},
+            {name: translate('CONFIG.WIDGET.AVG'), value: 'avg'},
+            {name: translate('CONFIG.WIDGET.MAX'), value: 'max'},
+            {name: translate('CONFIG.WIDGET.MIN'), value: 'min'},
+            {name: translate('CONFIG.WIDGET.DISTINCT'), value: 'distinct'}
         ];
 
         $scope.kpi_styles = [
@@ -243,7 +250,8 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
             contrast: {keys: 1, groups: 0, filters: -1, values: 2},
             chinaMap:{keys: 2, groups: -1, filters: -1, values: 2},
             chinaMapBmap:{keys: 2, groups: -1, filters: -1, values: 2},
-            relation: {keys: 2, groups: 2, filters: -1, values: 1}
+            relation: {keys: 2, groups: 2, filters: -1, values: 1},
+            usaMap: {keys: 2, groups: 2, filters: -1, values: 1}
         };
 
         $scope.switchLiteMode = function (mode) {
@@ -818,6 +826,19 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
                         v.type = 'value';
                     });
                     break;
+                case 'usaMap':
+                    $scope.curWidget.config.values.push({name: '', cols: []});
+                    _.each(oldConfig.values, function (v) {
+                        _.each(v.cols, function (c) {
+                            $scope.curWidget.config.values[0].cols.push(c);
+                        });
+                    });
+                    $scope.curWidget.config.valueAxis = 'vertical';
+                    _.each($scope.curWidget.config.values, function (v) {
+                        v.series_type = 'scatter';
+                        v.type = 'value';
+                    });
+                    break;
                 default:
                     $scope.curWidget.config.values.push({name: '', cols: []});
                     _.each(oldConfig.values, function (v) {
@@ -927,6 +948,7 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
                             case 'map':
                             case 'areaMap':
                             case 'chinaMap':
+                            case 'usaMap':
                             case 'relation':
                                 $scope.previewDivWidth = 12;
                                 break;

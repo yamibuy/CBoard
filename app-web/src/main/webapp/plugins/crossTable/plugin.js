@@ -69,6 +69,11 @@ CBCrossTable.prototype.table = function() {
     var valueHeader = this.getValueHeader();
     var pagedData = this.paginationProcessData(this.pageDataNum);
     var dataContent = this.getDataContent(pagedData[0]);
+    if(dataContent.length>0){
+    }else{
+        var colspan = (valueHeader.split('div').length-1)/2 ;
+        dataContent = '<tr style="height: 40px;text-align: center;line-height: 40px;"><td style="border-left: 1px solid #d5d5d5;" colspan = '+colspan+'>'+ cboardTranslate('CROSS_TABLE.NODATA')+  '</td></tr>';
+    }
     var bodyHtml = bodyTemplate.render({
         tableDivId: this.tableDivId,
         columnHeader: columnHeader,

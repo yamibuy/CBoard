@@ -48,7 +48,8 @@
     "CREATE_TIME": "创建时间",
     "UPDATE_TIM": "最后修改时间",
     "FOLD_TREE": "展开所有树节点",
-    "UNFOLD_TREE": "收起所有树节点"
+    "UNFOLD_TREE": "收起所有树节点",
+    "NODATA": "当前条件下无数据"
   },
   "HOMEPAGE": {
     "TITLE": "首页",
@@ -228,10 +229,17 @@
       "CHINA_MAP":"中国地图（本地）",
       "CHINA_MAP_BMAP":"中国地图（百度）",
       "RELATION": "关系图",
+      "USA_MAP": "美国地图",
       "DIY_BLUE": "自定义蓝色",
       "DIY_GREEN_DEEP": "自定义深绿色",
       "DIY_GREEN_SHALLOW": "自定义浅绿色",
-      "DIY_YELLOW": "自定义黄色"
+      "DIY_YELLOW": "自定义黄色",
+      "SUM":"求和:sum",
+      "COUNT":"计数:count",
+      "AVG":"平均值:avg",
+      "MAX":"最大值:max",
+      "MIN":"最小值:min",
+      "DISTINCT":"去重计数:distinct"
     },
     "DASHBOARD": {
       "DASHBOARD": "看板",
@@ -424,7 +432,8 @@
     "PREVIOUS_PAGE": "上一页",
     "SHOW": "显示",
     "ENTRIES": "条",
-    "EXPORT": "导出"
+    "EXPORT": "导出",
+    "NODATA": "当前条件下无数据"
   },
   "HELP_MESSAGE":{
     "CHINAMAP":{

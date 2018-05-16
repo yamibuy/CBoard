@@ -11,6 +11,7 @@ cBoard.service('chartTableService', function () {
         }
         var height;
         scope ? height = scope.myheight : null;
+        console.log(option);
         return new CBoardTableRender(containerDom, option, drill).do(height, persist);
     };
 

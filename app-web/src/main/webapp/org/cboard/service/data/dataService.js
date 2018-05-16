@@ -2,10 +2,10 @@
  * Created by yfyuan on 2016/8/12.
  */
 'use strict';
-cBoard.service('dataService', function ($http, $q, updateService,userService) {
+cBoard.service('dataService', function ($http, $q, updateService,userService,$filter) {
 
     var datasetList;
-
+    var translate = $filter('translate');
     var getDatasetList = function () {
         var deferred = $q.defer();
         if (datasetList) {

@@ -212,6 +212,9 @@ cBoard.service('chartService', function ($rootScope, $q, dataService, chartPieSe
                 case 'relation':
                     chart = chartRelationService;
                     break;
+                // case 'usaMap':
+                //     chart = chartUSAMapService;
+                //     break;
             }
             return chart;
         };
