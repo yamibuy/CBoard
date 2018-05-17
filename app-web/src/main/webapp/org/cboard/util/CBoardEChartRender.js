@@ -20,16 +20,62 @@ var echartsBasicOption = {
         itemHeight: 10
     }
 };
-
+var chartTypeList = {
+    'line': 'center',
+    'pie': 'center',
+    'kpi': 'center',
+    'table': 'center',
+    'funnel': 'center',
+    'sankey': 'center',
+    'radar': 'center',
+    'map': 'bottom',
+    'gauge': 'center',
+    'wordCloud': 'center',
+    'scatter': 'center',
+    'treeMap': 'center',
+    'areaMap': 'center',
+    'heatMapCalendar': 'center',
+    'heatMapTable': 'center',
+    'liquidFill': 'center',
+    'contrast': 'center',
+    'chinaMap': 'bottom',
+    'chinaMapBmap': 'center',
+    'relation': 'center',
+    'usaMap': 'bottom',
+};
 var CBoardEChartRender = function (jqContainer, options, isDeepSpec) {
     this.container = jqContainer; // jquery object
-    this.ecc = echarts.init(jqContainer.get(0), this.theme);
     this.isDeppSpec = isDeepSpec;
-
-    this.basicOption = echartsBasicOption;
     this.options = options;
+    if(options&&options.series[0] && options.series[0].data.length>0){
+        this.basicOption = echartsBasicOption;
+    }else{
+        var type =  window.sessionStorage.getItem('chartConfig.chart_type');
+        var top =  chartTypeList[type];
+        echarts.init(jqContainer.get(0), this.theme).clear();
+        echarts.init(jqContainer.get(0), this.theme).hideLoading();
+        this.basicOption =  {
+            title: {
+                show: true,
+                textStyle:{
+                    color:'rgba(0,0,0,.4)',
+                    fontSize:14
+                },
+                text: '当前条件下无数据',
+                left: 'center',
+                top: top,
+            },
+            xAxis: {
+                show: false
+            },
+            yAxis: {
+                show: false
+            },
+            series: []
+        };
+    }
+    this.ecc = echarts.init(jqContainer.get(0), this.theme);
 };
-
 CBoardEChartRender.prototype.theme = "theme-fin1"; // 主题
 
 CBoardEChartRender.prototype.chart = function (group, persist) {
@@ -41,7 +87,7 @@ CBoardEChartRender.prototype.chart = function (group, persist) {
             width: '100%'
         });
     }
-    if (options.legend.data && options.legend.data.length > 35) {
+    if (options.legend && options.legend.data && options.legend.data.length > 35) {
         options.grid.top = '5%';
         options.legend.show =false;
     }
@@ -80,7 +126,7 @@ CBoardEChartRender.prototype.changeSize = function (instance) {
     var seriesType = o.series[0] ? o.series[0].type : null;
     if (seriesType == 'pie') {
         var l = o.series.length;
-        var b = instance.getWidth() / (l + 1 + l * 8)
+        var b = instance.getWidth() / (l + 1 + l * 8);
         for (var i = 0; i < l; i++) {
             if ((b * 8) < (instance.getHeight() * 0.75)) {
                 o.series[i].radius = [0, b * 4];

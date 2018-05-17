@@ -73,7 +73,7 @@ cBoard.service('chartHeatMapTableService', function () {
             },
             animation: false,
             toolbox: {
-                show: true,
+                show:datas.length>0?true:false,
                 feature: {
                     mark: {show: false},
                     dataView: {show: true, readOnly: true},
@@ -86,7 +86,7 @@ cBoard.service('chartHeatMapTableService', function () {
                 type: 'category',
                 data: xAxisData,
                 splitArea: {
-                    show: true
+                    show:datas.length>0?true:false,
                 }
             },
             yAxis: {
@@ -94,19 +94,20 @@ cBoard.service('chartHeatMapTableService', function () {
                 type: 'category',
                 data: yAxisData,
                 splitArea: {
-                    show: true
+                    show:datas.length>0?true:false,
                 }
             },
             dataZoom: [
                 {
                     type: 'slider',
-                    show: true,
+                    show:datas.length>0?true:false,
                     xAxisIndex: [0],
                     start: 0,
                     end: 100
                 }
             ],
             visualMap: {
+                show:datas.length>0?true:false,
                 min: min,
                 max: max,
                 calculable: true,

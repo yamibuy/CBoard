@@ -110,7 +110,7 @@ cBoard.service('chartHeatMapCalendarService', function () {
                 }
             },
             toolbox: {
-                show: true,
+                show:series.length>0?true:false,
                 feature: {
                     mark: {show: false},
                     dataView: {show: true, readOnly: true},
@@ -121,6 +121,7 @@ cBoard.service('chartHeatMapCalendarService', function () {
             visualMap: {
                 min: min,
                 max: max,
+                show:series.length>0?true:false,
                 calculable: true,
                 orient: 'horizontal',
                 left: 'left',

@@ -96,6 +96,7 @@ cBoard.service('chartAreaMapService', function ($state, $window) {
                         data: groups
                     },
                     visualMap: {
+                        show:series.length>0?true:false,
                         min: 0,
                         max: max,
                         left: 'right',

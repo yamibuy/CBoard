@@ -152,6 +152,7 @@ cBoard.service('chartService', function ($rootScope, $q, dataService, chartPieSe
         var getChartServices = function (chartConfig) {
             var chart;
             console.log(chartConfig.chart_type);
+            window.sessionStorage.setItem('chartConfig.chart_type',chartConfig.chart_type);
             switch (chartConfig.chart_type) {
                 case 'line':
                     chart = chartLineService;

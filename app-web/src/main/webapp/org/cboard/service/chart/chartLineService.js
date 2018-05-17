@@ -129,9 +129,23 @@ cBoard.service('chartLineService', function ($state, $window) {
             echartOption.grid.right = 40;
         }
 
+
         // Apply tunning options
         updateEchartOptions(tunningOpt, echartOption);
-
+        if(echartOption.series.length==0){
+            echartOption.title = {
+                show: true,
+                textStyle:{
+                    color:'rgba(0,0,0,.4)',
+                    fontSize:14
+                },
+                text: '当前条件下无数据',
+                left: 'center',
+                top: 'center',
+            };
+            echartOption.xAxis = {show : false};
+            echartOption.yAxis= {show : false};
+        }
         return echartOption;
     };
 });

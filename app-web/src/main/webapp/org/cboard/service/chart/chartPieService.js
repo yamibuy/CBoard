@@ -64,7 +64,16 @@ cBoard.service('chartPieService', function ($state, $window) {
             series.push(s);
         }
         var echartOption = {
-            title: titles,
+            title: series.length>0?titles:{
+                show: true,
+                textStyle:{
+                    color:'rgba(0,0,0,.4)',
+                    fontSize:14
+                },
+                text: '当前条件下无数据',
+                left: 'center',
+                top: 'center',
+            },
             legend: {
                 orient: 'vertical',
                 left: 'left',

@@ -239,6 +239,7 @@ cBoard.service('chartChinaMapService', function () {
             async: false,
             //type:'json',
             success: function (cityJson) {
+                // cityJson = seriesData.length>0?cityJson:'';
                 echarts.registerMap(code, cityJson);
                 mapOption = {
                     legend: {
@@ -249,6 +250,7 @@ cBoard.service('chartChinaMapService', function () {
                         data: optionData
                     },
                     visualMap: {
+                        show:seriesData.length>0?true:false,
                         min: min,
                         max: max,
                         left: 'right',

@@ -67,17 +67,33 @@ cBoard.service('chartScatterService', function (dataService) {
             })[3];
         });
         var sizeMax = _.max(series, function (s) {
-            return Number(s.sizeMax);
-        }).sizeMax;
+           if(s){
+               return Number(s.sizeMax);
+           }else{
+               return 0;
+           }
+        }) ?   _.max(series, function (s) {
+            if(s){
+                return Number(s.sizeMax);
+            }else{
+                return 0;
+            }
+        }).sizeMax  :0;
         var sizeMin = _.min(series, function (s) {
             return Number(s.sizeMin);
-        }).sizeMin;
+        })?_.min(series, function (s) {
+            return Number(s.sizeMin);
+        }).sizeMin: 0;
         var colorMax = _.max(series, function (s) {
             return Number(s.colorMax);
-        }).colorMax;
+        })? _.max(series, function (s) {
+            return Number(s.colorMax);
+        }).colorMax:0;
         var colorMin = _.max(series, function (s) {
             return Number(s.colorMin);
-        }).colorMin;
+        })?_.max(series, function (s) {
+            return Number(s.colorMin);
+        }).colorMin:0;
 
         if (tunningOpt) {
             var labelInterval, labelRotate;

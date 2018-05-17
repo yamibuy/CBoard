@@ -5,10 +5,10 @@
 cBoard.service('chartGaugeService', function () {
 
     this.render = function (containerDom, option, scope, persist) {
-        if (option == null) {
-            containerDom.html("<div class=\"alert alert-danger\" role=\"alert\">No Data!</div>");
-            return;
-        }
+        // if (option == null) {
+        //     containerDom.html("<div class=\"alert alert-danger\" role=\"alert\">No Data!</div>");
+        //     return;
+        // }
         var height;
         scope ? height = scope.myheight - 20 : null;
         return new CBoardEChartRender(containerDom, option).chart(height, persist);
@@ -116,7 +116,7 @@ cBoard.service('chartGaugeService', function () {
         if (config.values[0].format) {
             value = numbro(value).format(config.values[0].format);
         }
-
+        value= value+'';
         var index = value.lastIndexOf("%");
 
         if (index != -1) {
@@ -126,7 +126,19 @@ cBoard.service('chartGaugeService', function () {
         }
 
         option.series[0].data = [{name: name, value: value}];
-
+        if(option.series[0].data[0].value=='N/A') {
+            option.toolbox.show = false;
+            option.title = {
+                show: true,
+                textStyle:{
+                    color:'rgba(0,0,0,.4)',
+                    fontSize:14
+                },
+                text: '当前条件下无数据',
+                left: 'center',
+                top: 'center',
+            };
+        }
         return option;
     };
 });

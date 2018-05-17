@@ -174,20 +174,16 @@ cBoard.service('chartUSAMapService', function () {
                         toName = null;
                         toN = null;
                         toL = null;
-                        if(data_keys[i].length > 2){
-                            toName = data_keys[i][2];
+                        if(data_keys[i][0].length > 2){
+                            toName = data_keys[i][0];
                             toN = parseFloat(data_keys[i][0]);
                             toL = parseFloat(data_keys[i][1]);
-                        }else if(data_keys[i].length == 2){
-                            toName = data_keys[i][1];
-                            toN = parseFloat(data_keys[i][0].split(",")[0]);
-                            toL = parseFloat(data_keys[i][0].split(",")[1]);
                         }
 
                         if(data.data[j][i]){
                             scatterData.push({
                                 name:toName,
-                                value:[toN,toL,parseFloat(data.data[j][i])]
+                                value: parseFloat(data.data[j][i])
                             });
                             if(maxScatter == null || maxScatter < parseFloat(data.data[j][i])){
                                 maxScatter = parseFloat(data.data[j][i]);
@@ -206,11 +202,14 @@ cBoard.service('chartUSAMapService', function () {
                         seriesData.push(
                             {
                                 name: serieConfig,
-                                type: 'scatter',
+                                type: 'map',
                                 coordinateSystem: 'geo',
                                 data: scatterData,
                                 symbolSize : function (val) {
                                     return val[2] * 30 / maxScatter;
+                                },
+                                itemStyle:{
+                                    emphasis:{label:{show:true}}
                                 },
                                 label: {
                                     normal: {
@@ -238,6 +237,7 @@ cBoard.service('chartUSAMapService', function () {
             async: false,
             //type:'json',
             success: function (cityJson) {
+                // cityJson = seriesData.length>0?cityJson:'';
                 echarts.registerMap(code, cityJson,{
                     Alaska: {              // 把阿拉斯加移到美国主大陆左下方
                         left: -131,
@@ -264,6 +264,7 @@ cBoard.service('chartUSAMapService', function () {
                         data: optionData
                     },
                     visualMap: {
+                        show:seriesData.length>0?true:false,
                         min: min,
                         max: max,
                         left: 'right',
@@ -297,6 +298,20 @@ cBoard.service('chartUSAMapService', function () {
                     },
                     series:seriesData
                 };
+                if(seriesData.length==0){
+                    mapOption.title = {
+                        show: true,
+                        textStyle:{
+                            color:'rgba(0,0,0,.4)',
+                            fontSize:14
+                        },
+                        text: '当前条件下无数据',
+                        left: 'center',
+                        top: 'bottom',
+                    };
+                    mapOption.xAxis = {show : false};
+                    mapOption.yAxis= {show : false};
+                }
             }
         });
 

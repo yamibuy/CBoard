@@ -67,7 +67,6 @@ cBoard.service('chartWordCloudService', function ($state, $window) {
                 data: datas
             }]
         };
-
         return option;
     };
 

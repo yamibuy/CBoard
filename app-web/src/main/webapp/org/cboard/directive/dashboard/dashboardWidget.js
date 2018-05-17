@@ -22,15 +22,6 @@ cBoard.directive('dashboardWidget', function ($compile, $templateCache, dataServ
         scope.widget.render(ndWrapper, null, scope);
     };
 
-    // var renderUSAMap = function (scope, element, attrs) {
-    //     var template = $templateCache.get("chartContent");
-    //     scope.myheight = scope.row.height ? (scope.row.height - 44 ) : 400;
-    //     var link = $compile(template);
-    //     element.append(link(scope));
-    //     var ndWrapper = $(element).find('.box-body');
-    //     scope.widget.render(ndWrapper, null, scope);
-    // };
-
     var renderKpi = function (scope, element, attrs) {
         var template = $templateCache.get("kpiContent");
         var aa = $compile(template)(scope);

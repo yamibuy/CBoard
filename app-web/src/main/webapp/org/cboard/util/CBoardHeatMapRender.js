@@ -29,9 +29,32 @@ var CBoardHeatMapRender = function (jqContainer, options, isDeepSpec) {
     $(heatMap).css("height", "500px");
     this.ecc = echarts.init(jqContainer.get(0), this.theme);
     this.isDeppSpec = isDeepSpec;
-
-    this.basicOption = echartsBasicOption;
     this.options = options;
+    if(options&&options.series[0] && options.series[0].data.length>0){
+        this.basicOption = echartsBasicOption;
+    }else{
+        echarts.init(jqContainer.get(0), this.theme).clear();
+        echarts.init(jqContainer.get(0), this.theme).hideLoading();
+        this.basicOption =  {
+            title: {
+                show: true,
+                textStyle:{
+                    color:'rgba(0,0,0,.4)',
+                    fontSize:14
+                },
+                text: '当前条件下无数据',
+                left: 'center',
+                top: 'center'
+            },
+            xAxis: {
+                show: false
+            },
+            yAxis: {
+                show: false
+            },
+            series: []
+        };
+    }
 };
 
 CBoardHeatMapRender.prototype.theme = "theme-fin1"; // 主题

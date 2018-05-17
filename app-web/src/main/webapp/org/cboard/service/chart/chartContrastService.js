@@ -21,7 +21,7 @@ cBoard.service('chartContrastService', function () {
             return key.join('-');
         });
 
-        var max = aggregate_data[0][0];
+        var max = aggregate_data[0] ?aggregate_data[0][0]:0;
         _.each(aggregate_data, function(arr){
             _.each(arr, function(e){
                 if(parseFloat(e) > parseFloat(max)){
@@ -61,7 +61,7 @@ cBoard.service('chartContrastService', function () {
                 }
             },
             legend: {
-                data: [casted_values[0][0],casted_values[1][0]]
+                data: [casted_values[0]?casted_values[0][0]:'',casted_values[1]?casted_values[1][0]:'']
             },
             grid: {
                 left: '3%',

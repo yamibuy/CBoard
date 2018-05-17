@@ -26,11 +26,35 @@ var CBoardBMapRender = function (jqContainer, options, isDeepSpec) {
     var bMap = jqContainer.get(0);
     $(bMap).css("width", "100%");
     $(bMap).css("height", $(bMap).parent().context.clientHeight + "px");
-    this.ecc = echarts.init(jqContainer.get(0), this.theme);
     this.isDeppSpec = isDeepSpec;
-
     this.basicOption = echartsBasicOption;
     this.options = options;
+    if(options&&options.series[0] && options.series[0].data.length>0){
+        this.basicOption = echartsBasicOption;
+    }else{
+        echarts.init(jqContainer.get(0), this.theme).clear();
+        echarts.init(jqContainer.get(0), this.theme).hideLoading();
+        this.basicOption =  {
+            title: {
+                show: true,
+                textStyle:{
+                    color:'grey',
+                    fontSize:20
+                },
+                text: '当前条件下无数据',
+                left: 'center',
+                top: 'bottom'
+            },
+            xAxis: {
+                show: false
+            },
+            yAxis: {
+                show: false
+            },
+            series: []
+        };
+    }
+    this.ecc = echarts.init(jqContainer.get(0), this.theme);
 };
 
 CBoardBMapRender.prototype.theme = "theme-fin1"; // 主题

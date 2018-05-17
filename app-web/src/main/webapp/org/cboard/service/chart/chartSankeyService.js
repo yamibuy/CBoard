@@ -80,7 +80,20 @@ cBoard.service('chartSankeyService', function ($state, $window) {
                 echartOption.legend.show =false;
             }
         }
-
+        if(echartOption.series[0].data.length==0){
+            echartOption.title = {
+                show: true,
+                textStyle:{
+                    color:'rgba(0,0,0,.4)',
+                    fontSize:14
+                },
+                text: '当前条件下无数据',
+                left: 'center',
+                top: 'bottom',
+            };
+            echartOption.xAxis = {show : false};
+            echartOption.yAxis= {show : false};
+        }
         return echartOption;
     };
 });
