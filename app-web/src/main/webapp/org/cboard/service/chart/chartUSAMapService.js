@@ -215,9 +215,6 @@ cBoard.service('chartUSAMapService', function () {
                                 },
                                 data: scatterData,
                                 showLegendSymbol: false,
-                                // symbolSize : function (val) {
-                                //     return val[2] * 30 / maxScatter;
-                                // },
                                 label: {
                                     normal: {
                                         formatter: '{b}',
@@ -263,13 +260,13 @@ cBoard.service('chartUSAMapService', function () {
                     }
                 });
                 mapOption = {
-                    // legend: {
-                    //     orient: 'vertical',
-                    //     top: 'top',
-                    //     left: 'left',
-                    //     selectedMode: 'multiple',
-                    //     data: optionData
-                    // },
+                    legend: {
+                        orient: 'vertical',
+                        top: 'top',
+                        left: 'left',
+                        selectedMode: 'multiple',
+                        data: optionData
+                    },
                     visualMap: {
                         show:seriesData.length>0?true:false,
                         min: min,
@@ -303,7 +300,8 @@ cBoard.service('chartUSAMapService', function () {
                         }
                     },
                     tooltip: {
-                        trigger: 'item'
+                        trigger: 'item',
+                        formatter: '{b0}: {c0}'
                     },
                     series:seriesData
                 };
