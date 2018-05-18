@@ -13,7 +13,6 @@ cBoard.service('chartLiquidFillService', function () {
         scope ? height = scope.myheight - 20 : null;
         return new CBoardEChartRender(containerDom, option).chart(height, persist);
     };
-
     this.parseOption = function (data) {
         var config = data.chartConfig;
 
@@ -47,12 +46,35 @@ cBoard.service('chartLiquidFillService', function () {
                     borderWidth: 2,
                     borderColor: '#156ACF'
                 },
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: '#156ACF',
+                            insideColor: '#fff',
+                            fontSize: 25
+                        }
+                    }
+                },
                 outline: {
                     show: false
                 }
             }]
         };
-
+        if(isNaN(datas[0])){
+            option.title = {
+                show: true,
+                textStyle:{
+                    color:'rgba(0,0,0,.4)',
+                    fontSize:14
+                },
+                text: 'No Data!',
+                left: 'center',
+                top: 'center',
+            };
+            option.xAxis = {show : false};
+            option.yAxis= {show : false};
+            option.series= [];
+        }
         return option;
     };
 });

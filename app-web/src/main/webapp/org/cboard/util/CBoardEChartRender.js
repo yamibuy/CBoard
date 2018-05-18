@@ -47,34 +47,34 @@ var CBoardEChartRender = function (jqContainer, options, isDeepSpec) {
     this.container = jqContainer; // jquery object
     this.isDeppSpec = isDeepSpec;
     this.options = options;
-    if(options&&options.series[0] && options.series[0].data.length>0){
-        this.basicOption = echartsBasicOption;
-    }else{
-        var type =  window.sessionStorage.getItem('chartConfig.chart_type');
-        var top =  chartTypeList[type];
-        echarts.init(jqContainer.get(0), this.theme).clear();
-        echarts.init(jqContainer.get(0), this.theme).hideLoading();
-        this.basicOption =  {
-            title: {
-                show: true,
-                textStyle:{
-                    color:'rgba(0,0,0,.4)',
-                    fontSize:14
-                },
-                text: '当前条件下无数据',
-                left: 'center',
-                top: top,
-            },
-            xAxis: {
-                show: false
-            },
-            yAxis: {
-                show: false
-            },
-            series: []
-        };
-    }
     this.ecc = echarts.init(jqContainer.get(0), this.theme);
+    this.basicOption = echartsBasicOption;
+
+        // var type =  window.sessionStorage.getItem('chartConfig.chart_type');
+        // var top =  chartTypeList[type];
+        // echarts.init(jqContainer.get(0), this.theme).clear();
+        // echarts.init(jqContainer.get(0), this.theme).hideLoading();
+        // this.basicOption =  {
+        //     title: {
+        //         show: true,
+        //         textStyle:{
+        //             color:'rgba(0,0,0,.4)',
+        //             fontSize:14
+        //         },
+        //         text: '当前条件下无数据',
+        //         left: 'center',
+        //         top: top,
+        //     },
+        //     xAxis: {
+        //         show: false
+        //     },
+        //     yAxis: {
+        //         show: false
+        //     },
+        //     series: []
+        // };
+
+
 };
 CBoardEChartRender.prototype.theme = "theme-fin1"; // 主题
 

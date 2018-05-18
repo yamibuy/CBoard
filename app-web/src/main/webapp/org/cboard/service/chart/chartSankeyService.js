@@ -87,9 +87,9 @@ cBoard.service('chartSankeyService', function ($state, $window) {
                     color:'rgba(0,0,0,.4)',
                     fontSize:14
                 },
-                text: '当前条件下无数据',
+                text: 'No Data!',
                 left: 'center',
-                top: 'bottom',
+                top: 'center',
             };
             echartOption.xAxis = {show : false};
             echartOption.yAxis= {show : false};

@@ -84,7 +84,20 @@ cBoard.service('chartRadarService', function ($state, $window) {
         };
 
         updateEchartOptions(chartConfig.option, echartOption);
-
+        if(echartOption.series[0].data.length==0){
+                echartOption.title = {
+                    show: true,
+                    textStyle:{
+                        color:'rgba(0,0,0,.4)',
+                        fontSize:14
+                    },
+                    text: 'No Data!',
+                    left: 'center',
+                    top: 'center',
+                };
+                echartOption.xAxis = {show : false};
+                echartOption.yAxis= {show : false};
+            }
         return echartOption;
     };
 });

@@ -30,31 +30,7 @@ var CBoardHeatMapRender = function (jqContainer, options, isDeepSpec) {
     this.ecc = echarts.init(jqContainer.get(0), this.theme);
     this.isDeppSpec = isDeepSpec;
     this.options = options;
-    if(options&&options.series[0] && options.series[0].data.length>0){
-        this.basicOption = echartsBasicOption;
-    }else{
-        echarts.init(jqContainer.get(0), this.theme).clear();
-        echarts.init(jqContainer.get(0), this.theme).hideLoading();
-        this.basicOption =  {
-            title: {
-                show: true,
-                textStyle:{
-                    color:'rgba(0,0,0,.4)',
-                    fontSize:14
-                },
-                text: '当前条件下无数据',
-                left: 'center',
-                top: 'center'
-            },
-            xAxis: {
-                show: false
-            },
-            yAxis: {
-                show: false
-            },
-            series: []
-        };
-    }
+    this.basicOption = echartsBasicOption;
 };
 
 CBoardHeatMapRender.prototype.theme = "theme-fin1"; // 主题
@@ -97,7 +73,7 @@ CBoardHeatMapRender.prototype.chart = function (group, persist) {
         }, 1000);
     }
     return function (o) {
-        o = $.extend(true, {}, self.basicOption, o)
+        o = $.extend(true, {}, self.basicOption, o);
         self.ecc.setOption(o, true);
     }
 };
@@ -107,7 +83,7 @@ CBoardHeatMapRender.prototype.changeSize = function (instance) {
     var seriesType = o.series[0] ? o.series[0].type : null;
     if (seriesType == 'pie') {
         var l = o.series.length;
-        var b = instance.getWidth() / (l + 1 + l * 8)
+        var b = instance.getWidth() / (l + 1 + l * 8);
         for (var i = 0; i < l; i++) {
             if ((b * 8) < (instance.getHeight() * 0.75)) {
                 o.series[i].radius = [0, b * 4];
@@ -117,5 +93,4 @@ CBoardHeatMapRender.prototype.changeSize = function (instance) {
         }
         instance.setOption(o);
     }
-
 };

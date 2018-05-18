@@ -202,15 +202,22 @@ cBoard.service('chartUSAMapService', function () {
                         seriesData.push(
                             {
                                 name: serieConfig,
+                                coordinateSystem:"geo",
                                 type: 'map',
-                                coordinateSystem: 'geo',
-                                data: scatterData,
-                                symbolSize : function (val) {
-                                    return val[2] * 30 / maxScatter;
-                                },
+                                roam: false,
+                                map: 'usa',
                                 itemStyle:{
                                     emphasis:{label:{show:true}}
                                 },
+                                // 文本位置修正
+                                textFixed: {
+                                    Alaska: [20, -20]
+                                },
+                                data: scatterData,
+                                showLegendSymbol: false,
+                                // symbolSize : function (val) {
+                                //     return val[2] * 30 / maxScatter;
+                                // },
                                 label: {
                                     normal: {
                                         formatter: '{b}',
@@ -239,12 +246,12 @@ cBoard.service('chartUSAMapService', function () {
             success: function (cityJson) {
                 // cityJson = seriesData.length>0?cityJson:'';
                 echarts.registerMap(code, cityJson,{
-                    Alaska: {              // 把阿拉斯加移到美国主大陆左下方
+                    'Alaska': {              // 把阿拉斯加移到美国主大陆左下方
                         left: -131,
                         top: 25,
                         width: 15
                     },
-                    Hawaii: {
+                    'Hawaii': {
                         left: -110,        // 夏威夷
                         top: 28,
                         width: 5
@@ -256,13 +263,13 @@ cBoard.service('chartUSAMapService', function () {
                     }
                 });
                 mapOption = {
-                    legend: {
-                        orient: 'vertical',
-                        top: 'top',
-                        left: 'left',
-                        selectedMode: 'multiple',
-                        data: optionData
-                    },
+                    // legend: {
+                    //     orient: 'vertical',
+                    //     top: 'top',
+                    //     left: 'left',
+                    //     selectedMode: 'multiple',
+                    //     data: optionData
+                    // },
                     visualMap: {
                         show:seriesData.length>0?true:false,
                         min: min,
@@ -271,7 +278,8 @@ cBoard.service('chartUSAMapService', function () {
                         top: 'bottom',
                         //text: ['High', 'Low'],
                         inRange: {
-                            color: ['#d94e5d','#eac736','#50a3ba'].reverse()
+                            // color: ['#d94e5d','#eac736','#50a3ba'].reverse()
+                            color: ['orangered','yellow','lightskyblue'].reverse()
                         },
                         calculable : true,
                         textStyle: {
@@ -280,6 +288,7 @@ cBoard.service('chartUSAMapService', function () {
                     },
                     geo: {
                         map: code,
+                        show:false,
                         label: {
                             emphasis: {
                                 show: false
@@ -305,7 +314,7 @@ cBoard.service('chartUSAMapService', function () {
                             color:'rgba(0,0,0,.4)',
                             fontSize:14
                         },
-                        text: '当前条件下无数据',
+                        text: 'No Data!',
                         left: 'center',
                         top: 'bottom',
                     };

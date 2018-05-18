@@ -104,12 +104,30 @@ cBoard.service('chartContrastService', function () {
                             color : '#1AB394'
                         }
                     },
-                    data:aggregate_data[1]
+                    data:aggregate_data[1]?aggregate_data[1]:[]
                 }
             ]
         };
 
         updateEchartOptions(tunningOpt, echartOption);
+        var length = echartOption.series.length;
+        for(var i=0;i<length;i++){
+            if(echartOption.series[i].data.length>0){
+                return echartOption;
+            }
+        }
+        echartOption.title = {
+            show: true,
+            textStyle:{
+                color:'rgba(0,0,0,.4)',
+                fontSize:14
+            },
+            text: 'No Data!',
+            left: 'center',
+            top: 'center',
+        };
+        echartOption.xAxis = {show : false};
+        echartOption.yAxis= {show : false};
         return echartOption;
     };
 });

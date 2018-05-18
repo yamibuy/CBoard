@@ -111,6 +111,20 @@ cBoard.service('chartAreaMapService', function ($state, $window) {
                 };
             }
         });
+        if(mapOption.series.length==0){
+            mapOption.title = {
+                show: true,
+                textStyle:{
+                    color:'rgba(0,0,0,.4)',
+                    fontSize:14
+                },
+                text: 'No Data!',
+                left: 'center',
+                top: 'center',
+            };
+            mapOption.xAxis = {show : false};
+            mapOption.yAxis= {show : false};
+        }
         return mapOption;
     };
 

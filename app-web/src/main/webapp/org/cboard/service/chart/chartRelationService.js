@@ -137,6 +137,20 @@ cBoard.service('chartRelationService', function () {
                 }
             ]
         };
+        if(option.series[0].data.length==0){
+            option.title = {
+                show: true,
+                textStyle:{
+                    color:'rgba(0,0,0,.4)',
+                    fontSize:14
+                },
+                text: 'No Data!',
+                left: 'center',
+                top: 'center',
+            };
+            option.xAxis = {show : false};
+            option.yAxis= {show : false};
+        }
         return option;
     };
 });

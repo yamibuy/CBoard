@@ -178,7 +178,20 @@ cBoard.service('chartScatterService', function (dataService) {
         };
 
         updateEchartOptions(chartConfig.option, echartOption);
-
+        if(echartOption.series.length==0){
+            echartOption.title = {
+                show: true,
+                textStyle:{
+                    color:'rgba(0,0,0,.4)',
+                    fontSize:14
+                },
+                text: 'No Data!',
+                left: 'center',
+                top: 'center',
+            };
+            echartOption.xAxis = {show : false};
+            echartOption.yAxis= {show : false};
+        }
         return echartOption;
     };
 });

@@ -6,7 +6,7 @@ cBoard.service('chartWordCloudService', function ($state, $window) {
 
     this.render = function (containerDom, option, scope, persist, drill, relations, chartConfig) {
         if (option == null) {
-            containerDom.html("<div class=\"alert alert-danger\" role=\"alert\">No Data!</div>");
+            containerDom.html('<div style="min-height:300px;line-height:300px;" >No Data!</div>');
             return;
         }
         var height;
@@ -67,6 +67,20 @@ cBoard.service('chartWordCloudService', function ($state, $window) {
                 data: datas
             }]
         };
+        if(option.series[0].data.length==0){
+            option.title = {
+                show: true,
+                textStyle:{
+                    color:'rgba(0,0,0,.4)',
+                    fontSize:14
+                },
+                text: 'No Data!',
+                left: 'center',
+                top: 'center',
+            };
+            option.xAxis = {show : false};
+            option.yAxis= {show : false};
+        }
         return option;
     };
 

@@ -133,7 +133,20 @@ cBoard.service('chartHeatMapCalendarService', function () {
             calendar: calendar,
             series: series
         };
-
+        if(option.series.length==0){
+            option.title = {
+                show: true,
+                textStyle:{
+                    color:'rgba(0,0,0,.4)',
+                    fontSize:14
+                },
+                text: 'No Data!',
+                left: 'center',
+                top: 'center',
+            };
+            option.xAxis = {show : false};
+            option.yAxis= {show : false};
+        }
         return option;
     };
 

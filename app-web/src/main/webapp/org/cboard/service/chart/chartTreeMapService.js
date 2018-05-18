@@ -6,7 +6,7 @@ cBoard.service('chartTreeMapService', function ($state, $window) {
 
     this.render = function (containerDom, option, scope, persist, drill, relations, chartConfig) {
         if (option == null) {
-            containerDom.html("<div class=\"alert alert-danger\" role=\"alert\">No Data!</div>");
+            containerDom.html('<div style="min-height:300px;line-height:300px;" >No Data!</div>');
             return;
         }
         var height;
@@ -55,7 +55,8 @@ cBoard.service('chartTreeMapService', function ($state, $window) {
         var depth = data.chartConfig.keys.length;
         var keys = data.keys;
         var values = data.data;
-        for (var i in keys) keys[i].reverse();
+        for (var i in keys)
+            if(keys[i]) {keys[i].reverse()};
         var datas = recursion(depth, depth, "", keys, values, style);
         if (style != "random" && style != "multi") {
             option.series[0].data = [
