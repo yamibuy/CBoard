@@ -5,10 +5,10 @@
 cBoard.service('chartGaugeService', function () {
 
     this.render = function (containerDom, option, scope, persist) {
-        // if (option == null) {
-        //     containerDom.html("<div class=\"alert alert-danger\" role=\"alert\">No Data!</div>");
-        //     return;
-        // }
+        if (option == null) {
+            containerDom.html('<div style=\"min-height:300px;line-height:300px;\" >No Data!</div>');
+            return;
+        }
         var height;
         scope ? height = scope.myheight - 20 : null;
         return new CBoardEChartRender(containerDom, option).chart(height, persist);
@@ -126,7 +126,7 @@ cBoard.service('chartGaugeService', function () {
         }
 
         option.series[0].data = [{name: name, value: value}];
-        if(option.series[0].data[0].value=='N/A') {
+        if(option.series[0].data[0].value=='N/A' || option.series[0].data[0].value=='NaN' ) {
             option.toolbox.show = false;
             option.title = {
                 show: true,
@@ -138,6 +138,7 @@ cBoard.service('chartGaugeService', function () {
                 left: 'center',
                 top: 'center',
             };
+            option.series = [];
         }
         return option;
     };

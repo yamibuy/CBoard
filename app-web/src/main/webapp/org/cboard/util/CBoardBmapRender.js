@@ -41,7 +41,7 @@ var CBoardBMapRender = function (jqContainer, options, isDeepSpec) {
                     color:'grey',
                     fontSize:20
                 },
-                text: '当前条件下无数据',
+                text: 'No Data!',
                 left: 'center',
                 top: 'bottom'
             },
