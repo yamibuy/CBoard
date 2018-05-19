@@ -286,7 +286,7 @@ cBoard.service('chartUSAMapService', function () {
                     },
                     geo: {
                         map: code,
-                        show:false,
+                        show:true,
                         label: {
                             emphasis: {
                                 show: false
@@ -317,7 +317,7 @@ cBoard.service('chartUSAMapService', function () {
                         },
                         text: 'No Data!',
                         left: 'center',
-                        top: 'center',
+                        top: 'bottom',
                     };
                     mapOption.xAxis = {show : false};
                     mapOption.yAxis= {show : false};
