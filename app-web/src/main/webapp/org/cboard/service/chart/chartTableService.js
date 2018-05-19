@@ -6,7 +6,7 @@ cBoard.service('chartTableService', function () {
 
     this.render = function (containerDom, option, scope, persist, drill) {
         if (option == null) {
-            containerDom.html("<div class=\"alert alert-danger\" role=\"alert\">No Data!</div>");
+            containerDom.html('<div style="min-height:300px;line-height:300px;" >No Data!</div>');
             return;
         }
         var height;

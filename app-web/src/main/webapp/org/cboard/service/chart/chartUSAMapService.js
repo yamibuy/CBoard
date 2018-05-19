@@ -5,7 +5,7 @@
 cBoard.service('chartUSAMapService', function () {
     this.render = function (containerDom, option, scope, persist,drill) {
         if (option == null) {
-            containerDom.html("<div class=\"alert alert-danger\" role=\"alert\">No Data!</div>");
+            containerDom.html('<div style="min-height:300px;line-height:300px;" >No Data!</div>');
             return;
         }
         var height;
@@ -199,6 +199,7 @@ cBoard.service('chartUSAMapService', function () {
                     }
 
                     if(scatterData.length > 0){
+
                         seriesData.push(
                             {
                                 name: serieConfig,
@@ -316,15 +317,79 @@ cBoard.service('chartUSAMapService', function () {
                         },
                         text: 'No Data!',
                         left: 'center',
-                        top: 'bottom',
+                        top: 'center',
                     };
                     mapOption.xAxis = {show : false};
                     mapOption.yAxis= {show : false};
+                }else{
+                    //单独处理{name: 'Puerto Rico', value: 3667084}{name: 'Alaska', value: 731449},
+                    var  allCityList = [{name: 'Alabama', value: 0},
+                        {name: 'Alaska', value: 0},
+                        {name: 'Arizona', value: 0},
+                        {name: 'Arkansas', value: 0},
+                        {name: 'California', value: 0},
+                        {name: 'Colorado', value: 0},
+                        {name: 'Connecticut', value: 0},
+                        {name: 'Delaware', value: 0},
+                        {name: 'District of Columbia', value: 0},
+                        {name: 'Florida', value: 0},
+                        {name: 'Georgia', value: 0},
+                        {name: 'Hawaii', value: 0},
+                        {name: 'Idaho', value: 0},
+                        {name: 'Illinois', value: 0},
+                        {name: 'Indiana', value: 0},
+                        {name: 'Iowa', value: 0},
+                        {name: 'Kansas', value: 0},
+                        {name: 'Kentucky', value: 0},
+                        {name: 'Louisiana', value: 0},
+                        {name: 'Maine', value: 0},
+                        {name: 'Maryland', value: 0},
+                        {name: 'Massachusetts', value: 0},
+                        {name: 'Michigan', value: 0},
+                        {name: 'Minnesota', value: 0},
+                        {name: 'Mississippi', value: 0},
+                        {name: 'Missouri', value: 0},
+                        {name: 'Montana', value: 0},
+                        {name: 'Nebraska', value: 0},
+                        {name: 'Nevada', value: 0},
+                        {name: 'New Hampshire', value: 0},
+                        {name: 'New Jersey', value: 0},
+                        {name: 'New Mexico', value: 0},
+                        {name: 'New York', value: 0},
+                        {name: 'North Carolina', value: 0},
+                        {name: 'North Dakota', value: 0},
+                        {name: 'Ohio', value: 0},
+                        {name: 'Oklahoma', value: 0},
+                        {name: 'Oregon', value: 0},
+                        {name: 'Pennsylvania', value: 0},
+                        {name: 'Rhode Island', value: 0},
+                        {name: 'South Carolina', value: 0},
+                        {name: 'South Dakota', value: 0},
+                        {name: 'Tennessee', value: 0},
+                        {name: 'Texas', value: 0},
+                        {name: 'Utah', value: 0},
+                        {name: 'Vermont', value: 0},
+                        {name: 'Virginia', value: 0},
+                        {name: 'Washington', value: 0},
+                        {name: 'West Virginia', value: 0},
+                        {name: 'Wisconsin', value: 0},
+                        {name: 'Wyoming', value: 0},
+                        {name: 'Puerto Rico', value: 0}];
+                    var allCityLength = allCityList.length;
+                    var mapData = mapOption.series[0].data;
+                    var mapLength = mapData.length;
+                    for(var p = 0; p<allCityLength;p++){
+                        for(var q=0;q<mapLength;q++){
+                            if(allCityList[p].name == mapData[q].name ){
+                                allCityList[p].value = mapData[q].value;
+                                break;
+                            }
+                        }
+                    }
+                    mapOption.series[0].data = allCityList;
                 }
             }
         });
-
         return mapOption;
     };
-
 });
