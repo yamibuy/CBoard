@@ -69,7 +69,9 @@ cBoard.service('chartFunnelService', function ($state, $window) {
             show: true,
             textStyle:{
                 color:'rgba(0,0,0,.4)',
-                fontSize:14
+                fontSize:12,
+                fontFamily: 'Arial, Verdana, sans-serif',
+                fontStyle: 'normal'
             },
             text: 'No Data!',
             left: 'center',
@@ -88,7 +90,7 @@ cBoard.service('chartFunnelService', function ($state, $window) {
             toolbox: false,
             series: series
         };
-        console.log(echartOption);
+        // console.log(echartOption);
         updateEchartOptions(chartConfig.option, echartOption);
 
         return echartOption;

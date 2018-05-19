@@ -142,7 +142,9 @@ cBoard.service('chartRelationService', function () {
                 show: true,
                 textStyle:{
                     color:'rgba(0,0,0,.4)',
-                    fontSize:14
+                    fontSize:12,
+                    fontFamily: 'Arial, Verdana, sans-serif',
+                    fontStyle: 'normal'
                 },
                 text: 'No Data!',
                 left: 'center',

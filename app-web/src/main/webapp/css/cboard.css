@@ -95,8 +95,8 @@
 .cChinaMapBmap.disabled{ background-image: url(../imgs/chinaMapBmap.png); }
 .cRelation{ background-image: url(../imgs/relation-active.png); }
 .cRelation.disabled{ background-image: url(../imgs/relation.png); }
-.cUSAMap{ background-image: url(../imgs/liquidFill-active.png); }
-.cUSAMap.disabled{ background-image: url(../imgs/liquidFill.png); }
+.cUSAMap{ background-image: url(../imgs/usa-active.png); background-position: -10px 0px; }
+.cUSAMap.disabled{ background-image: url(../imgs/usa.png);background-position: -10px 0px;}
 
 .chart-type a.active{
     background-color: #FFF;
