@@ -20,61 +20,12 @@ var echartsBasicOption = {
         itemHeight: 10
     }
 };
-var chartTypeList = {
-    'line': 'center',
-    'pie': 'center',
-    'kpi': 'center',
-    'table': 'center',
-    'funnel': 'center',
-    'sankey': 'center',
-    'radar': 'center',
-    'map': 'bottom',
-    'gauge': 'center',
-    'wordCloud': 'center',
-    'scatter': 'center',
-    'treeMap': 'center',
-    'areaMap': 'center',
-    'heatMapCalendar': 'center',
-    'heatMapTable': 'center',
-    'liquidFill': 'center',
-    'contrast': 'center',
-    'chinaMap': 'bottom',
-    'chinaMapBmap': 'center',
-    'relation': 'center',
-    'usaMap': 'bottom',
-};
 var CBoardEChartRender = function (jqContainer, options, isDeepSpec) {
     this.container = jqContainer; // jquery object
     this.isDeppSpec = isDeepSpec;
     this.options = options;
     this.ecc = echarts.init(jqContainer.get(0), this.theme);
     this.basicOption = echartsBasicOption;
-
-        // var type =  window.sessionStorage.getItem('chartConfig.chart_type');
-        // var top =  chartTypeList[type];
-        // echarts.init(jqContainer.get(0), this.theme).clear();
-        // echarts.init(jqContainer.get(0), this.theme).hideLoading();
-        // this.basicOption =  {
-        //     title: {
-        //         show: true,
-        //         textStyle:{
-        //             color:'rgba(0,0,0,.4)',
-        //             fontSize:14
-        //         },
-        //         text: '当前条件下无数据',
-        //         left: 'center',
-        //         top: top,
-        //     },
-        //     xAxis: {
-        //         show: false
-        //     },
-        //     yAxis: {
-        //         show: false
-        //     },
-        //     series: []
-        // };
-
-
 };
 CBoardEChartRender.prototype.theme = "theme-fin1"; // 主题
 
@@ -136,7 +87,6 @@ CBoardEChartRender.prototype.changeSize = function (instance) {
         }
         instance.setOption(o);
     }
-
 };
 
 //{"sourceField":[],"relations":[{},{}]}

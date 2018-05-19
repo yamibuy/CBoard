@@ -83,7 +83,7 @@ cBoard.service('chartPieService', function ($state, $window) {
             },
             tooltip: {
                 trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                formatter: "{b} : {c} ({d}%)"
             },
             toolbox: false,
             series: series
