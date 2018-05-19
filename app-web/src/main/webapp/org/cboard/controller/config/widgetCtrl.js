@@ -956,6 +956,7 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
                     }
                 }).then(function () {
                     $scope.loadingPre = false;
+                    console.log('table draw end time : '+new Date().getTime());
                 });
             }
         };

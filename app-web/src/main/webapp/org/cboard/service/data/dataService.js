@@ -205,6 +205,9 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
             cfg.values = _.map(dataSeries, function (s) {
                 return {column: s.name, aggType: s.aggregate};
             });
+            // console.time('getData');
+            console.log('-------------查询条件chartConfig-----------------');
+            console.log(chartConfig);
             $http.post("dashboard/getAggregateData.do", {
                 datasourceId: datasource,
                 query: angular.toJson(query),
@@ -212,15 +215,19 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
                 cfg: angular.toJson(cfg),
                 reload: reload
             }).success(function (data) {
+                // console.log('data  success time : '+new Date().getTime());
+                // console.timeEnd('getData');
                 var result = castRawData2Series(data, chartConfig);
                 result.chartConfig = chartConfig;
                 if (!_.isUndefined(datasetId)) {
                     getDrillConfig(datasetId, chartConfig).then(function (c) {
                         result.drill = {config: c};
                         defer.resolve(result);
+                        // console.log('getDataSeriesend  resolve end time : '+new Date().getTime());
                     });
                 } else {
                     defer.resolve(result);
+                    // console.log('getDataSeriesend  resolve end time : '+new Date().getTime());
                 }
             });
         });
@@ -499,16 +506,19 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
      * @param chartConfig
      */
     var castRawData2Series = function (aggData, chartConfig) {
-        var castedKeys = new Array();
-        var castedGroups = new Array();
+        // console.log('castRawData2Series  start time : '+new Date().getTime());
+        console.time('castRawData2Series');
+        var castedKeys = [];
+        var castedGroups = [];
         var joinedKeys = {};
         var joinedGroups = {};
         var newData = {};
 
         var getIndex = function (columnList, col) {
-            var result = new Array();
+            var result = [];
             if (col) {
-                for (var j = 0; j < col.length; j++) {
+                var colLength = col.length;
+                for (var j = 0; j < colLength; j++) {
                     var idx = _.find(columnList, function (e) {
                         return e.name == col[j];
                     });
@@ -534,7 +544,8 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
         var valueSeries = _.filter(aggData.columnList, function (e) {
             return e.aggType;
         });
-        for (var i = 0; i < aggData.data.length; i++) {
+        var aggDataLength = aggData.data.length;
+        for (var i = 0; i < aggDataLength; i++) {
             //组合keys
             var newKey = getRowElements(aggData.data[i], keysIdx);
             var jk = newKey.join('-');
@@ -590,9 +601,9 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
         castedKeys.sort(getSort(keysSort));
         castedGroups.sort(getSort(groupsSort));
         //
-        var castedAliasSeriesName = new Array();
+        var castedAliasSeriesName = [];
         var aliasSeriesConfig = {};
-        var aliasData = new Array();
+        var aliasData = [];
 
         var valueSort = undefined;
         var valueSortArr = [];
@@ -648,7 +659,7 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
                     };
                     castSeriesData(series, group.join('-'), castedKeys, newData, function (castedData, keyIdx) {
                         if (!aliasData[castedAliasSeriesName.length - 1]) {
-                            aliasData[castedAliasSeriesName.length - 1] = new Array();
+                            aliasData[castedAliasSeriesName.length - 1] = [];
                         }
                         // Only format decimal
                         aliasData[castedAliasSeriesName.length - 1][keyIdx] = castedData;
@@ -686,6 +697,7 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
                 i--;
             }
         }
+        console.timeEnd('castRawData2Series');
         return {
             keys: castedKeys,
             series: castedAliasSeriesName,

@@ -172,7 +172,6 @@ cBoard.controller('boardCtrl',
                         } else {
                             $scope.alerts = [{msg: dps.msg, type: 'danger'}];
                         }
-
                     }
                 });
             });

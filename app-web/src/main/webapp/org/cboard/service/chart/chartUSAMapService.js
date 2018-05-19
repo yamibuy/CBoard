@@ -188,13 +188,14 @@ cBoard.service('chartUSAMapService', function () {
                             if(maxScatter == null || maxScatter < parseFloat(data.data[j][i])){
                                 maxScatter = parseFloat(data.data[j][i]);
                             }
-
+                            max = max>1000?1000:max;
                             if(max == null || max <= parseFloat(data.data[j][i])){
                                 max = parseFloat(data.data[j][i]) + 10;
                             }
                             if(min == null || min >= parseFloat(data.data[j][i])){
                                 min = parseFloat(data.data[j][i]) - 10;
                             }
+                            min = min>0?min:0;
                         }
                     }
 
