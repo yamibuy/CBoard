@@ -208,6 +208,7 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
             // console.time('getData');
             console.log('-------------查询条件chartConfig-----------------');
             console.log(chartConfig);
+            cfg.limit = chartConfig.values[0].cols[0].f_top;
             $http.post("dashboard/getAggregateData.do", {
                 datasourceId: datasource,
                 query: angular.toJson(query),
@@ -506,7 +507,7 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
      * @param chartConfig
      */
     var castRawData2Series = function (aggData, chartConfig) {
-        // console.log('castRawData2Series  start time : '+new Date().getTime());
+        console.log(aggData);
         console.time('castRawData2Series');
         var castedKeys = [];
         var castedGroups = [];
@@ -698,6 +699,12 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
             }
         }
         console.timeEnd('castRawData2Series');
+        console.log({
+            keys: castedKeys,
+            series: castedAliasSeriesName,
+            data: aliasData,
+            seriesConfig: aliasSeriesConfig
+        });
         return {
             keys: castedKeys,
             series: castedAliasSeriesName,
