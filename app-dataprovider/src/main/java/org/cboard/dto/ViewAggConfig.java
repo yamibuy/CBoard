@@ -19,6 +19,7 @@ public class ViewAggConfig {
     private List<DimensionConfig> filters;
     private List<ValueConfig> values;
     private Integer limit;
+    private Integer startColumn;
 
     public static AggConfig getAggConfig(ViewAggConfig viewAggConfig) {
         if (viewAggConfig != null) {
@@ -32,6 +33,7 @@ public class ViewAggConfig {
             }
             aggConfig.setValues(viewAggConfig.getValues());
             aggConfig.setLimit(viewAggConfig.getLimit());
+            aggConfig.setStartColumn(viewAggConfig.getStartColumn());
             return aggConfig;
         }
         return null;
@@ -76,4 +78,13 @@ public class ViewAggConfig {
 	public void setLimit(Integer limit) {
 		this.limit = limit;
 	}
+
+	public Integer getStartColumn() {
+		return startColumn;
+	}
+
+	public void setStartColumn(Integer startColumn) {
+		this.startColumn = startColumn;
+	}
+	
 }

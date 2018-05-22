@@ -112,7 +112,11 @@ public class SqlHelper {
         }
         String exec = String.format(fsql, selectColsStr, tableName, whereStr, groupByStr);
         if (config.getLimit() != null) {
-        	exec += "LIMIT "+config.getLimit()+"";
+        	Integer startColumn = 0;
+        	if (config.getStartColumn() != null) {
+        		startColumn = config.getStartColumn();
+			}
+        	exec += "LIMIT "+config.getLimit()+" offset "+startColumn+"";
 		}
         return exec;
     }
