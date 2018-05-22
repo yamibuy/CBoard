@@ -205,10 +205,13 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
             cfg.values = _.map(dataSeries, function (s) {
                 return {column: s.name, aggType: s.aggregate};
             });
-            // console.time('getData');
+
             console.log('-------------查询条件chartConfig-----------------');
-            console.log(chartConfig);
-            cfg.limit = chartConfig.values[0].cols[0].f_top ?  chartConfig.values[0].cols[0].f_top : null;
+
+            cfg.limit = null;
+            if(chartConfig.values[0].cols[0]){
+                cfg.limit = chartConfig.values[0].cols[0].f_top ?  chartConfig.values[0].cols[0].f_top:null;
+            }
             $http.post("dashboard/getAggregateData.do", {
                 datasourceId: datasource,
                 query: angular.toJson(query),
@@ -216,19 +219,15 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
                 cfg: angular.toJson(cfg),
                 reload: reload
             }).success(function (data) {
-                // console.log('data  success time : '+new Date().getTime());
-                // console.timeEnd('getData');
                 var result = castRawData2Series(data, chartConfig);
                 result.chartConfig = chartConfig;
                 if (!_.isUndefined(datasetId)) {
                     getDrillConfig(datasetId, chartConfig).then(function (c) {
                         result.drill = {config: c};
                         defer.resolve(result);
-                        // console.log('getDataSeriesend  resolve end time : '+new Date().getTime());
                     });
                 } else {
                     defer.resolve(result);
-                    // console.log('getDataSeriesend  resolve end time : '+new Date().getTime());
                 }
             });
         });
