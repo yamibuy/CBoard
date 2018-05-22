@@ -208,7 +208,7 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
             // console.time('getData');
             console.log('-------------查询条件chartConfig-----------------');
             console.log(chartConfig);
-            cfg.limit = chartConfig.values[0].cols[0].f_top;
+            cfg.limit = chartConfig.values[0].cols[0].f_top ?  chartConfig.values[0].cols[0].f_top : null;
             $http.post("dashboard/getAggregateData.do", {
                 datasourceId: datasource,
                 query: angular.toJson(query),
