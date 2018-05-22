@@ -390,15 +390,15 @@ cBoard.service('chartUSAMapService', function () {
                     mapOption.series[0].data = allCityList;
                     if(chartConfig.option.visualMap && chartConfig.option.visualMap.max && chartConfig.option.visualMap.min){
                         if(chartConfig.option.visualMap.max>chartConfig.option.visualMap.min){
-                            mapOption.visualMap.max = chartConfig.option.visualMap.max;
-                            mapOption.visualMap.min = chartConfig.option.visualMap.min;
+                            mapOption.visualMap.max = Math.floor(chartConfig.option.visualMap.max);
+                            mapOption.visualMap.min = Math.floor(chartConfig.option.visualMap.min);
                         }
                     }else{
                         if( chartConfig.option.visualMap &&  chartConfig.option.visualMap.max && chartConfig.option.visualMap.max>=0){
-                            mapOption.visualMap.max = chartConfig.option.visualMap.max;
+                            mapOption.visualMap.max = Math.floor(chartConfig.option.visualMap.max);
                         }
                         if( chartConfig.option.visualMap &&  chartConfig.option.visualMap.min && chartConfig.option.visualMap.min>=0){
-                            mapOption.visualMap.min = chartConfig.option.visualMap.min;
+                            mapOption.visualMap.min = Math.floor(chartConfig.option.visualMap.min);
                         }
                     }
                 }
