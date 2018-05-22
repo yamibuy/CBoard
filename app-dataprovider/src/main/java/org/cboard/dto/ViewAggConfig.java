@@ -14,10 +14,11 @@ import java.util.stream.Collectors;
  */
 public class ViewAggConfig {
 
-    private List<DimensionConfig> rows;
+	private List<DimensionConfig> rows;
     private List<DimensionConfig> columns;
     private List<DimensionConfig> filters;
     private List<ValueConfig> values;
+    private Integer limit;
 
     public static AggConfig getAggConfig(ViewAggConfig viewAggConfig) {
         if (viewAggConfig != null) {
@@ -30,6 +31,7 @@ public class ViewAggConfig {
                 aggConfig.setFilters(new ArrayList<>());
             }
             aggConfig.setValues(viewAggConfig.getValues());
+            aggConfig.setLimit(viewAggConfig.getLimit());
             return aggConfig;
         }
         return null;
@@ -66,4 +68,12 @@ public class ViewAggConfig {
     public void setValues(List<ValueConfig> values) {
         this.values = values;
     }
+    
+    public Integer getLimit() {
+		return limit;
+	}
+
+	public void setLimit(Integer limit) {
+		this.limit = limit;
+	}
 }

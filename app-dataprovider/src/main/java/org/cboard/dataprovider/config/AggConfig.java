@@ -11,6 +11,7 @@ public class AggConfig {
     private List<DimensionConfig> columns;
     private List<ConfigComponent> filters;
     private List<ValueConfig> values;
+    private Integer limit;
 
     public List<DimensionConfig> getRows() {
         return rows;
@@ -43,4 +44,13 @@ public class AggConfig {
     public void setValues(List<ValueConfig> values) {
         this.values = values;
     }
+
+	public Integer getLimit() {
+		return limit;
+	}
+
+	public void setLimit(Integer limit) {
+		this.limit = limit;
+	}
+    
 }

@@ -94,27 +94,6 @@ public class SqlHelper {
         String dimColsStr = assembleDimColumns(dimStream);
         String aggColsStr = assembleAggValColumns(config.getValues().stream());
 
-//        List<DimensionConfig> filterList = new ArrayList<DimensionConfig>();
-//        for (ConfigComponent configComponent : config.getFilters()) {
-//			filterList.add((DimensionConfig) configComponent);
-//		}
-//        Boolean hasNow = false;
-//        String whereStr = "";
-//        if (filterList.size()>0) {
-//        	for(int i=0;i<filterList.size();i++){
-//        		for (int j = i+1; j < filterList.size(); j++) {
-//    				if (filterList.get(i).getColumnName().equals(filterList.get(j).getColumnName())) {
-//    					hasNow = true;
-//					}
-//    			}
-//        	}
-//		}
-//        if (hasNow) {
-//            whereStr = filterSqlV3(config);
-//		}else {
-//			whereStr = filterSql(filters, "WHERE");
-//		}
-        
         String whereStr = filterSqlV3(config);
         String groupByStr = StringUtils.isBlank(dimColsStr) ? "" : "GROUP BY " + dimColsStr;
 
@@ -132,6 +111,9 @@ public class SqlHelper {
             fsql = "\nSELECT %s \n FROM %s \n %s \n %s";
         }
         String exec = String.format(fsql, selectColsStr, tableName, whereStr, groupByStr);
+        if (config.getLimit() != null) {
+        	exec += "LIMIT "+config.getLimit()+"";
+		}
         return exec;
     }
 
