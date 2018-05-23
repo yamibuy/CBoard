@@ -288,33 +288,36 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
             $scope.intervalGroup = {};
             $scope.loading = false;
             $scope.board = response;
-            _.each($scope.board.layout.rows, function (row) {
-                _.each(row.params, function (param) {
-                    if (!param.paramType) {
-                        param.paramType = 'selector';
+            if($scope.board.layout){
+                _.each($scope.board.layout.rows, function (row) {
+                    _.each(row.params, function (param) {
+                        if (!param.paramType) {
+                            param.paramType = 'selector';
+                        }
+                    });
+                });
+                if (paramInitListener) {
+                    paramInitListener(reload);
+                }
+                _.each($scope.board.layout.rows, function (row) {
+                    _.each(row.params, function (param) {
+                        $scope.paramInit++;
+                    });
+                });
+                if ($scope.board.layout.type == 'timeline') {
+                    groupTimeline();
+                }
+                if ($scope.paramInit == 0) {
+                    loadWidget(reload);
+                }
+                paramInitListener = $scope.$on('paramInitFinish', function (e, d) {
+                    $scope.paramInit--;
+                    if ($scope.paramInit == 0) {
+                        loadWidget(reload)
                     }
                 });
-            });
-            if (paramInitListener) {
-                paramInitListener(reload);
             }
-            _.each($scope.board.layout.rows, function (row) {
-                _.each(row.params, function (param) {
-                    $scope.paramInit++;
-                });
-            });
-            if ($scope.board.layout.type == 'timeline') {
-                groupTimeline();
-            }
-            if ($scope.paramInit == 0) {
-                loadWidget(reload);
-            }
-            paramInitListener = $scope.$on('paramInitFinish', function (e, d) {
-                $scope.paramInit--;
-                if ($scope.paramInit == 0) {
-                    loadWidget(reload)
-                }
-            });
+
         });
     };
 

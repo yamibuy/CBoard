@@ -39,34 +39,65 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
                 var dataset = _.find(dsList, function (e) {
                     return e.id == datasetId;
                 });
-                //link filter group
-                _.each(chartConfig.filters, function (f) {
-                    if (f.group) {
-                        var group = _.find(dataset.data.filters, function (e) {
-                            return e.id == f.id;
-                        });
-                        if (group) {
-                            f.filters = group.filters;
-                            f.group = group.group;
-                        }
-                    }
-                });
-                //link exp
-                _.each(chartConfig.values, function (v) {
-                    _.each(v.cols, function (c) {
-                        if (c.type == 'exp') {
-                            var exp = _.find(dataset.data.expressions, function (e) {
-                                return c.id == e.id;
+                if(dataset){
+                    //link filter group
+                    _.each(chartConfig.filters, function (f) {
+                        if (f.group) {
+                            var group = _.find(dataset.data.filters, function (e) {
+                                return e.id == f.id;
                             });
-                            if (exp) {
-                                c.exp = exp.exp;
-                                c.alias = exp.alias;
+                            if (group) {
+                                f.filters = group.filters;
+                                f.group = group.group;
                             }
-                            // replace variable in exp
-                            c.exp = replaceVariable(dataset.data.expressions, c);
                         }
                     });
-                });
+                    //link exp
+                    _.each(chartConfig.values, function (v) {
+                        _.each(v.cols, function (c) {
+                            if (c.type == 'exp') {
+                                var exp = _.find(dataset.data.expressions, function (e) {
+                                    return c.id == e.id;
+                                });
+                                if (exp) {
+                                    c.exp = exp.exp;
+                                    c.alias = exp.alias;
+                                }
+                                // replace variable in exp
+                                c.exp = replaceVariable(dataset.data.expressions, c);
+                            }
+                        });
+                    });
+
+                    //link dimension
+                    var linkFunction = function (k) {
+                        if (k.id) {
+                            var _level;
+                            var _dimension;
+                            _.each(dataset.data.schema.dimension, function (e) {
+                                if (e.type == 'level') {
+                                    _.each(e.columns, function (c) {
+                                        if (c.id == k.id) {
+                                            _dimension = c;
+                                            _level = e;
+                                        }
+                                    });
+                                } else if (k.id == e.id) {
+                                    _dimension = e;
+                                }
+                            });
+                            if (_dimension && _dimension.alias) {
+                                k.alias = _dimension.alias;
+                                if (_level) {
+                                    k.level = _level.alias;
+                                }
+                            }
+                        }
+                    };
+                    _.each(chartConfig.keys, linkFunction);
+                    _.each(chartConfig.groups, linkFunction);
+                    deferred.resolve();
+                }
                 function replaceVariable(expList, exp) {
                     var value = exp.exp;
                     var loopCnt = 0;
@@ -85,34 +116,6 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
                     }
                     return value;
                 }
-                //link dimension
-                var linkFunction = function (k) {
-                    if (k.id) {
-                        var _level;
-                        var _dimension;
-                        _.each(dataset.data.schema.dimension, function (e) {
-                            if (e.type == 'level') {
-                                _.each(e.columns, function (c) {
-                                    if (c.id == k.id) {
-                                        _dimension = c;
-                                        _level = e;
-                                    }
-                                });
-                            } else if (k.id == e.id) {
-                                _dimension = e;
-                            }
-                        });
-                        if (_dimension && _dimension.alias) {
-                            k.alias = _dimension.alias;
-                            if (_level) {
-                                k.level = _level.alias;
-                            }
-                        }
-                    }
-                };
-                _.each(chartConfig.keys, linkFunction);
-                _.each(chartConfig.groups, linkFunction);
-                deferred.resolve();
                 return deferred.promise;
             });
         }
@@ -506,8 +509,6 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
      * @param chartConfig
      */
     var castRawData2Series = function (aggData, chartConfig) {
-        console.log(aggData);
-        console.time('castRawData2Series');
         var castedKeys = [];
         var castedGroups = [];
         var joinedKeys = {};
@@ -697,13 +698,6 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
                 i--;
             }
         }
-        console.timeEnd('castRawData2Series');
-        console.log({
-            keys: castedKeys,
-            series: castedAliasSeriesName,
-            data: aliasData,
-            seriesConfig: aliasSeriesConfig
-        });
         return {
             keys: castedKeys,
             series: castedAliasSeriesName,
