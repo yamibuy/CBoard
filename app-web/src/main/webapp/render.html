@@ -242,5 +242,12 @@
         </div>
     </div>
 </script>
+<script type="text/javascript">
+    $(document).ajaxComplete(function(event,obj,settings){
+        if (obj.responseText == 'timeout') { //超时标识
+            location.href='/login'; //跳转到登录页面
+        }
+    })
+</script>
 </body>
 </html>
