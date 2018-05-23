@@ -381,9 +381,12 @@ cBoard.service('chartUSAMapService', function () {
                     var mapLength = mapData.length;
                     for(var p = 0; p<allCityLength;p++){
                         for(var q=0;q<mapLength;q++){
-                            if(allCityList[p].name == mapData[q].name ){
-                                allCityList[p].value = mapData[q].value;
-                                break;
+                            //去除空格再判断，防止遗漏new york数据
+                            if(mapData[q].name){//防止名称为空字符串
+                                if(allCityList[p].name.replace(/[ ]/g,"") == mapData[q].name.replace(/[ ]/g,"") ){
+                                    allCityList[p].value = mapData[q].value;
+                                    break;
+                                }
                             }
                         }
                     }
