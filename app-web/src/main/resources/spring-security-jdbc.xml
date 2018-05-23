@@ -18,6 +18,7 @@
         <security:form-login login-page="/login.do" username-parameter="username" password-parameter="password"
                              default-target-url="/starter.html" always-use-default-target="true"/>
         <security:logout logout-url="/j_spring_cas_security_logout"/>
+        <security:session-management invalid-session-url="/timeout"></security:session-management>
         <security:remember-me remember-me-parameter="remember_me"/>
         <security:csrf disabled="true"/>
     </security:http>

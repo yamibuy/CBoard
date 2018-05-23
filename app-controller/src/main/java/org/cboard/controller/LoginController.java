@@ -1,5 +1,7 @@
 package org.cboard.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +21,18 @@ public class LoginController {
     public String loginPage() {
         return "login";
     }
+    
+    @RequestMapping(value = "/timeout")
+    public void sessionTimeout(HttpServletRequest request,HttpServletResponse response) throws IOException {  
+        if (request.getHeader("x-requested-with") != null  
+                && request.getHeader("x-requested-with").equalsIgnoreCase(  
+                        "XMLHttpRequest")) { // ajax 超时处理  
+            response.getWriter().print("timeout");  //设置超时标识
+            response.getWriter().close();
+        } else {
+             response.sendRedirect("/login");  
+        }
+    }  
 
     private String getPrincipal(){
         String userName = null;
