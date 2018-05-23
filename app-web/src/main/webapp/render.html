@@ -245,8 +245,9 @@
 <script type="text/javascript">
     $(document).ajaxComplete(function(event,obj,settings){
         if (obj.responseText == 'timeout') { //超时标识
-            location.href='/login'; //跳转到登录页面
+            location.href='/login.do'; //跳转到登录页面
         }
+        return ;
     })
 </script>
 </body>
