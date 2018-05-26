@@ -394,7 +394,11 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
 
         var getWidgetList = function (callback) {
             $http.get("dashboard/getWidgetList.do").success(function (response) {
-                $scope.widgetList = response;
+                if(!_.isArray(response)){
+                    $scope.widgetList = response;
+                }else {
+                    $scope.widgetList = [];
+                }
                 $scope.folderIds = angular.toJson(_.uniq($scope.widgetList.map(function (item) {
                     return item.folderId;
                 })));
@@ -408,9 +412,11 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
         var getCategoryList = function () {
             $http.get("dashboard/getWidgetCategoryList.do").success(function (response) {
                 $scope.categoryList = response;
-                $("#widgetName").autocomplete({
-                    source: $scope.categoryList
-                });
+                if(_.isArray($scope.categoryList)){
+                    $("#widgetName").autocomplete({
+                        source: $scope.categoryList
+                    });
+                }
             });
         };
 
@@ -544,9 +550,15 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
             if ($scope.customDs) {
                 return false;
             } else {
-                var dsExp = _.find($scope.datasetList, function (ds) {
+                var dsExp = null;
+                var temp = _.find($scope.datasetList, function (ds) {
                     return ds.id == $scope.curWidget.datasetId;
-                }).data.expressions;
+                });
+                if(temp){
+                    dsExp = temp.data.expressions;
+                }else {
+                    return false;
+                }
                 var exp = _.find(dsExp, function (e) {
                     return (e.id && o.id == e.id) || o.alias == e.alias;
                 });
@@ -558,9 +570,16 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
             if ($scope.customDs) {
                 return false;
             } else {
-                var fg = _.find($scope.datasetList, function (ds) {
+                var fg = null;
+                var temp = _.find($scope.datasetList, function (ds) {
                     return ds.id == $scope.curWidget.datasetId;
-                }).data.filters;
+                });
+                if(temp){
+                    fg = temp.data.filters;
+                }else {
+                    return false;
+                }
+
                 var f = _.find(fg, function (e) {
                     return e.id && o.id == e.id;
                 });

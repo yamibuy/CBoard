@@ -188,14 +188,12 @@ cBoard.service('chartUSAMapService', function () {
                             if(maxScatter == null || maxScatter < parseFloat(data.data[j][i])){
                                 maxScatter = parseFloat(data.data[j][i]);
                             }
-                            max = max>1000?1000:max;
                             if(max == null || max <= parseFloat(data.data[j][i])){
                                 max = parseFloat(data.data[j][i]) + 10;
                             }
                             if(min == null || min >= parseFloat(data.data[j][i])){
                                 min = parseFloat(data.data[j][i]) - 10;
                             }
-                            min = min>0?min:0;
                         }
                     }
 
@@ -278,7 +276,7 @@ cBoard.service('chartUSAMapService', function () {
                         //text: ['High', 'Low'],
                         inRange: {
                             // color: ['#d94e5d','#eac736','#50a3ba'].reverse()
-                            color: ['orangered','yellow','lightskyblue'].reverse()
+                            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
                         },
                         calculable : true,
                         textStyle: {

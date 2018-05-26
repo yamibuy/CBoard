@@ -701,7 +701,7 @@ a:focus {
     top: 44px;
     margin-left: 0;
   }
-  .sidebar-mini.sidebar-collapse .main-sidebar .user-panel > .info,
+  .sidebar-mini.sidebar-collapse .main-sidebar .user-panel,
   .sidebar-mini.sidebar-collapse .sidebar-form,
   .sidebar-mini.sidebar-collapse .sidebar-menu > li > a > span,
   .sidebar-mini.sidebar-collapse .sidebar-menu > li > .treeview-menu,
