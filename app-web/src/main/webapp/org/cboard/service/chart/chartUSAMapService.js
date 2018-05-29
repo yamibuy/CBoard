@@ -381,7 +381,7 @@ cBoard.service('chartUSAMapService', function () {
                         for(var q=0;q<mapLength;q++){
                             //去除空格再判断，防止遗漏new york数据
                             if(mapData[q].name){//防止名称为空字符串
-                                if(allCityList[p].name.replace(/[ ]/g,"") == mapData[q].name.replace(/[ ]/g,"") ){
+                                if(allCityList[p].name.replace(/\s/g,"") == mapData[q].name.replace(/\s/g,"") ){
                                     allCityList[p].value = mapData[q].value;
                                     break;
                                 }
