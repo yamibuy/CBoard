@@ -394,7 +394,7 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
 
         var getWidgetList = function (callback) {
             $http.get("dashboard/getWidgetList.do").success(function (response) {
-                if(!_.isArray(response)){
+                if(_.isArray(response)){
                     $scope.widgetList = response;
                 }else {
                     $scope.widgetList = [];
@@ -1776,5 +1776,4 @@ cBoard.controller('widgetCtrl', function ($scope, $state, $stateParams, $http, $
         /** Ace Editor Starer... **/
         $scope.queryAceOpt = datasetEditorOptions();
     }
-)
-;
+);
