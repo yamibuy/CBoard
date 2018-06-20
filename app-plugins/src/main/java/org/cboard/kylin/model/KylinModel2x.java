@@ -7,6 +7,7 @@ import org.cboard.kylin.KylinDataProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -49,7 +50,13 @@ public class KylinModel2x extends KylinBaseModel {
             urlParams.put("tableName", table);
             //ResponseEntity e = restTemplate.getForEntity("http://" + serverIp + "/kylin/api/tables/{project}/{tableName}", String.class, urlParams);
             //20171224update
-            ResponseEntity e = restTemplate.getForEntity("http://" + serverIp + "/kylin/api/tables/{tableName}", String.class, urlParams);
+//            ResponseEntity e = restTemplate.getForEntity("http://" + serverIp + "/kylin/api/tables/{tableName}", String.class, urlParams);
+            ResponseEntity e;
+            try {
+                e = restTemplate.getForEntity("http://" + serverIp + "/kylin/api/tables/{tableName}", String.class, urlParams);
+            } catch (HttpClientErrorException exc) {
+                e = restTemplate.getForEntity("http://" + serverIp + "/kylin/api/tables/{project}/{tableName}", String.class, urlParams);
+            }
             LOG.info(">>>"+e.toString());
             //20171224update end
             return e;

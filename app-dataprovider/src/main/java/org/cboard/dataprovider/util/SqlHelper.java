@@ -136,9 +136,62 @@ public class SqlHelper {
     	for (ConfigComponent component : config.getFilters()) {
 			filterList.add((DimensionConfig) component);
 		}
-    	String whereStr = whereCheck(filterList);
+//    	String whereStr = whereCheck(filterList);
+		String whereStr = whereCheckV2(filterList);
     	return whereStr;
     }
+
+    private String whereCheckV2(List<DimensionConfig> filterList){
+    	StringBuffer sb = new StringBuffer();
+    	sb.append("WHERE ");
+		for(int i = 0;i<filterList.size();i++){
+			DimensionConfig info = filterList.get(i);
+			String biao = "";
+			String cloumn = "";
+			if (info.getColumnName().indexOf(".") != -1) {
+				biao = ""+info.getColumnName().substring(0, info.getColumnName().indexOf("."))+".";
+				cloumn = ""+info.getColumnName().substring(info.getColumnName().indexOf(".")+1, info.getColumnName().length())+" ";
+			}else {
+				cloumn = info.getColumnName()+" ";
+			}
+
+			List<String> valueList = new ArrayList<String>();
+			for (String str : info.getValues()) {
+				valueList.add("'"+str+"'");
+			}
+
+			List<String> valueList1 = new ArrayList<String>();
+			for (String str : filterList.get(i).getValues()) {
+				valueList1.add("'"+str+"'");
+			}
+
+			String filterType = "";
+			if (filterList.get(i).getFilterType().equals("=")) {
+				filterType = "IN ";
+			}else if(filterList.get(i).getFilterType().equals("≠")){
+				filterType = "NOT IN ";
+			}else if (filterList.get(i).getFilterType().equals("≥")) {
+				filterType = ">= ";
+			}else if (filterList.get(i).getFilterType().equals("≤")) {
+				filterType = "<= ";
+			}else {
+				filterType = filterList.get(i).getFilterType();
+			}
+
+			if (info.getFilterType().equals("[a,b]")||info.getFilterType().equals("(a,b)")||
+					info.getFilterType().equals("(a,b]")||info.getFilterType().equals("[a,b)")) {
+				sb.append("(" +biao+cloumn +" >= "+"("+valueList.get(0)+")"+" AND "+biao+cloumn+" <= "+"("+valueList.get(1)+")"+")");
+			}else{
+				String values = "("+valueList1.toString().replace("[", "").replace("]", "")+")";
+				sb.append(" ("+biao+cloumn+filterType+values+")");
+			}
+
+			if(i != filterList.size()-1){
+				sb.append(" AND");
+			}
+		}
+    	return sb.toString();
+	}
     
     private String whereCheck(List<DimensionConfig> filterList){
     	for(int i = 0; i < filterList.size(); i++){

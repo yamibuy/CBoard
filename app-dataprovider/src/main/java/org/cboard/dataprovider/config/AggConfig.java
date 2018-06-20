@@ -61,5 +61,5 @@ public class AggConfig {
 	public void setStartColumn(Integer startColumn) {
 		this.startColumn = startColumn;
 	}
-    
+
 }

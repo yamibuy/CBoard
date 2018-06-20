@@ -2,13 +2,10 @@ package org.cboard.services;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
+import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.hive.metastore.api.ThriftHiveMetastore.Processor.list_privileges;
 import org.cboard.dao.DatasetDao;
@@ -74,8 +71,9 @@ public class DataProviderService {
             Dataset dataset = getDataset(datasetId);
             attachCustom(dataset, config);
             DataProvider dataProvider = getDataProvider(datasourceId, query, dataset);
-            filterCheck(config);
-            return dataProvider.getAggData(config, reload);
+//            AggConfig aggConfig = filterCheck(config);
+            AggConfig aggConfig = filterCheckV2(config);
+            return dataProvider.getAggData(aggConfig, reload);
         } catch (Exception e) {
             LOG.error("", e);
             throw new CBoardException("系统异常,请联系亚米网IT人员");
@@ -83,7 +81,7 @@ public class DataProviderService {
     }
     
     //检验是否含有相同字段条件，用看板条件替换图表条件的值
-    private void filterCheck(AggConfig config) throws ParseException{
+    private AggConfig filterCheck(AggConfig config) throws ParseException{
     	List<DimensionConfig> filterList = new ArrayList<DimensionConfig>();
     	List<DimensionConfig> filterList2 = new ArrayList<DimensionConfig>();
 		String clName="";
@@ -225,6 +223,45 @@ public class DataProviderService {
 				config.getFilters().add(dimensionConfig);
 			}
 		}
+
+		return config;
+    }
+
+    //检验是否含有相同字段条件，用看板条件替换图表条件的值
+    private AggConfig filterCheckV2(AggConfig config){
+
+        List<ConfigComponent> filters = config.getFilters();
+        List<DimensionConfig> filterList1 = new ArrayList<DimensionConfig>();
+        Map<String,DimensionConfig> map = new HashMap<>();
+        for(ConfigComponent  filter:filters){
+            filterList1.add((DimensionConfig) filter);
+        }
+        filters.clear();
+        //合并filter集合中的values
+        for(DimensionConfig dimensionConfig1 :filterList1){
+            for(DimensionConfig dimensionConfig2 :filterList1){
+                //有相同的filter
+                if(dimensionConfig1.getColumnName().equals(dimensionConfig2.getColumnName())){
+                    List<String> values1 = dimensionConfig1.getValues();
+                    List<String> values2 = dimensionConfig2.getValues();
+                    //合并相同的filter中values的值
+                    for(String value :values2){
+                        if(!values1.contains(value)){
+                            values1.add(value);
+                        }
+                    }
+                }
+            }
+            if(dimensionConfig1.getValues().size() > 0){
+                map.put(dimensionConfig1.getColumnName(),dimensionConfig1);
+            }
+        }
+
+        for(DimensionConfig info:map.values()){
+            filters.add(info);
+        }
+
+        return config;
     }
 
     public DataProviderResult getColumns(Long datasourceId, Map<String, String> query, Long datasetId, boolean reload) {
