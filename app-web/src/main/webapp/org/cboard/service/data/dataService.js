@@ -206,7 +206,7 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
             });
 
             cfg.values = _.map(dataSeries, function (s) {
-                return {column: s.name, aggType: s.aggregate};
+                return {column: s.name, aggType: s.aggregate,f_top:s.f_top,f_type:s.f_type,sort:s.sort};
             });
 
             console.log('-------------查询条件chartConfig-----------------');
@@ -395,7 +395,10 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
             default:
                 return [{
                     name: config.col,
-                    aggregate: config.aggregate_type
+                    aggregate: config.aggregate_type,
+                    f_top:config.f_top,
+                    f_type:config.f_type,
+                    sort:config.sort
                 }];
                 break;
         }

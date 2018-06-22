@@ -6,6 +6,15 @@ package org.cboard.dataprovider.config;
 public class ValueConfig {
     private String column;
     private String aggType;
+    private String sort;
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
 
     public String getColumn() {
         return column;

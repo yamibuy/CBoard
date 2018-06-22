@@ -92,10 +92,13 @@ public class SqlHelper {
         Stream<DimensionConfig> dimStream = Stream.concat(config.getColumns().stream(), config.getRows().stream());
 
         String dimColsStr = assembleDimColumns(dimStream);
-        String aggColsStr = assembleAggValColumns(config.getValues().stream());
+//        String aggColsStr = assembleAggValColumns(config.getValues().stream());
+        String aggColsStr = assembleAggValColumnsV2(config.getValues());
+        String valuesStr = assembleValuesStr(config);
 
         String whereStr = filterSqlV3(config);
         String groupByStr = StringUtils.isBlank(dimColsStr) ? "" : "GROUP BY " + dimColsStr;
+        String orderByStr = StringUtils.isBlank(valuesStr)? "" : "ORDER BY " + valuesStr;
 
         StringJoiner selectColsStr = new StringJoiner(",");
         if (!StringUtils.isBlank(dimColsStr)) {
@@ -106,17 +109,17 @@ public class SqlHelper {
         }
         String fsql = null;
         if (isSubquery) {
-            fsql = "\nSELECT %s \n FROM (\n%s\n) cb_view \n %s \n %s";
+            fsql = "\nSELECT %s \n FROM (\n%s\n) cb_view \n %s \n %s \n %s";
         } else {
-            fsql = "\nSELECT %s \n FROM %s \n %s \n %s";
+            fsql = "\nSELECT %s \n FROM %s \n %s \n %s \n %s";
         }
-        String exec = String.format(fsql, selectColsStr, tableName, whereStr, groupByStr);
+        String exec = String.format(fsql, selectColsStr, tableName, whereStr, groupByStr,orderByStr);
         if (config.getLimit() != null) {
         	Integer startColumn = 0;
         	if (config.getStartColumn() != null) {
         		startColumn = config.getStartColumn();
 			}
-        	exec += "LIMIT "+config.getLimit()+" offset "+startColumn+"";
+        	exec += " LIMIT "+config.getLimit()+" offset "+startColumn+"";
 		}
         return exec;
     }
@@ -144,6 +147,10 @@ public class SqlHelper {
     private String whereCheckV2(List<DimensionConfig> filterList){
     	StringBuffer sb = new StringBuffer();
     	sb.append("WHERE ");
+    	if(filterList.size() == 0){
+    		sb.append("( 1 = 1 )");
+    		return  sb.toString();
+		}
 		for(int i = 0;i<filterList.size();i++){
 			DimensionConfig info = filterList.get(i);
 			String biao = "";
@@ -657,12 +664,43 @@ public class SqlHelper {
         return quta + text + quta;
     }
 
+	private String assembleAggValColumnsV2(List<ValueConfig> list) {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i< list.size();i++){
+			sb.append(sqlSyntaxHelper.getAggStr(list.get(i)) + " ");
+			if(i<list.size() -1){
+				sb.append(" , ");
+			}
+		}
+		return sb.toString();
+	}
     private String assembleAggValColumns(Stream<ValueConfig> selectStream) {
         StringJoiner columns = new StringJoiner(", ", "", " ");
         columns.setEmptyValue("");
         selectStream.map(vc -> sqlSyntaxHelper.getAggStr(vc)).filter(e -> e != null).forEach(columns::add);
         return columns.toString();
     }
+
+	private String assembleValuesStr(AggConfig config) {
+		List<ValueConfig> list = config.getValues();
+		if(config.getFilters().size() == 0){
+			return "";
+		}
+
+    	StringBuffer sb = new StringBuffer();
+    	for (int i = 0; i< list.size();i++){
+			String ss = sqlSyntaxHelper.getAggStr(list.get(i));
+			String rest = ss.substring(0,ss.lastIndexOf("AS"));
+			sb.append(rest);
+			if( null != list.get(i).getSort()){
+				sb.append(list.get(i).getSort());
+			}
+			if(i<list.size() -1){
+				sb.append(" , ");
+			}
+		}
+		return sb.toString();
+	}
 
     private String assembleDimColumns(Stream<DimensionConfig> columnsStream) {
         StringJoiner columns = new StringJoiner(", ", "", " ");
