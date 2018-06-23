@@ -667,12 +667,17 @@ public class SqlHelper {
 	private String assembleAggValColumnsV2(List<ValueConfig> list) {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i< list.size();i++){
-			sb.append(sqlSyntaxHelper.getAggStr(list.get(i)) + " ");
-			if(i<list.size() -1){
-				sb.append(" , ");
+			if(null != list.get(i).getType()){
+				continue;
 			}
+			sb.append(sqlSyntaxHelper.getAggStr(list.get(i)) + " ");
+			sb.append(" , ");
 		}
-		return sb.toString();
+		String resultStr = sb.toString();
+		if(resultStr.endsWith(", ")){
+			resultStr = resultStr.substring(0,resultStr.lastIndexOf(", ") - 1 );
+		}
+		return resultStr;
 	}
     private String assembleAggValColumns(Stream<ValueConfig> selectStream) {
         StringJoiner columns = new StringJoiner(", ", "", " ");
@@ -689,17 +694,38 @@ public class SqlHelper {
 
     	StringBuffer sb = new StringBuffer();
     	for (int i = 0; i< list.size();i++){
-			String ss = sqlSyntaxHelper.getAggStr(list.get(i));
-			String rest = ss.substring(0,ss.lastIndexOf("AS"));
-			sb.append(rest);
-			if( null != list.get(i).getSort()){
-				sb.append(list.get(i).getSort());
+			ValueConfig v = list.get(i);
+			if(null == v.getSort() ){
+				continue;
 			}
-			if(i<list.size() -1){
-				sb.append(" , ");
+    		if(null != v.getType() && "exp".equals(v.getType())){
+    			if(v.getExp().contains("distinct")){//拼接可选表达式  目前只是把distinct换成用COUNT包住
+					String ss = v.getExp().replace("distinct(","COUNT(distinct ");
+					if(sb.toString().contains(ss)){
+						continue;
+					}
+					sb.append(ss);
+				}else {
+					sb.append(v.getExp());
+				}
+			}else {
+				String ss = sqlSyntaxHelper.getAggStr(v);
+				String rest = ss.substring(0,ss.lastIndexOf("AS"));
+				sb.append(rest);
 			}
+			if( null != v.getSort()){
+				sb.append(v.getSort());
+			}
+
+			sb.append(" , ");
 		}
-		return sb.toString();
+
+		String resultStr = sb.toString();
+		if(resultStr.endsWith(", ")){
+			resultStr = resultStr.substring(0,resultStr.lastIndexOf(", ") - 1 );
+		}
+
+		return resultStr;
 	}
 
     private String assembleDimColumns(Stream<DimensionConfig> columnsStream) {

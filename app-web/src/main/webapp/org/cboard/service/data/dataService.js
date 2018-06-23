@@ -206,7 +206,7 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
             });
 
             cfg.values = _.map(dataSeries, function (s) {
-                return {column: s.name, aggType: s.aggregate,f_top:s.f_top,f_type:s.f_type,sort:s.sort};
+                return {column: s.name, aggType: s.aggregate,f_top:s.f_top,f_type:s.f_type,sort:s.sort,exp:s.exp,type:s.type};
             });
 
             console.log('-------------查询条件chartConfig-----------------');
@@ -390,7 +390,14 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
     var configToDataSeries = function (config) {
         switch (config.type) {
             case 'exp':
-                return getExpSeries(config.exp);
+                // return [{
+                //     exp:config.exp,
+                //     f_top:config.f_top,
+                //     f_type:config.f_type,
+                //     sort:config.sort,
+                //     type:config.type
+                // }];
+                return getExpSeries(config.exp,config.sort,config.type);
                 break;
             default:
                 return [{
@@ -404,8 +411,8 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
         }
     };
 
-    var getExpSeries = function (exp) {
-        return parserExp(exp).aggs;
+    var getExpSeries = function (exp,sort,type) {
+        return parserExp(exp,sort,type).aggs;
     };
 
     var filter = function (cfg, iv) {
@@ -712,7 +719,7 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
     var castSeriesData = function (series, group, castedKeys, newData, iterator) {
         switch (series.type) {
             case 'exp':
-                var runExp = compileExp(series.exp);
+                var runExp = compileExp(series.exp,series.sort,series.type);
                 for (var i = 0; i < castedKeys.length; i++) {
                     iterator(runExp(newData[group], castedKeys[i].join('-')), i);
                 }
@@ -725,8 +732,8 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
         }
     };
 
-    var compileExp = function (exp) {
-        var parseredExp = parserExp(exp);
+    var compileExp = function (exp,sort,type) {
+        var parseredExp = parserExp(exp,sort,type);
         return function (groupData, key) {
             var _names = parseredExp.names;
             return eval(parseredExp.evalExp);
@@ -803,7 +810,7 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
         return arr;
     };
 
-    function parserExp(rawExp) {
+    function parserExp(rawExp,sort,type) {
         var evalExp = rawExp;
         var _temp = [];
         var aggs = [];
@@ -825,7 +832,10 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
             names.push(name);
             aggs.push({
                 name: name,
-                aggregate: aggregate
+                aggregate: aggregate,
+                sort:sort,
+                type:type,
+                exp:rawExp
             });
         });
         return {evalExp: evalExp, aggs: aggs, names: names};

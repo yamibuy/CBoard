@@ -15,6 +15,7 @@ import org.cboard.dataprovider.DataProviderManager;
 import org.cboard.dataprovider.config.AggConfig;
 import org.cboard.dataprovider.config.ConfigComponent;
 import org.cboard.dataprovider.config.DimensionConfig;
+import org.cboard.dataprovider.config.ValueConfig;
 import org.cboard.dataprovider.result.AggregateResult;
 import org.cboard.dto.DataProviderResult;
 import org.cboard.exception.CBoardException;
@@ -227,7 +228,7 @@ public class DataProviderService {
 		return config;
     }
 
-    //检验是否含有相同字段条件，用看板条件替换图表条件的值
+    //检验是否含有相同字段条件，用看板条件替换图表条件的值  过滤相同的valuse里的exp表达式
     private AggConfig filterCheckV2(AggConfig config){
 
         List<ConfigComponent> filters = config.getFilters();
@@ -260,7 +261,6 @@ public class DataProviderService {
         for(DimensionConfig info:map.values()){
             filters.add(info);
         }
-
         return config;
     }
 

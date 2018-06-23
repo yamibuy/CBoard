@@ -7,6 +7,24 @@ public class ValueConfig {
     private String column;
     private String aggType;
     private String sort;
+    private String type;
+    private String exp;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getExp() {
+        return exp;
+    }
+
+    public void setExp(String exp) {
+        this.exp = exp;
+    }
 
     public String getSort() {
         return sort;
