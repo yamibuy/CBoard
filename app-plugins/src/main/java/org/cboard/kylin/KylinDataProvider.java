@@ -1,5 +1,6 @@
 package org.cboard.kylin;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
@@ -214,6 +215,8 @@ public class KylinDataProvider extends DataProvider implements Aggregatable, Ini
             }
         } catch (Exception e) {
             LOG.error("ERROR:" + e.getMessage());
+//            String configStr = JSON.toJSONString(config);
+            LOG.error("报错sql详细 ：" + "sql"+exec+"\n"+"请求json："+JSON.toJSONString(config)+"\n"+"报错信息："+e.getMessage());
             throw new Exception("ERROR:" + e.getMessage(), e);
         }
         return DPCommonUtils.transform2AggResult(config, list);

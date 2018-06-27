@@ -74,7 +74,8 @@ public class DataProviderService {
             DataProvider dataProvider = getDataProvider(datasourceId, query, dataset);
 //            AggConfig aggConfig = filterCheck(config);
             AggConfig aggConfig = filterCheckV2(config);
-            return dataProvider.getAggData(aggConfig, reload);
+            AggregateResult aggData = dataProvider.getAggData(aggConfig, reload);
+            return aggData;
         } catch (Exception e) {
             LOG.error("", e);
             throw new CBoardException("系统异常,请联系亚米网IT人员");

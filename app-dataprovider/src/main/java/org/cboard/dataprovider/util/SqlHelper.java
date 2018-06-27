@@ -167,10 +167,10 @@ public class SqlHelper {
 				valueList.add("'"+str+"'");
 			}
 
-			List<String> valueList1 = new ArrayList<String>();
-			for (String str : filterList.get(i).getValues()) {
-				valueList1.add("'"+str+"'");
-			}
+//			List<String> valueList1 = new ArrayList<String>();
+//			for (String str : filterList.get(i).getValues()) {
+//				valueList1.add("'"+str+"'");
+//			}
 
 			String filterType = "";
 			if (filterList.get(i).getFilterType().equals("=")) {
@@ -189,8 +189,19 @@ public class SqlHelper {
 					info.getFilterType().equals("(a,b]")||info.getFilterType().equals("[a,b)")) {
 				sb.append("(" +biao+cloumn +" >= "+"("+valueList.get(0)+")"+" AND "+biao+cloumn+" <= "+"("+valueList.get(1)+")"+")");
 			}else{
-				String values = "("+valueList1.toString().replace("[", "").replace("]", "")+")";
-				sb.append(" ("+biao+cloumn+filterType+values+")");
+				if("IN ".equals(filterType) || "NOT IN ".equals(filterType)){
+					String values = "("+valueList.toString().replace("[", "").replace("]", "")+")";
+					sb.append(" ("+biao+cloumn+filterType+values+") ");
+				}else {//循环values的值处理
+					sb.append(" (");
+					for(int k = 0; k<valueList.size();k++){
+						sb.append(biao+cloumn+filterType+valueList.get(k));
+						if(k != valueList.size()-1){
+							sb.append(" AND ");
+						}
+					}
+					sb.append(") ");
+				}
 			}
 
 			if(i != filterList.size()-1){
@@ -695,7 +706,10 @@ public class SqlHelper {
     	StringBuffer sb = new StringBuffer();
     	for (int i = 0; i< list.size();i++){
 			ValueConfig v = list.get(i);
-			if(null == v.getSort() ){
+//			if(null == v.getSort() ){
+//				continue;
+//			}
+			if(null == v.getF_top() ){
 				continue;
 			}
     		if(null != v.getType() && "exp".equals(v.getType())){

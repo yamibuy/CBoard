@@ -9,6 +9,17 @@ public class ValueConfig {
     private String sort;
     private String type;
     private String exp;
+    private Integer f_top;
+
+    public Integer getF_top() {
+        return f_top;
+    }
+
+    public void setF_top(Integer f_top) {
+        this.f_top = f_top;
+    }
+
+
 
     public String getType() {
         return type;
