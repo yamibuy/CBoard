@@ -2,6 +2,8 @@ package org.cboard.dataprovider.util;
 
 import org.apache.commons.lang.StringUtils;
 import org.cboard.dataprovider.config.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.compiler.STParser.element_return;
 
 import com.facebook.presto.jdbc.internal.spi.predicate.Domain;
@@ -25,7 +27,7 @@ import static org.cboard.dataprovider.DataProvider.separateNull;
  * Created by zyong on 2017/9/15.
  */
 public class SqlHelper {
-
+	private static final Logger LOG = LoggerFactory.getLogger(SqlHelper.class);
     private String tableName;
     private StringBuffer whereStr = new StringBuffer();
     private boolean isSubquery;
@@ -92,7 +94,6 @@ public class SqlHelper {
         Stream<DimensionConfig> dimStream = Stream.concat(config.getColumns().stream(), config.getRows().stream());
 
         String dimColsStr = assembleDimColumns(dimStream);
-//        String aggColsStr = assembleAggValColumns(config.getValues().stream());
         String aggColsStr = assembleAggValColumnsV2(config.getValues());
         String valuesStr = assembleValuesStr(config);
 
@@ -147,10 +148,7 @@ public class SqlHelper {
     private String whereCheckV2(List<DimensionConfig> filterList){
     	StringBuffer sb = new StringBuffer();
     	sb.append("WHERE ");
-    	if(filterList.size() == 0){
-    		sb.append("( 1 = 1 )");
-    		return  sb.toString();
-		}
+
 		for(int i = 0;i<filterList.size();i++){
 			DimensionConfig info = filterList.get(i);
 			String biao = "";
@@ -190,7 +188,11 @@ public class SqlHelper {
 				sb.append("(" +biao+cloumn +" >= "+"("+valueList.get(0)+")"+" AND "+biao+cloumn+" <= "+"("+valueList.get(1)+")"+")");
 			}else{
 				if("IN ".equals(filterType) || "NOT IN ".equals(filterType)){
-					String values = "("+valueList.toString().replace("[", "").replace("]", "")+")";
+					String inValues = valueList.toString().replace("[", "").replace("]", "");
+					if(StringUtils.isEmpty(inValues)){
+						continue;
+					}
+					String values = "("+inValues+")";
 					sb.append(" ("+biao+cloumn+filterType+values+") ");
 				}else {//循环values的值处理
 					sb.append(" (");
@@ -208,7 +210,18 @@ public class SqlHelper {
 				sb.append(" AND");
 			}
 		}
-    	return sb.toString();
+
+		String wResult = sb.toString();
+		if(wResult.endsWith("AND")){
+			wResult = wResult.substring(0,wResult.lastIndexOf("AND") - 1 );
+		}
+
+		if(wResult.equals("WHERE ")){
+			wResult += "( 1 = 1 )";
+			return  wResult;
+		}
+
+    	return wResult;
 	}
     
     private String whereCheck(List<DimensionConfig> filterList){
@@ -678,9 +691,9 @@ public class SqlHelper {
 	private String assembleAggValColumnsV2(List<ValueConfig> list) {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i< list.size();i++){
-			if(null != list.get(i).getType()){
-				continue;
-			}
+//			if(null != list.get(i).getType()){
+//				continue;
+//			}
 			sb.append(sqlSyntaxHelper.getAggStr(list.get(i)) + " ");
 			sb.append(" , ");
 		}

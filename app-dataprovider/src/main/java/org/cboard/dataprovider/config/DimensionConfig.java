@@ -11,17 +11,17 @@ public class DimensionConfig extends ConfigComponent {
     private List<String> values;
     private String id;
     private String custom;
-    private String isBoard;
+    private Boolean isBoard;
 
-    public String getIsBoard() {
-		return isBoard;
-	}
+    public Boolean getBoard() {
+        return isBoard;
+    }
 
-	public void setIsBoard(String isBoard) {
-		this.isBoard = isBoard;
-	}
+    public void setBoard(Boolean board) {
+        isBoard = board;
+    }
 
-	public String getColumnName() {
+    public String getColumnName() {
         return columnName;
     }
 

@@ -73,7 +73,7 @@ public class DataProviderService {
             attachCustom(dataset, config);
             DataProvider dataProvider = getDataProvider(datasourceId, query, dataset);
 //            AggConfig aggConfig = filterCheck(config);
-            AggConfig aggConfig = filterCheckV2(config);
+            AggConfig aggConfig = filterCheckV4(config);
             AggregateResult aggData = dataProvider.getAggData(aggConfig, reload);
             return aggData;
         } catch (Exception e) {
@@ -81,7 +81,78 @@ public class DataProviderService {
             throw new CBoardException("系统异常,请联系亚米网IT人员");
         }
     }
-    
+
+    private AggConfig filterCheckV4(AggConfig config) throws ParseException {
+
+        List<ConfigComponent> filters = config.getFilters();
+
+        List<DimensionConfig> filterList1 = new ArrayList<DimensionConfig>();//原始的
+        DimensionConfig timeDimensionConfig = null;//看板的时期时间
+        for(ConfigComponent  filter:filters){
+            filterList1.add((DimensionConfig) filter);
+        }
+        int i = 0;//如果只有一个看板的时间条件则保留
+
+        //不能单纯合并相同字段  因为字段相同但是条件不同
+        //合并看板和模块内的时间  以看板时间为准定位近几天的时间
+        //先判断是不是看板
+        for(DimensionConfig info :filterList1){
+            Boolean isBoard = info.getBoard();
+            if(null != isBoard && true == isBoard && "DIM_CAL_DATE.DAY_ID".equals(info.getColumnName())){
+                timeDimensionConfig = info;
+            }
+            if("DIM_CAL_DATE.DAY_ID".equals(info.getColumnName()) && null != info.getValues() && info.getValues().size() > 0){
+                i++;
+            }
+        }
+
+        if(null == timeDimensionConfig){//判断是否有看板时间  有则需要重新计算
+            return config;
+        }
+        config.getFilters().clear();
+        String s1 ="";
+        String s2 = timeDimensionConfig.getValues().get(0);//看板时间
+        SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        if(s2.startsWith("{") && s2.endsWith("}")){//需要计算
+            calendar.setTime(sFormat.parse(sFormat.format(new Date())));
+            String[] split = s2.split("'");
+            String cha = split[2].replace(",", "");
+            calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(cha));
+            String format = sFormat.format(calendar.getTime());
+            s1 = format;
+        }else {
+            s1 = s2;
+        }
+
+        for(DimensionConfig info :filterList1){
+            if("DIM_CAL_DATE.DAY_ID".equals(info.getColumnName())){
+                if(null != info.getValues() && info.getValues().size() > 0){
+                    String vs = info.getValues().get(0);
+                    if(vs.startsWith("{") && vs.endsWith("}")){
+                        info.getValues().clear();
+
+                        calendar.setTime(sFormat.parse(s1));
+                        String[] split = vs.split("'");
+                        String cha = split[2].replace(",", "");
+                        calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(cha));
+                        String format = sFormat.format(calendar.getTime());
+
+                        info.getValues().add(format);
+                    }
+                }
+            }
+        }
+
+        if(i > 1){
+//            filterList1.remove(timeDimensionConfig);
+            timeDimensionConfig.setFilterType("≤");
+        }
+
+        config.getFilters().addAll(filterList1);
+        return config;
+    }
+
     //检验是否含有相同字段条件，用看板条件替换图表条件的值
     private AggConfig filterCheck(AggConfig config) throws ParseException{
     	List<DimensionConfig> filterList = new ArrayList<DimensionConfig>();
@@ -103,9 +174,9 @@ public class DataProviderService {
     	for(int i=0;i<filterList2.size();i++){
     		for (int j = i+1; j < filterList2.size(); j++) {
 				if (filterList2.get(i).getColumnName().equals(filterList2.get(j).getColumnName())) {
-					if (filterList2.get(i).getIsBoard()=="true") {
+					if (filterList2.get(i).getBoard()==true) {
 						clName = filterList2.get(i).getValues().get(0);
-					}else if (filterList2.get(j).getIsBoard()=="true") {
+					}else if (filterList2.get(j).getBoard()==true) {
 						clName = filterList2.get(j).getValues().get(0);
 					}
 					hasNow = true;
@@ -118,7 +189,7 @@ public class DataProviderService {
     		for (int i=0;i<filterList.size();i++) {
     			for (int j = i+1; j < filterList.size(); j++) {
     				if (filterList.get(i).getColumnName().equals(filterList.get(j).getColumnName())) {
-    					if (filterList.get(i).getIsBoard() == null) {
+    					if (filterList.get(i).getBoard() == null) {
         					for (String cloumn : filterList.get(i).getValues()) {
         						if (!"".equals(clName)) {
         							if (cloumn.indexOf("now") != -1) {
@@ -215,7 +286,7 @@ public class DataProviderService {
     		List<DimensionConfig> filterList3 = new ArrayList<DimensionConfig>();
     		config.setFilters(new ArrayList<ConfigComponent>());
 			for (DimensionConfig dimensionConfig : filterList) {
-				if (dimensionConfig.getIsBoard() == null) {
+				if (dimensionConfig.getBoard() == null) {
 					config.getFilters().add(dimensionConfig);
 				}else {
 					filterList3.add(dimensionConfig);

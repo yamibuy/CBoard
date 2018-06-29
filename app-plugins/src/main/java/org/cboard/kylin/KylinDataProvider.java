@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
+import com.google.gson.JsonObject;
 import org.apache.commons.lang.StringUtils;
 import org.cboard.cache.CacheManager;
 import org.cboard.cache.HeapCacheManager;
@@ -197,6 +198,10 @@ public class KylinDataProvider extends DataProvider implements Aggregatable, Ini
     @Override
     public AggregateResult queryAggData(AggConfig config) throws Exception {
         String exec = sqlHelper.assembleAggDataSqlv2(config);
+//        String sql = sqlHelper.assembleAggDataSql(config);
+//        LOG.error("================","config:"+config.toString());
+        LOG.error("=======V2生成的sql:========="+exec);
+
         List<String[]> list = new LinkedList<>();
         LOG.info(exec);
         try (
@@ -215,8 +220,6 @@ public class KylinDataProvider extends DataProvider implements Aggregatable, Ini
             }
         } catch (Exception e) {
             LOG.error("ERROR:" + e.getMessage());
-//            String configStr = JSON.toJSONString(config);
-            LOG.error("报错sql详细 ：" + "sql"+exec+"\n"+"请求json："+JSON.toJSONString(config)+"\n"+"报错信息："+e.getMessage());
             throw new Exception("ERROR:" + e.getMessage(), e);
         }
         return DPCommonUtils.transform2AggResult(config, list);
