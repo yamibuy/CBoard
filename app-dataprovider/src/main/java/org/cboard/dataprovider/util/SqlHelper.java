@@ -737,8 +737,12 @@ public class SqlHelper {
 				}
 			}else {
 				String ss = sqlSyntaxHelper.getAggStr(v);
-				String rest = ss.substring(0,ss.lastIndexOf("AS"));
-				sb.append(rest);
+				if(ss.contains("AS")){
+					String rest = ss.substring(0,ss.lastIndexOf("AS"));
+					sb.append(rest);
+				}else {
+					sb.append(ss);
+				}
 			}
 			if( null != v.getSort()){
 				sb.append(v.getSort());

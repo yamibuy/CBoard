@@ -401,9 +401,6 @@ public class DashboardController extends BaseController {
                 .hash().toString();
         synchronized (lockString.intern()) {
             LOG.error("=======用于生成的sql的json:========="+cfg);
-            if(cfg.contains("2d3e8df4-c51b-4cc9-8355-5439caf97272")){
-                LOG.error("");
-            }
             AggConfig config = ViewAggConfig.getAggConfig(JSONObject.parseObject(cfg, ViewAggConfig.class));
             aggResult = dataProviderService.queryAggData(datasourceId, strParams, datasetId, config, reload);
         }
