@@ -98,11 +98,14 @@ public class DataProviderService {
         //先判断是不是看板
         for(DimensionConfig info :filterList1){
             Boolean isBoard = info.getBoard();
-            if(null != isBoard && true == isBoard && "DIM_CAL_DATE.DAY_ID".equals(info.getColumnName())){
+            if(null != isBoard && true == isBoard && info.getColumnName().contains("DIM_CAL_DATE")){
                 timeDimensionConfig = info;
             }
-            if("DIM_CAL_DATE.DAY_ID".equals(info.getColumnName()) && null != info.getValues() && info.getValues().size() > 0){
+            if(info.getColumnName().contains("DIM_CAL_DATE") && null != info.getValues() && info.getValues().size() > 0){
                 i++;
+                if(info.getValues().get(0).startsWith("{") && info.getValues().get(0).endsWith("}")){
+                    info.setFilterType("≥");
+                }
             }
         }
 
@@ -112,33 +115,50 @@ public class DataProviderService {
         config.getFilters().clear();
         String s1 ="";
         String s2 = timeDimensionConfig.getValues().get(0);//看板时间
-        SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd");
+
         Calendar calendar = Calendar.getInstance();
         if(s2.startsWith("{") && s2.endsWith("}")){//需要计算
-            calendar.setTime(sFormat.parse(sFormat.format(new Date())));
             String[] split = s2.split("'");
+            String broadTimeType = split[1];
+            SimpleDateFormat sBroadFormat = new SimpleDateFormat("yyyy-MM-dd");
+            calendar.setTime(sBroadFormat.parse(sBroadFormat.format(new Date())));
             String cha = split[2].replace(",", "");
             calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(cha));
-            String format = sFormat.format(calendar.getTime());
+            String format = sBroadFormat.format(calendar.getTime());
             s1 = format;
         }else {
             s1 = s2;
         }
 
         for(DimensionConfig info :filterList1){
-            if("DIM_CAL_DATE.DAY_ID".equals(info.getColumnName())){
+            if(info.getColumnName().contains("DIM_CAL_DATE")){
                 if(null != info.getValues() && info.getValues().size() > 0){
                     String vs = info.getValues().get(0);
                     if(vs.startsWith("{") && vs.endsWith("}")){
                         info.getValues().clear();
-
-                        calendar.setTime(sFormat.parse(s1));
                         String[] split = vs.split("'");
+                        String timeType = split[1];
                         String cha = split[2].replace(",", "");
-                        calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(cha));
-                        String format = sFormat.format(calendar.getTime());
+                        String timeTypeS = split[3].replace("\"", "");
+                        SimpleDateFormat sFilterFormat = new SimpleDateFormat(timeTypeS);
+                        calendar.setTime(sFilterFormat.parse(s1));
+                        if ("M".equals(timeType)) {
+                            calendar.add(Calendar.MONTH, Integer.parseInt(cha));
+                        }else if ("D".equals(timeType)) {
+                            calendar.add(Calendar.DATE, Integer.parseInt(cha));
+                        }else if ("Y".equals(timeType)) {
+                            calendar.add(Calendar.YEAR, Integer.parseInt(cha));
+                        }else if ("W".equals(timeType)) {
+                            calendar.add(Calendar.DAY_OF_WEEK, Integer.parseInt(cha));
+                        }else if("Q".equals(timeType)){
+
+                        }
+//                        calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(cha));
+                        String format = sFilterFormat.format(calendar.getTime());
 
                         info.getValues().add(format);
+
+                        info.setFilterType("≥");
                     }
                 }
             }

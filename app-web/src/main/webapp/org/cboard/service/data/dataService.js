@@ -184,12 +184,15 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
         linkDataset(datasetId, chartConfig).then(function () {
             var dataSeries = getDataSeries(chartConfig);
             var cfg = {rows: [], columns: [], filters: []};
+            // console.log("原始数据====");
+            // console.log(chartConfig);
             cfg.rows = getDimensionConfig(chartConfig.keys);
             cfg.columns = getDimensionConfig(chartConfig.groups);
             cfg.filters = getDimensionConfig(chartConfig.filters);
             cfg.filters = cfg.filters.concat(getDimensionConfig(chartConfig.boardFilters,'boardFilters'));
             cfg.filters = cfg.filters.concat(getDimensionConfig(chartConfig.boardWidgetFilters));
-
+            // console.log("请求数据===");
+            // console.log(cfg);
             _.forEach(cfg.rows,function(value,index){
                 if(value.filterType !== 'eq'){
                     cfg.filters.push(angular.copy(value));
@@ -209,7 +212,7 @@ cBoard.service('dataService', function ($http, $q, updateService,userService,$fi
                 return {column: s.name, aggType: s.aggregate,f_top:s.f_top,f_type:s.f_type,sort:s.sort,exp:s.exp,type:s.type};
             });
 
-            console.log('-------------查询条件chartConfig-----------------');
+            // console.log('-------------查询条件chartConfig-----------------');
 
             cfg.limit = null;
             if(chartConfig.values[0].cols[0]){
