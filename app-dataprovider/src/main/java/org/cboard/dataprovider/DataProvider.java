@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import com.googlecode.aviator.AviatorEvaluator;
+import com.googlecode.aviator.Expression;
 import org.cboard.dataprovider.aggregator.Aggregatable;
 import org.cboard.dataprovider.aggregator.InnerAggregator;
 import org.cboard.dataprovider.config.AggConfig;
@@ -159,7 +160,9 @@ public abstract class DataProvider {
             List<DashboardRole> roles = roleService.getCurrentRoleList();
             roles.forEach(role -> list.add(role.getRoleName()));
         } else {
-            list.add(AviatorEvaluator.compile(value.substring(1, value.length() - 1), true).execute().toString());
+            Expression compile = AviatorEvaluator.compile(value.substring(1, value.length() - 1), true);
+            Object execute = compile.execute();
+            list.add(execute.toString());
         }
         return list.stream();
     }

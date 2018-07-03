@@ -17,6 +17,7 @@ import org.cboard.dataprovider.config.ConfigComponent;
 import org.cboard.dataprovider.config.DimensionConfig;
 import org.cboard.dataprovider.config.ValueConfig;
 import org.cboard.dataprovider.result.AggregateResult;
+import org.cboard.dataprovider.util.DataUtils;
 import org.cboard.dto.DataProviderResult;
 import org.cboard.exception.CBoardException;
 import org.cboard.pojo.DashboardDataset;
@@ -73,7 +74,9 @@ public class DataProviderService {
             attachCustom(dataset, config);
             DataProvider dataProvider = getDataProvider(datasourceId, query, dataset);
 //            AggConfig aggConfig = filterCheck(config);
-            AggConfig aggConfig = filterCheckV4(config);
+
+//            buildQuarter(config)
+            AggConfig aggConfig = filterCheckV4(buildQuarter(config));
             AggregateResult aggData = dataProvider.getAggData(aggConfig, reload);
             return aggData;
         } catch (Exception e) {
@@ -150,8 +153,6 @@ public class DataProviderService {
                             calendar.add(Calendar.YEAR, Integer.parseInt(cha));
                         }else if ("W".equals(timeType)) {
                             calendar.add(Calendar.DAY_OF_WEEK, Integer.parseInt(cha));
-                        }else if("Q".equals(timeType)){
-
                         }
 //                        calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(cha));
                         String format = sFilterFormat.format(calendar.getTime());
@@ -490,5 +491,33 @@ public class DataProviderService {
         public void setInterval(Long interval) {
             this.interval = interval;
         }
+    }
+
+    //构建季度时间
+    private AggConfig buildQuarter(AggConfig config) {
+        for(int i = 0 ;i<config.getFilters().size();i++){
+            DimensionConfig info = (DimensionConfig) config.getFilters().get(i);
+            if(info.getColumnName().contains("DIM_CAL_DATE.QUARTER_ID") && null != info.getValues() && info.getValues().size() > 0) {
+                String[] split = info.getValues().get(0).split("'");
+//                boolean q = config.getValues().get(0).equals("Q");
+                String cha = split[2].replace(",", "");
+//                int chaYear = Integer.parseInt(cha) / 4;
+//                int chaQuarter = Integer.parseInt(cha) % 4;
+//                int year = Integer.parseInt(DataUtils.getSysYear()) - chaYear;
+//                int quarter = DataUtils.getSeason(new Date()) - chaQuarter;
+                int year = Integer.parseInt(DataUtils.getSysYear());
+                int quarter = DataUtils.getSeason(new Date()) + Integer.parseInt(cha);
+                if(quarter < 0){
+                    year = year - 1;
+                    quarter = 4 - quarter;
+                }
+                if(quarter == 0){
+                    quarter = 1;
+                }
+                info.getValues().clear();
+                info.getValues().add(year + "-" +quarter);
+            }
+        }
+        return config;
     }
 }
