@@ -118,29 +118,35 @@ public class DataProviderService {
         if(null == timeDimensionConfig){//判断是否有看板时间  有则需要重新计算
             for(DimensionConfig info :filterList1){
                 if(info.getColumnName().contains("DIM_CAL_DATE") && null != info.getValues() && info.getValues().size() > 0){
-                    String vs = info.getValues().get(0);
-                    if(vs.startsWith("{") && vs.endsWith("}")){
-                        info.getValues().clear();
-                        String[] split = vs.split("'");
-                        String timeType = split[1];
-                        String cha = split[2].replace(",", "");
-                        String timeTypeS = split[3].replace("\"", "");
+                    List<String> valuesList = new ArrayList<>();
+                    for(String vs:info.getValues()){
+                        if(vs.startsWith("{") && vs.endsWith("}")){
+                            String[] split = vs.split("'");
+                            String timeType = split[1];
+                            String cha = split[2].replace(",", "");
+                            String timeTypeS = split[3].replace("\"", "");
 
-                        calendar.setTime(new Date());
-                        if ("M".equals(timeType)) {
-                            calendar.add(Calendar.MONTH, Integer.parseInt(cha));
-                        }else if ("D".equals(timeType)) {
-                            calendar.add(Calendar.DATE, Integer.parseInt(cha));
-                        }else if ("Y".equals(timeType)) {
-                            calendar.add(Calendar.YEAR, Integer.parseInt(cha));
-                        }else if ("W".equals(timeType)) {
-                            timeTypeS = "yyyy-ww";
-                            calendar.add(Calendar.WEEK_OF_YEAR, Integer.parseInt(cha));
+                            calendar.setTime(new Date());
+                            if ("M".equals(timeType)) {
+                                calendar.add(Calendar.MONTH, Integer.parseInt(cha));
+                            }else if ("D".equals(timeType)) {
+                                calendar.add(Calendar.DATE, Integer.parseInt(cha));
+                            }else if ("Y".equals(timeType)) {
+                                calendar.add(Calendar.YEAR, Integer.parseInt(cha));
+                            }else if ("W".equals(timeType)) {
+                                timeTypeS = "yyyy-ww";
+                                calendar.add(Calendar.WEEK_OF_YEAR, Integer.parseInt(cha));
+                            }
+                            SimpleDateFormat sFilterFormat = new SimpleDateFormat(timeTypeS);
+                            String format = sFilterFormat.format(calendar.getTime());
+                            valuesList.add(format);
+                        }else{
+                            valuesList.add(vs);
                         }
-                        SimpleDateFormat sFilterFormat = new SimpleDateFormat(timeTypeS);
-                        String format = sFilterFormat.format(calendar.getTime());
-                        info.getValues().add(format);
                     }
+                    info.getValues().clear();
+                    info.getValues().addAll(valuesList);
+
                 }
             }
             return config;
@@ -168,34 +174,37 @@ public class DataProviderService {
         for(DimensionConfig info :filterList1){
             if(info.getColumnName().contains("DIM_CAL_DATE")){
                 if(null != info.getValues() && info.getValues().size() > 0){
-                    String vs = info.getValues().get(0);
-                    if(vs.startsWith("{") && vs.endsWith("}")){
-                        info.getValues().clear();
-                        String[] split = vs.split("'");
-                        String timeType = split[1];
-                        String cha = split[2].replace(",", "");
-                        String timeTypeS = split[3].replace("\"", "");
-                        if(timeTypeS.equals("yyyy-W")){
-                            timeTypeS = "yyyy-ww";
-                        }
-                        SimpleDateFormat sFilterFormat = new SimpleDateFormat(timeTypeS);
-                        calendar.setTime(sFilterFormat.parse(s1));
-                        if ("M".equals(timeType)) {
-                            calendar.add(Calendar.MONTH, Integer.parseInt(cha));
-                        }else if ("D".equals(timeType)) {
-                            calendar.add(Calendar.DATE, Integer.parseInt(cha));
-                        }else if ("Y".equals(timeType)) {
-                            calendar.add(Calendar.YEAR, Integer.parseInt(cha));
-                        }else if ("W".equals(timeType)) {
-                            calendar.add(Calendar.WEEK_OF_YEAR, Integer.parseInt(cha));
-                        }
+                    List<String> valuesList = new ArrayList<>();
+                    for(String  vs:info.getValues()){
+                        if(vs.startsWith("{") && vs.endsWith("}")){
+                            String[] split = vs.split("'");
+                            String timeType = split[1];
+                            String cha = split[2].replace(",", "");
+                            String timeTypeS = split[3].replace("\"", "");
+                            if(timeTypeS.equals("yyyy-W")){
+                                timeTypeS = "yyyy-ww";
+                            }
+                            SimpleDateFormat sFilterFormat = new SimpleDateFormat(timeTypeS);
+                            calendar.setTime(sFilterFormat.parse(s1));
+                            if ("M".equals(timeType)) {
+                                calendar.add(Calendar.MONTH, Integer.parseInt(cha));
+                            }else if ("D".equals(timeType)) {
+                                calendar.add(Calendar.DATE, Integer.parseInt(cha));
+                            }else if ("Y".equals(timeType)) {
+                                calendar.add(Calendar.YEAR, Integer.parseInt(cha));
+                            }else if ("W".equals(timeType)) {
+                                calendar.add(Calendar.WEEK_OF_YEAR, Integer.parseInt(cha));
+                            }
 //                        calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(cha));
-                        String format = sFilterFormat.format(calendar.getTime());
-
-                        info.getValues().add(format);
-
-                        info.setFilterType("≥");
+                            String format = sFilterFormat.format(calendar.getTime());
+                            valuesList.add(format);
+                            info.setFilterType("≥");
+                        }else {
+                            valuesList.add(vs);
+                        }
                     }
+                    info.getValues().clear();
+                    info.getValues().addAll(valuesList);
                 }
             }
         }
