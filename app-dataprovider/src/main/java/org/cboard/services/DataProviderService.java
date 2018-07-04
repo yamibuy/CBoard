@@ -86,7 +86,7 @@ public class DataProviderService {
     }
 
     private AggConfig filterCheckV4(AggConfig config) throws ParseException {
-
+        Calendar calendar = Calendar.getInstance();
         List<ConfigComponent> filters = config.getFilters();
 
         List<DimensionConfig> filterList1 = new ArrayList<DimensionConfig>();//原始的
@@ -107,22 +107,49 @@ public class DataProviderService {
             }
             if(info.getColumnName().contains("DIM_CAL_DATE") && null != info.getValues() && info.getValues().size() > 0){
                 i++;
-                if(info.getValues().get(0).startsWith("{") && info.getValues().get(0).endsWith("}")){
-                    if(!board){
-                        info.setFilterType("≥");
-                    }
-                }
+//                if(info.getValues().get(0).startsWith("{") && info.getValues().get(0).endsWith("}")){
+//                    if(!board){
+//                        info.setFilterType("≥");
+//                    }
+//                }
             }
         }
 
         if(null == timeDimensionConfig){//判断是否有看板时间  有则需要重新计算
+            for(DimensionConfig info :filterList1){
+                if(info.getColumnName().contains("DIM_CAL_DATE") && null != info.getValues() && info.getValues().size() > 0){
+                    String vs = info.getValues().get(0);
+                    if(vs.startsWith("{") && vs.endsWith("}")){
+                        info.getValues().clear();
+                        String[] split = vs.split("'");
+                        String timeType = split[1];
+                        String cha = split[2].replace(",", "");
+                        String timeTypeS = split[3].replace("\"", "");
+
+                        calendar.setTime(new Date());
+                        if ("M".equals(timeType)) {
+                            calendar.add(Calendar.MONTH, Integer.parseInt(cha));
+                        }else if ("D".equals(timeType)) {
+                            calendar.add(Calendar.DATE, Integer.parseInt(cha));
+                        }else if ("Y".equals(timeType)) {
+                            calendar.add(Calendar.YEAR, Integer.parseInt(cha));
+                        }else if ("W".equals(timeType)) {
+                            timeTypeS = "yyyy-ww";
+                            calendar.add(Calendar.WEEK_OF_YEAR, Integer.parseInt(cha));
+                        }
+                        SimpleDateFormat sFilterFormat = new SimpleDateFormat(timeTypeS);
+                        String format = sFilterFormat.format(calendar.getTime());
+                        info.getValues().add(format);
+                    }
+                }
+            }
             return config;
         }
         config.getFilters().clear();
         String s1 ="";
         String s2 = timeDimensionConfig.getValues().get(0);//看板时间
 
-        Calendar calendar = Calendar.getInstance();
+
         if(s2.startsWith("{") && s2.endsWith("}")){//需要计算
             String[] split = s2.split("'");
             String broadTimeType = split[1];
@@ -148,6 +175,9 @@ public class DataProviderService {
                         String timeType = split[1];
                         String cha = split[2].replace(",", "");
                         String timeTypeS = split[3].replace("\"", "");
+                        if(timeTypeS.equals("yyyy-W")){
+                            timeTypeS = "yyyy-ww";
+                        }
                         SimpleDateFormat sFilterFormat = new SimpleDateFormat(timeTypeS);
                         calendar.setTime(sFilterFormat.parse(s1));
                         if ("M".equals(timeType)) {
@@ -157,7 +187,7 @@ public class DataProviderService {
                         }else if ("Y".equals(timeType)) {
                             calendar.add(Calendar.YEAR, Integer.parseInt(cha));
                         }else if ("W".equals(timeType)) {
-                            calendar.add(Calendar.DAY_OF_WEEK, Integer.parseInt(cha));
+                            calendar.add(Calendar.WEEK_OF_YEAR, Integer.parseInt(cha));
                         }
 //                        calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(cha));
                         String format = sFilterFormat.format(calendar.getTime());
