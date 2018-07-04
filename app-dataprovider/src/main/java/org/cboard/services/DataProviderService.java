@@ -541,26 +541,33 @@ public class DataProviderService {
     private AggConfig buildQuarter(AggConfig config) {
         for(int i = 0 ;i<config.getFilters().size();i++){
             DimensionConfig info = (DimensionConfig) config.getFilters().get(i);
-            if(info.getColumnName().contains("DIM_CAL_DATE.QUARTER_ID") && null != info.getValues() && info.getValues().size() > 0) {
-                String[] split = info.getValues().get(0).split("'");
+            List<String> valuesList = new ArrayList<>();
+            for(String vs: info.getValues()){
+                if(info.getColumnName().contains("DIM_CAL_DATE.QUARTER_ID") && null != info.getValues() && info.getValues().size() > 0) {
+                    String[] split = vs.split("'");
 //                boolean q = config.getValues().get(0).equals("Q");
-                String cha = split[2].replace(",", "");
+                    String cha = split[2].replace(",", "");
 //                int chaYear = Integer.parseInt(cha) / 4;
 //                int chaQuarter = Integer.parseInt(cha) % 4;
 //                int year = Integer.parseInt(DataUtils.getSysYear()) - chaYear;
 //                int quarter = DataUtils.getSeason(new Date()) - chaQuarter;
-                int year = Integer.parseInt(DataUtils.getSysYear());
-                int quarter = DataUtils.getSeason(new Date()) + Integer.parseInt(cha);
-                if(quarter < 0){
-                    year = year - 1;
-                    quarter = 4 - quarter;
+                    int year = Integer.parseInt(DataUtils.getSysYear());
+                    int quarter = DataUtils.getSeason(new Date()) + Integer.parseInt(cha);
+                    if(quarter < 0){
+                        year = year - 1;
+                        quarter = 4 - quarter;
+                    }
+                    if(quarter == 0){
+                        quarter = 1;
+                    }
+                    valuesList.add(year + "-" +quarter);
+                }else {
+                    valuesList.add(vs);
                 }
-                if(quarter == 0){
-                    quarter = 1;
-                }
-                info.getValues().clear();
-                info.getValues().add(year + "-" +quarter);
             }
+            info.getValues().clear();
+            info.getValues().addAll(valuesList);
+
         }
         return config;
     }
