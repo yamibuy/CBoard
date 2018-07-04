@@ -14,6 +14,8 @@ import org.cboard.dao.*;
 import org.cboard.dataprovider.DataProviderManager;
 import org.cboard.dataprovider.DataProviderViewManager;
 import org.cboard.dataprovider.config.AggConfig;
+import org.cboard.dataprovider.config.ConfigComponent;
+import org.cboard.dataprovider.config.DimensionConfig;
 import org.cboard.dataprovider.result.AggregateResult;
 import org.cboard.dto.*;
 import org.cboard.pojo.*;
@@ -402,6 +404,15 @@ public class DashboardController extends BaseController {
         synchronized (lockString.intern()) {
             LOG.error("=======用于生成的sql的json:========="+cfg);
             AggConfig config = ViewAggConfig.getAggConfig(JSONObject.parseObject(cfg, ViewAggConfig.class));
+//            a:for(ConfigComponent info:config.getFilters()){
+//                List<String> values = ((DimensionConfig) info).getValues();
+//                b:for(String str:values){
+//                    if(str.contains("Other")){
+//                        LOG.error("=======用于生成的sql的json:========="+cfg);
+//                    }
+//                  break a;
+//                }
+//            }
             aggResult = dataProviderService.queryAggData(datasourceId, strParams, datasetId, config, reload);
         }
         return aggResult;

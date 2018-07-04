@@ -132,6 +132,8 @@ public class DataProviderService {
             calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(cha));
             String format = sBroadFormat.format(calendar.getTime());
             s1 = format;
+            timeDimensionConfig.getValues().clear();
+            timeDimensionConfig.getValues().add(s1);
         }else {
             s1 = s2;
         }
