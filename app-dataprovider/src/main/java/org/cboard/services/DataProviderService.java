@@ -101,13 +101,16 @@ public class DataProviderService {
         //先判断是不是看板
         for(DimensionConfig info :filterList1){
             Boolean isBoard = info.getBoard();
-            if(null != isBoard && true == isBoard && info.getColumnName().contains("DIM_CAL_DATE")){
+            Boolean board  = null != isBoard && true == isBoard && info.getColumnName().contains("DIM_CAL_DATE");
+            if(board){
                 timeDimensionConfig = info;
             }
             if(info.getColumnName().contains("DIM_CAL_DATE") && null != info.getValues() && info.getValues().size() > 0){
                 i++;
                 if(info.getValues().get(0).startsWith("{") && info.getValues().get(0).endsWith("}")){
-                    info.setFilterType("≥");
+                    if(!board){
+                        info.setFilterType("≥");
+                    }
                 }
             }
         }
