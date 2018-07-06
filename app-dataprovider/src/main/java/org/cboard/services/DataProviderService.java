@@ -159,10 +159,22 @@ public class DataProviderService {
         if(s2.startsWith("{") && s2.endsWith("}")){//需要计算
             String[] split = s2.split("'");
             String broadTimeType = split[1];
-            SimpleDateFormat sBroadFormat = new SimpleDateFormat("yyyy-MM-dd");
-            calendar.setTime(sBroadFormat.parse(sBroadFormat.format(new Date())));
             String cha = split[2].replace(",", "");
-            calendar.add(Calendar.DAY_OF_YEAR,Integer.parseInt(cha));
+            String timeTypeS = split[3].replace("\"", "");
+
+            calendar.setTime(new Date());
+            if ("M".equals(broadTimeType)) {
+                calendar.add(Calendar.MONTH, Integer.parseInt(cha));
+            }else if ("D".equals(broadTimeType)) {
+                calendar.add(Calendar.DATE, Integer.parseInt(cha));
+            }else if ("Y".equals(broadTimeType)) {
+                calendar.add(Calendar.YEAR, Integer.parseInt(cha));
+            }else if ("W".equals(broadTimeType)) {
+                timeTypeS = "yyyy-ww";
+                calendar.add(Calendar.WEEK_OF_YEAR, Integer.parseInt(cha));
+            }
+
+            SimpleDateFormat sBroadFormat = new SimpleDateFormat(timeTypeS);
             String format = sBroadFormat.format(calendar.getTime());
             s1 = format;
             timeDimensionConfig.getValues().clear();
