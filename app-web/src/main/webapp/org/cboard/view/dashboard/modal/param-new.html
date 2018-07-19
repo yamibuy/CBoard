@@ -184,7 +184,9 @@
                     </div>
                     <!-- 时间上下限 -->
                     <div class="col-xs-12 col-md-12 col-lg-10 pleft-0" ng-if="operate.closeInterval">
-                        <div class="col-lg-5">
+                        <div class="col-xs-10 col-md-4 col-lg-5">
+                            <div class="input-group">
+                        <!--<div class="col-lg-5">-->
                             <!-- datetimepicker -->
                             <input type="text" ngdatepicker ng-if="selectedAttrKey === 'Y'" minview="2" class="form-control time-year-1" ng-model="rangeItem.capped" placeholder="请选择年份上限">
                             <input type="text" ngdatepicker ng-if="selectedAttrKey === 'M'" minview="1" class="form-control time-month-1" ng-model="rangeItem.capped" placeholder="请选择月份上限">
@@ -192,8 +194,17 @@
                             <small class="text-danger" ng-if="exist_t">
                                 已存在
                             </small>
+                            <div class="input-group-btn">
+                                <div class="input-group-btn"
+                                     ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
+                                </div>
+                            </div>
+                        <!--</div>-->
+                            </div>
                         </div>
-                        <div class="col-lg-5">
+                        <div class="col-xs-10 col-md-4 col-lg-5">
+                            <div class="input-group">
+                        <!--<div class="col-lg-5">-->
                             <!-- datetimepicker TODO -->
                             <input type="text" ngdatepicker ng-if="selectedAttrKey === 'Y'" minview="2" class="form-control time-year-2" ng-model="rangeItem.lowerLimit" placeholder="请选择年份下限">
                             <input type="text" ngdatepicker ng-if="selectedAttrKey === 'M'" minview="1" class="form-control time-month-2" ng-model="rangeItem.lowerLimit" placeholder="请选择月份下限">
@@ -201,7 +212,14 @@
                             <small class="text-danger" ng-if="exist_e">
                                 已存在
                             </small>
+                            <div class="input-group-btn">
+                                <div class="input-group-btn"
+                                     ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
+                                </div>
+                            </div>
+                            </div>
                         </div>
+                        <!--</div>-->
                         <div class="col-lg-2">
                             <button class="btn btn-primary" ng-click="selectRange('closeInterval')" ng-disabled="!rangeItem.capped || !rangeItem.lowerLimit">
                                 <i class="fa fa-check"></i>

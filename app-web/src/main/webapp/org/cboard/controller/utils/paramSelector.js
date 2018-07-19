@@ -159,6 +159,7 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
         return typeof(param)
     };
     $scope.onClickDropList = function(key){
+        console.log(key);
         // 判断类型
         var obj = $scope.dropList[$scope.selectedAttrKey];
         if($scope.operate.equal){
@@ -186,7 +187,11 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
                 }
             };
         }else {
-
+            for(var i in obj){
+                if(obj[i].key == key){
+                    $scope.param.cloneValue.push(obj[i]);
+                }
+            };
         }
     };
 
