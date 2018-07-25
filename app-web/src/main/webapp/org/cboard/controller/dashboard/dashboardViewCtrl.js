@@ -840,9 +840,24 @@ cBoard.controller('dashboardViewCtrl', function ($timeout, $rootScope, $scope, $
                     // case '[a,b)':
                     // case '(a,b)':
                     case '[a,b]':
+                        // var leftBrackets = param.type.split('a')[0];
+                        // var rightBrackets = param.type.split('b')[1];
+                        // paramObj = param.name + ' between ' + leftBrackets + param.values[0] + ',' + param.values[1] + rightBrackets;
+
                         var leftBrackets = param.type.split('a')[0];
                         var rightBrackets = param.type.split('b')[1];
-                        paramObj = param.name + ' between ' + leftBrackets + param.values[0] + ',' + param.values[1] + rightBrackets;
+                        var arr = angular.copy(param.values);
+                        _.forEach(arr,function(v,i){
+                            for(var j in dropList){
+                                for(var k in dropList[j]){
+                                    if(dropList[j][k].key == v){
+                                        arr[i] = dropList[j][k].format
+                                    }
+                                }
+                            };
+                        });
+
+                        paramObj = param.name + ' between ' + leftBrackets + arr[0] + ',' + arr[1] + rightBrackets;
                         break;
                 }
                 param.title = param.values.length > 0 ? paramObj : undefined;
