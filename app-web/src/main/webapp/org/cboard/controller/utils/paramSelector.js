@@ -38,6 +38,10 @@ cBoard.controller('paramSelector', function ($timeout, $scope, $uibModalInstance
         ],
         D: [
             {
+                key: "{now('D',0,'yyyy-MM-dd')}",
+                title: '当天',
+            },
+            {
                 key: "{now('D',-1,'yyyy-MM-dd')}",
                 title: '最近第1天',
             },

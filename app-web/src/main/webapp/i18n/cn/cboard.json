@@ -21,7 +21,7 @@
     "DELETE": "删除",
     "EXPORT": "导出",
     "LOG": "日志",
-    "LAST1M": "最近一月",
+    "LAST1M": "一月",
     "LAST1W": "最近一周",
     "LAST10D": "最近10天",
     "LAST10D_TIMESTAMP": "最近10天(时间戳)",
