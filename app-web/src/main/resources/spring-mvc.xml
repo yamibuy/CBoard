@@ -19,7 +19,7 @@
             <value>UTF-8</value>
         </property>
         <property name="maxUploadSize">
-            <value>10485760</value><!-- 10M -->
+            <value>392982950</value><!-- 10M 文件下载大小控制-->
         </property>
         <property name="maxInMemorySize">
             <value>4096</value>

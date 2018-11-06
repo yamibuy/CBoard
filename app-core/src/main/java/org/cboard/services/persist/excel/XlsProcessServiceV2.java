@@ -1,10 +1,13 @@
 package org.cboard.services.persist.excel;
 
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.cboard.dao.BoardDao;
 import org.cboard.pojo.DashboardBoard;
 import org.cboard.services.persist.PersistContext;
@@ -19,30 +22,31 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Created by yfyuan on 2017/2/15.
+ * 重构
+ * 使用SXSSFWorkbook创建excel
+ * 突破65536
  */
 @Service
-public class XlsProcessService {
+public class XlsProcessServiceV2 {
 
     Logger LOG = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     private BoardDao boardDao;
 
     private XlsProcesser jpgXlsProcesser = new JpgXlsProcesser();
     private XlsProcesser tableXlsProcesser = new TableXlsProcesser();
 
-    public HSSFWorkbook dashboardToXls(List<PersistContext> contexts) {
+    public SXSSFWorkbook dashboardToXls(List<PersistContext> contexts) {
         XlsProcesserContext context = null;
         for (PersistContext e : contexts) {
             context = dashboardToXls(e, context);
         }
-        return (HSSFWorkbook) context.getWb();
+        return (SXSSFWorkbook) context.getWb();
     }
 
-    public HSSFWorkbook tableToxls(JSONObject data) {
+    public SXSSFWorkbook tableToxls(JSONObject data) {
         XlsProcesserContext context = new XlsProcesserContext();
-        HSSFWorkbook wb = new HSSFWorkbook();
+        SXSSFWorkbook wb = new SXSSFWorkbook(1048575);
         setColorIndex(wb);
         CellStyle titleStyle = createTitleStyle(wb);
         CellStyle thStyle = createThStyle(wb);
@@ -56,7 +60,7 @@ public class XlsProcessService {
         context.settStyle(tStyle);
         context.setPercentStyle(percentStyle);
         Sheet sheet = context.getWb().createSheet();
-        LOG.error("=======XlsProcessService的sheet:========="+  sheet.toString());
+        LOG.error("=======XlsProcessServiceV2的sheet:========="+ sheet.toString());
         context.setBoardSheet(sheet);
         context.setC1(0);
         context.setC2(data.getJSONArray("data").getJSONArray(0).size() - 1);
@@ -99,7 +103,7 @@ public class XlsProcessService {
 
         if (context == null) {
             context = new XlsProcesserContext();
-            HSSFWorkbook wb = new HSSFWorkbook();
+            SXSSFWorkbook wb = new SXSSFWorkbook();
             setColorIndex(wb);
             CellStyle titleStyle = createTitleStyle(wb);
             CellStyle thStyle = createThStyle(wb);
@@ -196,7 +200,9 @@ public class XlsProcessService {
                 max = r.getLastCellNum();
             }
         }
+
         for (int colNum = 0; colNum < max; colNum++) {
+            ((SXSSFSheet)dataSheet).trackColumnForAutoSizing(colNum);
             dataSheet.autoSizeColumn(colNum, true);
         }
     }
@@ -211,7 +217,7 @@ public class XlsProcessService {
         return null;
     }
 
-    private CellStyle createTitleStyle(HSSFWorkbook wb) {
+    private CellStyle createTitleStyle(SXSSFWorkbook wb) {
         Font font = wb.createFont();
         font.setFontHeightInPoints((short) 16);
         font.setColor(IndexedColors.WHITE.getIndex());
@@ -225,7 +231,7 @@ public class XlsProcessService {
         return titleStyle;
     }
 
-    private CellStyle createThStyle(HSSFWorkbook wb) {
+    private CellStyle createThStyle(SXSSFWorkbook wb) {
         CellStyle thStyle = wb.createCellStyle();
         thStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
         thStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -246,7 +252,7 @@ public class XlsProcessService {
         return thStyle;
     }
 
-    private CellStyle createTStyle(HSSFWorkbook wb) {
+    private CellStyle createTStyle(SXSSFWorkbook wb) {
         CellStyle tStyle = wb.createCellStyle();
         tStyle.setBorderBottom(BorderStyle.THIN);
         tStyle.setBottomBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
@@ -262,11 +268,12 @@ public class XlsProcessService {
         return tStyle;
     }
 
-    private void setColorIndex(HSSFWorkbook wb) {
-        HSSFPalette customPalette = wb.getCustomPalette();
-        customPalette.setColorAtIndex(IndexedColors.BLUE.index, (byte) 26, (byte) 127, (byte) 205);
-        customPalette.setColorAtIndex(IndexedColors.BLUE_GREY.index, (byte) 56, (byte) 119, (byte) 166);
-        customPalette.setColorAtIndex(IndexedColors.GREY_25_PERCENT.index, (byte) 235, (byte) 235, (byte) 235);
+    private void setColorIndex(SXSSFWorkbook wb) {
+        CellStyle cellStyle = wb.createCellStyle();
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);//设置填充方案
+        cellStyle.setFillForegroundColor(IndexedColors.BLUE.index);  //设置填充颜色
+        cellStyle.setFillForegroundColor(IndexedColors.BLUE_GREY.index);  //设置填充颜色
+        cellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.index);  //设置填充颜色
     }
 
 }

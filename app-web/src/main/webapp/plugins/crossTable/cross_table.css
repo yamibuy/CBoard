@@ -126,6 +126,21 @@
 .cross_table_view .exportBnt {
     background: url("../../imgs/excel.svg");
     background-size: cover;
+    margin:7px 5px 10px 5px;
+    float: right;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.cross_table_view .exportCsvBnt{
+    background: url("../../imgs/csv.svg");
+    background-size: cover;
+    margin:7px 5px 10px 5px;
+    float: right;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
 }
 
 div.operateBox {

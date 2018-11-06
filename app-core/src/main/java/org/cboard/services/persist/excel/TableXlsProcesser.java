@@ -6,6 +6,9 @@ import org.apache.poi.hssf.usermodel.HSSFClientAnchor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeUtil;
+import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,11 +20,25 @@ import java.util.stream.Collectors;
  * Created by yfyuan on 2017/2/15.
  */
 public class TableXlsProcesser extends XlsProcesser {
-
+    Logger LOG = LoggerFactory.getLogger(this.getClass());
+    /**
+     * 当数据超过65536行时会报错
+     * HSSFWorkbook:是操作Excel2003以前（包括2003）的版本，扩展名是.xls；
+     *
+     * XSSFWorkbook:是操作Excel2007的版本，扩展名是.xlsx；
+     *
+     * 从POI 3.8版本开始，提供了一种基于XSSF的低内存占用的API----SXSSF
+     *
+     * 当数据量超出65536条后，在使用HSSFWorkbook或XSSFWorkbook，程序会报OutOfMemoryError：Javaheap space;内存溢出错误。这时应该用SXSSFworkbook。
+     *
+     * @param context
+     * @return
+     */
     @Override
     protected ClientAnchor drawContent(XlsProcesserContext context) {
         JSONArray tData = context.getData().getJSONArray("data");
-        final ClientAnchor tAnchor = new HSSFClientAnchor();
+//        final ClientAnchor tAnchor = new HSSFClientAnchor();
+        XSSFClientAnchor tAnchor = new XSSFClientAnchor();
         tAnchor.setCol1(context.getC1());
         tAnchor.setRow1(context.getR1());
         int colSpan = (context.getC2() - context.getC1()) / tData.getJSONArray(0).size();
@@ -31,9 +48,11 @@ public class TableXlsProcesser extends XlsProcesser {
         List<Integer> columnDataCellIdx = new ArrayList<>();
         List<CellRangeAddress> mergeRegion = new ArrayList<>();
         for (int r = 0; r < tData.size(); r++) {
-            Row row = context.getBoardSheet().getRow(context.getR1() + r);
+            Sheet boardSheet = context.getBoardSheet();
+            Row row = boardSheet.getRow(context.getR1() + r);
             if (row == null) {
-                row = context.getBoardSheet().createRow(context.getR1() + r);
+
+                row = boardSheet.createRow(context.getR1() + r);
             }
             int colStart = context.getC1();
             for (int c = 0; c < tData.getJSONArray(r).size(); c++) {

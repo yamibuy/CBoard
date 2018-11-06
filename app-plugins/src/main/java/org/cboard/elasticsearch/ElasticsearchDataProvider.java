@@ -283,7 +283,7 @@ public class ElasticsearchDataProvider extends DataProvider implements Aggregata
                     break;
                 default:
                     Object missing = numericTypes.contains(getTypes().get(d.getColumnName())) ? NULL_NUMBER : NULL_STRING;
-                    aggregation = json(d.getColumnName(), termsAggregation(d.getColumnName(), 1000, missing));
+                    aggregation = json(d.getColumnName(), termsAggregation(d.getColumnName(), 5000000, missing));//500W 为查询长度
             }
             // Query Override
             if (overrideAgg != null) {

@@ -111,6 +111,7 @@ CBCrossTable.prototype.table = function() {
     if (this.data.length) {
         // Bind Event
         this.export();
+        this.exportCsv();
         this.renderPagination(pagedData, 1);
         this.clickPageNum(pagedData);
         this.clickNextPrev(pagedData);
@@ -168,7 +169,7 @@ CBCrossTable.prototype.getToolBarContent = function() {
     var headerLines = this.colHeaderRows + 1;
     var colNum = this.data[0].length;
     var rowNum = colNum ? this.totalRow - headerLines : 0;
-    var contentTemplate = "<span class='info'><b>info: </b>{rowNum} x {colNum}</span> <span class='exportBnt' title='Export'></span>";
+    var contentTemplate = "<span class='info'><b>info: </b>{rowNum} x {colNum}</span> <span class='exportBnt' title='Export'></span> <span class='exportCsvBnt' title='Export CSV'></span>";
     return contentTemplate.render({rowNum: rowNum, colNum: colNum});
 };
 
@@ -592,6 +593,43 @@ CBCrossTable.prototype.export = function () {
         };
         xhr.send(formData);
     });
-
 };
 
+CBCrossTable.prototype.exportCsv = function () {
+    var selector = "#" + this.toolbarDivId + " .exportCsvBnt";
+    var filename = "table";
+    var title = $("#" + this.toolbarDivId).parent().parent().prev().find('.box-title').html();
+    var username = $(".username").text();
+    var description = $(".description").text();
+    filename = !title ? (!username ? (!description ? filename : description)
+        : username) : title;
+    var _this = this;
+    $(selector).on('click', function () {
+        var escMatcher = '\n|\r|,|"';
+        var row;
+        var output = '\ufeff';
+        var rows =  _this.data.length;
+        var columns =  _this.data[0].length;
+        for (var i = 0; i < rows; i++) {
+            var rowArray = [];
+            for (var j = 0; j < columns; j++) {
+                var cell =  _this.data[i][j].data;
+                var strValue = (cell === undefined || cell === null) ? '' : cell.toString();
+                strValue.replace(new RegExp('"', 'g'), '""');
+                if (strValue.search(escMatcher) > -1) {
+                    strValue = '"' + strValue + '"';
+                }
+                rowArray.push(strValue);
+            }
+            output += rowArray.join(',') + '\n';
+        }
+
+        var blob = new Blob([output], {type: "application/csv"});
+        var objectUrl = URL.createObjectURL(blob);
+        var aForCsv = $("<a><span class='forCsv'>下载csv</span></a>").attr("href", objectUrl);
+        aForCsv.attr("download", filename+".csv");
+        $("body").append(aForCsv);
+        $(".forCsv").click();
+        aForCsv.remove();
+    });
+};

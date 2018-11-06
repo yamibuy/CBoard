@@ -299,15 +299,17 @@
             <artifactId>ehcache</artifactId>
             <version>3.2.0</version>
         </dependency>
+        <!--  从POI 3.8版本开始，提供了一种基于XSSF的低内存占用的API  SXSSF
+        当数据量超出65536条后，在使用HSSFWorkbook或XSSFWorkbook，程序会报OutOfMemoryError：Javaheap space;内存溢出错误。这时应该用SXSSFworkbook。-->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>3.16</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>3.16</version>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.quartz-scheduler</groupId>

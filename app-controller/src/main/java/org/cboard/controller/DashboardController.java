@@ -10,6 +10,7 @@ import com.google.common.hash.Hashing;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.cboard.dao.*;
 import org.cboard.dataprovider.DataProviderManager;
 import org.cboard.dataprovider.DataProviderViewManager;
@@ -22,6 +23,7 @@ import org.cboard.pojo.*;
 import org.cboard.services.*;
 import org.cboard.services.job.JobService;
 import org.cboard.services.persist.excel.XlsProcessService;
+import org.cboard.services.persist.excel.XlsProcessServiceV2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -98,6 +100,9 @@ public class DashboardController extends BaseController {
 
     @Autowired
     private XlsProcessService xlsProcessService;
+
+    @Autowired
+    private XlsProcessServiceV2 xlsProcessServiceV2;
 
 
 
@@ -482,8 +487,11 @@ public class DashboardController extends BaseController {
     @RequestMapping(value = "/tableToxls")
     public ResponseEntity<byte[]> tableToxls(@RequestParam(name = "data") String data) throws UnsupportedEncodingException {
     	JSONObject oData = JSONObject.parseObject(data);
-        HSSFWorkbook wb = xlsProcessService.tableToxls(oData);
-		String title = !StringUtils.isEmpty(oData.getString("title"))
+        LOG.error("=======导出excel的data长度:========="+oData.getJSONArray("data").size());
+        LOG.error("=======导出excel的data内容:========="+ oData.getJSONArray("data").get(0).toString());
+//        HSSFWorkbook wb = xlsProcessService.tableToxls(oData);
+        SXSSFWorkbook wb = xlsProcessServiceV2.tableToxls(oData);
+        String title = !StringUtils.isEmpty(oData.getString("title"))
 				? URLEncoder.encode(oData.getString("title"), "UTF-8") : "table";
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
