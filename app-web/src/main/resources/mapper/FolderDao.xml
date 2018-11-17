@@ -11,6 +11,7 @@
         create_time   AS createTime,
         update_time   AS updateTime
         FROM dashboard_folder
+        order by folder_id ASC
     </select>
 
     <select id="getFolder" resultType="org.cboard.pojo.DashboardFolder">
@@ -28,7 +29,7 @@
     <select id="getFolderByUserId" resultType="org.cboard.pojo.DashboardFolder">
         SELECT folder_id id,folder_name name,parent_id parentId,is_private isPrivate,user_id userId,create_time createTime,update_time updateTime
         FROM dashboard_folder
-        WHERE user_id = #{0} and is_private = 0 and folder_id != 10000
+        WHERE user_id = #{0} and is_private = 0 and folder_id != 10000 order by folder_id ASC
     </select>
 
     <insert id="save" parameterType="org.cboard.pojo.DashboardFolder" useGeneratedKeys="true" keyColumn="folder_id" keyProperty="id">

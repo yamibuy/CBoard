@@ -562,6 +562,7 @@ public class DashboardController extends BaseController {
 
         List<DashboardFolder> list = new ArrayList<>();
         list.addAll(itemFolders);
+        Collections.sort(list);
         return Lists.transform(list, ViewDashboardFolder.TO);
     }
 

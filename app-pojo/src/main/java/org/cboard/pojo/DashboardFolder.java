@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 /**
  * Created by jx_luo on 2017/10/13.
  */
-public class DashboardFolder {
+public class DashboardFolder implements Comparable<DashboardFolder>{
     private int id;
     private String name;
     private int parentId;
@@ -87,5 +87,10 @@ public class DashboardFolder {
         if (id != other.getId())
             return false;
         return true;
+    }
+
+    @Override
+    public int compareTo(DashboardFolder o) {
+        return this.getId() - o.getId();
     }
 }
