@@ -1,0 +1,64 @@
+package org.cboard.dataprovider.config;
+
+/**
+ * Created by zyong on 2017/1/9.
+ */
+public class ValueConfig {
+    private String column;
+    private String aggType;
+    private String sort;
+    private String type;
+    private String exp;
+    private Integer f_top;
+
+    public Integer getF_top() {
+        return f_top;
+    }
+
+    public void setF_top(Integer f_top) {
+        this.f_top = f_top;
+    }
+
+
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getExp() {
+        return exp;
+    }
+
+    public void setExp(String exp) {
+        this.exp = exp;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
+    public String getColumn() {
+        return column;
+    }
+
+    public void setColumn(String column) {
+        this.column = column;
+    }
+
+    public String getAggType() {
+        return aggType;
+    }
+
+    public void setAggType(String aggType) {
+        this.aggType = aggType;
+    }
+}
+

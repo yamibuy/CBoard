@@ -1,0 +1,85 @@
+<!-- Content Wrapper. Contains page content -->
+<ng-include src="'org/cboard/view/dashboard/layout/header.html'"></ng-include>
+
+<div id="inner-container" class="content">
+
+    <input ng-model="relations" ng-hide="true" id="relations"/> <!--json [{},{}]-->
+    <div ng-repeat="row in board.layout.rows track by $index" ng-class="{true: 'box',false: ''}[row.widgets[0].widget.data.config.chart_type != 'kpi']">
+        <ng-switch on="row.type">
+            <div ng-switch-when="param" class="row">
+                <div class="col-lg-12">
+                    <div class="box-solid">
+                        <div class="box-header border-non" ng-if="paramToString(row)">
+                            <div class="box-tools pull-right" ng-init="paramInfoShow = true">
+                                <div ng-show="paramInfoShow" class="paramTemplate btn btn-box-tool">{{paramToString(row)}}</div>
+                                <button type="button" class="btn btn-box-tool" ng-click="paramInfoShow = !paramInfoShow">
+                                    <i class="fa fa-info-circle"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="col-lg-12">
+                                <div class="pull-left" style="margin-right: 10px" ng-repeat="param in row.params | filter:{paramType:'selector'}:true" ng-controller="paramCtrl" ng-init="init()">
+                                    <ng-include src="'org/cboard/view/dashboard/param/selector.html'"/>
+                                </div>
+                                <div class="col-lg-12" ng-repeat="param in row.params | filter:{paramType:'slider'}:true" ng-controller="paramCtrl" ng-init="init()">
+                                    <ng-include src="'org/cboard/view/dashboard/param/slider.html'" class="col-md-{{param.cfg.width}}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-default class="row">
+                <div class="col-lg-12">
+                    <div ng-repeat="widget in row.widgets track by $index">
+                        <!-- 看板数据 -->
+                        <div ng-if="widget.show" ng-show="!widget.sourceId || widget.showDiv">
+                            <dashboard-widget ng-show="widget.loading == false"></dashboard-widget>
+                        </div>
+                        <!-- Loading -->
+                        <div ng-if="widget.hasRole != false && (widget.loading || !widget.show)" class="col-md-{{widget.width}}">
+                            <div class="box box-solid">
+                                <div class="box-header">
+                                    <i class="fa fa-bar-chart-o"></i>
+                                    <h3 class="box-title">{{widget.name}}</h3>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" ng-if="widgetCfg" ng-click="config(widget)"><i
+                                                class="fa fa-wrench"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- <div class="box-body">
+                                    <div class="overlay">
+                                        <i class="fa fa-refresh fa-spin"></i>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div ng-if="widget.hasRole == false" class="col-md-{{widget.width}}">
+                            <div class="box box-solid">
+                                <div class="box-header">
+                                    <i class="fa fa-bar-chart-o"></i>
+                                    <h3 class="box-title">{{widget.name}}</h3>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    {{'ADMIN.CONTACT_ADMIN' | translate}}：<br>
+                                    <ul>
+                                        <li ng-repeat="ri in widget.roleInfo"> {{ri.type | translate}}：{{ri.name}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-switch>
+    </div>
+
+</div>

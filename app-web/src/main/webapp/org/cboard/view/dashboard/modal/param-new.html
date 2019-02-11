@@ -1,0 +1,308 @@
+<div class="modal-header modal-header-background">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="close()">
+        <span aria-hidden="true">×</span></button>
+    <h4 class="modal-title font-bold">{{param.name ? param.name : (param.alias ? param.alias : param.col)}}</h4>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal">
+        <div class="fieldset">
+            <!--属性名称-->
+            <div class="form-group">
+                <label class="col-lg-2 control-label">
+                    属性名称：
+                </label>
+                <div class="col-lg-10">
+                    <p class="form-control-static">
+                        {{param.name ? param.name : (param.alias ? param.alias : param.col)}}
+                    </p>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <!--属性类型-->
+            <div class="form-group" ng-show="false">
+                <label class="col-lg-2 control-label">
+                    属性类型：
+                </label>
+                <div class="col-lg-10">
+                    <label class="col-lg-2 control-label pull-left-imp" for="modal-year">
+                        <input type="radio" name="modal-year"
+                               ng-model="selectedAttrKey" id="modal-year"
+                               ng-change="clearValue(1)"
+                               value="Y">
+                        年
+                    </label>
+                    <label class="col-lg-2 control-label pull-left-imp" for="modal-season">
+                        <input type="radio" name="modal-season"
+                               ng-model="selectedAttrKey" id="modal-season"
+                               ng-change="clearValue(1)"
+                               value="Q">
+                        季度
+                    </label>
+                    <label class="col-lg-2 control-label pull-left-imp" for="modal-month">
+                        <input type="radio" name="modal-month"
+                               ng-model="selectedAttrKey" id="modal-month"
+                               ng-change="clearValue(1)"
+                               value="M">
+                        月
+                    </label>
+                    <label class="col-lg-2 control-label pull-left-imp" for="modal-week">
+                        <input type="radio" name="modal-week"
+                               ng-model="selectedAttrKey" id="modal-week"
+                               ng-change="clearValue(1)"
+                               value="W">
+                        周
+                    </label>
+                    <label class="col-lg-2 control-label pull-left-imp" for="modal-day">
+                        <input type="radio" name="modal-day"
+                               ng-model="selectedAttrKey" id="modal-day"
+                               ng-change="clearValue(1)"
+                               value="D">
+                        日
+                    </label>
+                    <label class="col-lg-2 control-label pull-left-imp" for="modal-not-date">
+                        <input type="radio" name="modal-not-date"
+                               ng-model="selectedAttrKey" id="modal-not-date"
+                               ng-change="clearValue(0)"
+                               value="other">
+                        非日期类型
+                    </label>
+                </div>
+            </div>
+            <div class="hr-line-dashed" ng-show="false"></div>
+            <!--属性操作-->
+            <div class="form-group">
+                <label class="col-lg-2 control-label">
+                    属性操作：
+                </label>
+                <div class="col-xs-12 col-md-12 col-lg-10">
+                    <div class="col-xs-12 col-md-4 col-lg-4">
+                        <select class="form-control"
+                                ng-model="param.type"
+                                ng-change="filterType()"
+                                ng-disabled="disabled">
+                            <option ng-repeat="t in type" value="{{t.value}}">
+                                {{t.title}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <!--属性值-->
+            <div class="form-group">
+                <label class="col-lg-2 control-label">
+                    属性值：
+                </label>
+                <!--非日期类型-->
+                <div ng-if="selectedAttrKey === 'other'" class="col-xs-12 col-md-12 col-lg-10">
+                    <div class="modal-property__wrapper">
+                        <div class="col-xs-12 col-md-12 col-lg-9">
+                            <div class="input-group">
+                                <div class="input-group-btn">
+                                    <button ng-disabled="loading" class="btn btn-success ladda-button" ng-click="getSelects()" data-style="zoom-in">
+                                        <i class="fa fa-refresh"></i>
+                                        <span class="ladda-label">
+                                            读取数据
+                                        </span>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control" ng-model="keyword" placeholder="请输入关键字">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-12 col-lg-9 SelectsOption">
+                            <select multiple class="form-control selectsOption modal-list__wrapper" ng-model="selectItems">
+                                <option ng-repeat="v in selects | filter:selected | filter:keyword"
+                                        style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" title="{{v}}"
+                                        value="{{v}}"
+                                        ng-click="dbclickPush(v)">{{v}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-xs-12 col-md-12 col-lg-9" style="margin-top: 5px">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="rangeItem.selected" placeholder="试试手动输入想要搜索的属性值,多个值请使用英文逗号隔开">
+                                <div class="input-group-btn">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-primary" ng-click="setInputValue()" ng-disabled="!rangeItem.selected">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <small class="text-danger" ng-if="exist_other">
+                                已存在
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <!--年/月/日-->
+                <div ng-if="selectedAttrKey === 'Y' || selectedAttrKey === 'M' || selectedAttrKey === 'D'" class="col-xs-12 col-md-12 col-lg-10">
+                    <!-- = ≠ -->
+                    <div class="col-xs-12 col-md-12 col-lg-10 pleft-0" ng-if="operate.equal">
+                        <div class="col-xs-10 col-md-4 col-lg-5">
+                            <div class="input-group">
+                                <!-- datetimepicker -->
+                                <input type="text" ng-if="selectedAttrKey === 'Y'" ngdatepicker class="form-control time-year" ng-model="rangeItem.selected" placeholder="请选择年" minview="2">
+                                <input type="text" ng-if="selectedAttrKey === 'M'" ngdatepicker class="form-control time-month" ng-model="rangeItem.selected" placeholder="请选择月" minview="1">
+                                <input type="text" ng-if="selectedAttrKey === 'D'" ngdatepicker class="form-control time-day" ng-model="rangeItem.selected" placeholder="请选择日" minview="0">
+                                <div class="input-group-btn">
+                                    <div class="input-group-btn"
+                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
+                                    </div>
+                                </div>
+                            </div>
+                            <small class="text-danger" ng-if="exist_o">
+                                已存在
+                            </small>
+                        </div>
+                        <div class="col-xs-2 col-md-2 col-lg-2">
+                            <button class="btn btn-primary" ng-click="selectRange('equal')" ng-disabled="!rangeItem.selected">
+                                <i class="fa fa-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- < ≤ > ≥ -->
+                    <div class="col-xs-12 col-md-12 col-lg-10 pleft-0" ng-if="operate.openInterval">
+                        <div class="col-xs-10 col-md-4 col-lg-6">
+                            <div class="input-group">
+                                <!-- datetimepicker -->
+                                <input type="text" ngdatepicker ng-if="selectedAttrKey === 'Y'" minview="2" class="form-control time-year" ng-model="rangeItem.selected" placeholder="请选择年">
+                                <input type="text" ngdatepicker ng-if="selectedAttrKey === 'M'" minview="1" class="form-control time-month" ng-model="rangeItem.selected" placeholder="请选择月">
+                                <input type="text" ngdatepicker ng-if="selectedAttrKey === 'D'" minview="0" class="form-control time-day" ng-model="rangeItem.selected" placeholder="请选择日">
+                                <div class="input-group-btn">
+                                    <div class="input-group-btn"
+                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 col-md-2 col-lg-2">
+                            <button class="btn btn-primary" ng-click="selectRange('openInterval')" ng-disabled="!rangeItem.selected">
+                                <i class="fa fa-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- 时间上下限 -->
+                    <div class="col-xs-12 col-md-12 col-lg-10 pleft-0" ng-if="operate.closeInterval">
+                        <div class="col-xs-10 col-md-4 col-lg-5">
+                            <div class="input-group">
+                        <!--<div class="col-lg-5">-->
+                            <!-- datetimepicker -->
+                            <input type="text" ngdatepicker ng-if="selectedAttrKey === 'Y'" minview="2" class="form-control time-year-1" ng-model="rangeItem.capped" placeholder="请选择年份上限">
+                            <input type="text" ngdatepicker ng-if="selectedAttrKey === 'M'" minview="1" class="form-control time-month-1" ng-model="rangeItem.capped" placeholder="请选择月份上限">
+                            <input type="text" ngdatepicker ng-if="selectedAttrKey === 'D'" minview="0" class="form-control time-day-1" ng-model="rangeItem.capped" placeholder="请选择日期上限">
+                            <small class="text-danger" ng-if="exist_t">
+                                已存在
+                            </small>
+                            <div class="input-group-btn">
+                                <div class="input-group-btn"
+                                     ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
+                                </div>
+                            </div>
+                        <!--</div>-->
+                            </div>
+                        </div>
+                        <div class="col-xs-10 col-md-4 col-lg-5">
+                            <div class="input-group">
+                        <!--<div class="col-lg-5">-->
+                            <!-- datetimepicker TODO -->
+                            <input type="text" ngdatepicker ng-if="selectedAttrKey === 'Y'" minview="2" class="form-control time-year-2" ng-model="rangeItem.lowerLimit" placeholder="请选择年份下限">
+                            <input type="text" ngdatepicker ng-if="selectedAttrKey === 'M'" minview="1" class="form-control time-month-2" ng-model="rangeItem.lowerLimit" placeholder="请选择月份下限">
+                            <input type="text" ngdatepicker ng-if="selectedAttrKey === 'D'" minview="0" class="form-control time-day-2" ng-model="rangeItem.lowerLimit" placeholder="请选择日期下限">
+                            <small class="text-danger" ng-if="exist_e">
+                                已存在
+                            </small>
+                            <div class="input-group-btn">
+                                <div class="input-group-btn"
+                                     ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <!--</div>-->
+                        <div class="col-lg-2">
+                            <button class="btn btn-primary" ng-click="selectRange('closeInterval')" ng-disabled="!rangeItem.capped || !rangeItem.lowerLimit">
+                                <i class="fa fa-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 季度/周 -->
+                <div ng-if="selectedAttrKey === 'Q' || selectedAttrKey === 'W'" class="col-xs-12 col-md-12 col-lg-10">
+                    <div class="col-lg-12" ng-if="operate.equal">
+                        <div class="col-lg-4 pleft-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="rangeItem.selected" placeholder="{{selectedAttrKey == 'W' ? '如：2018-1或2018-52': '如：2018-1或2018-4'}}">
+                                <div class="input-group-btn">
+                                    <div class="input-group-btn"
+                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" ng-click="selectRange('qorw')" ng-disabled="!rangeItem.selected">
+                            <i class="fa fa-check"></i>
+                        </button>
+                    </div>
+
+                    <div class="col-lg-12" ng-if="operate.openInterval">
+                        <div class="col-lg-4 pleft-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="rangeItem.selected" placeholder="{{selectedAttrKey == 'W' ? '如：2018-1或2018-52': '如：2018-1或2018-4'}}">
+                                <div class="input-group-btn">
+                                    <div class="input-group-btn"
+                                         ng-include="'org/cboard/view/dashboard/modal/variable-dropbox.html'">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" ng-click="selectRange('qorw')" ng-disabled="!rangeItem.selected">
+                            <i class="fa fa-check"></i>
+                        </button>
+                    </div>
+
+                    <div class="col-lg-10 pall-0" ng-if="operate.closeInterval">
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" ng-model="rangeItem.capped" placeholder="{{selectedAttrKey == 'W' ? '如：2018-1或2018-52': '如：2018-1或2018-4'}}">
+                        </div>
+                        <div class="col-lg-5">
+                            <input type="text" class="form-control" ng-model="rangeItem.lowerLimit" placeholder="{{selectedAttrKey == 'W' ? '如：2018-1或2018-52': '如：2018-1或2018-4'}}">
+                        </div>
+                        <div class="col-lg-2 pull-right">
+                            <button class="btn btn-primary" ng-click="selectRange('qorw')" ng-disabled="!rangeItem.capped || !rangeItem.lowerLimit">
+                                <i class="fa fa-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <!-- 选定值 -->
+            <div class="form-group">
+                <label class="col-lg-2 control-label">
+                    选定值：
+                </label>
+                <div class="col-lg-10">
+                    <div class="col-lg-12">
+                        <div class="btn-group" ng-if="param.cloneValue.length > 0">
+                            <button class="btn btn-warning btn-sm" ng-click="clearSelectedAll()">清除全部</button>
+                        </div>
+                        <div class="btn-group" ng-repeat="value in param.cloneValue track by $index" style="margin-right: 3px">
+                            <button class="btn btn-default btn-sm">{{findTypeOf(value) == 'string' ? value : value.title}}</button>
+                            <button class="btn btn-default btn-sm" ng-click="clearSelected($index)">
+                                <i class="fa fa-trash-o text-danger"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" ng-click="close()">
+        {{'COMMON.CANCEL'|translate}}
+    </button>
+    <button type="button" class="btn btn-primary" ng-click="ok()" ng-disabled="param.cloneValue.length == 0 && selectedAttrKey != 'other'">{{'COMMON.OK'|translate}}</button>
+</div>

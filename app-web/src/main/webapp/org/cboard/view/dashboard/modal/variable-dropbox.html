@@ -1,0 +1,7 @@
+<button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+    <span class="fa fa-caret-down"></span></button>
+<ul class="dropdown-menu">
+    <li ng-click="onClickDropList(d.key)" ng-repeat="d in currentDropList">
+        <a>{{d.title}}</a>
+    </li>
+</ul>
